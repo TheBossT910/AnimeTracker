@@ -1,0 +1,557 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		CA2B938F2CC1A2F800D6B8FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA2B93762CC1A2F700D6B8FD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA2B937D2CC1A2F700D6B8FD;
+			remoteInfo = AnimeTracker;
+		};
+		CA2B93992CC1A2F800D6B8FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA2B93762CC1A2F700D6B8FD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA2B937D2CC1A2F700D6B8FD;
+			remoteInfo = AnimeTracker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CA2B937E2CC1A2F700D6B8FD /* AnimeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnimeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA2B938E2CC1A2F800D6B8FD /* AnimeTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimeTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA2B93982CC1A2F800D6B8FD /* AnimeTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimeTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CA2B93802CC1A2F700D6B8FD /* AnimeTracker */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AnimeTracker;
+			sourceTree = "<group>";
+		};
+		CA2B93912CC1A2F800D6B8FD /* AnimeTrackerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AnimeTrackerTests;
+			sourceTree = "<group>";
+		};
+		CA2B939B2CC1A2F800D6B8FD /* AnimeTrackerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AnimeTrackerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CA2B937B2CC1A2F700D6B8FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA2B938B2CC1A2F800D6B8FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA2B93952CC1A2F800D6B8FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CA2B93752CC1A2F700D6B8FD = {
+			isa = PBXGroup;
+			children = (
+				CA2B93802CC1A2F700D6B8FD /* AnimeTracker */,
+				CA2B93912CC1A2F800D6B8FD /* AnimeTrackerTests */,
+				CA2B939B2CC1A2F800D6B8FD /* AnimeTrackerUITests */,
+				CA2B937F2CC1A2F700D6B8FD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CA2B937F2CC1A2F700D6B8FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA2B937E2CC1A2F700D6B8FD /* AnimeTracker.app */,
+				CA2B938E2CC1A2F800D6B8FD /* AnimeTrackerTests.xctest */,
+				CA2B93982CC1A2F800D6B8FD /* AnimeTrackerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CA2B937D2CC1A2F700D6B8FD /* AnimeTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA2B93A22CC1A2F800D6B8FD /* Build configuration list for PBXNativeTarget "AnimeTracker" */;
+			buildPhases = (
+				CA2B937A2CC1A2F700D6B8FD /* Sources */,
+				CA2B937B2CC1A2F700D6B8FD /* Frameworks */,
+				CA2B937C2CC1A2F700D6B8FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CA2B93802CC1A2F700D6B8FD /* AnimeTracker */,
+			);
+			name = AnimeTracker;
+			packageProductDependencies = (
+			);
+			productName = AnimeTracker;
+			productReference = CA2B937E2CC1A2F700D6B8FD /* AnimeTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CA2B938D2CC1A2F800D6B8FD /* AnimeTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA2B93A52CC1A2F800D6B8FD /* Build configuration list for PBXNativeTarget "AnimeTrackerTests" */;
+			buildPhases = (
+				CA2B938A2CC1A2F800D6B8FD /* Sources */,
+				CA2B938B2CC1A2F800D6B8FD /* Frameworks */,
+				CA2B938C2CC1A2F800D6B8FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA2B93902CC1A2F800D6B8FD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CA2B93912CC1A2F800D6B8FD /* AnimeTrackerTests */,
+			);
+			name = AnimeTrackerTests;
+			packageProductDependencies = (
+			);
+			productName = AnimeTrackerTests;
+			productReference = CA2B938E2CC1A2F800D6B8FD /* AnimeTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CA2B93972CC1A2F800D6B8FD /* AnimeTrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA2B93A82CC1A2F800D6B8FD /* Build configuration list for PBXNativeTarget "AnimeTrackerUITests" */;
+			buildPhases = (
+				CA2B93942CC1A2F800D6B8FD /* Sources */,
+				CA2B93952CC1A2F800D6B8FD /* Frameworks */,
+				CA2B93962CC1A2F800D6B8FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA2B939A2CC1A2F800D6B8FD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CA2B939B2CC1A2F800D6B8FD /* AnimeTrackerUITests */,
+			);
+			name = AnimeTrackerUITests;
+			packageProductDependencies = (
+			);
+			productName = AnimeTrackerUITests;
+			productReference = CA2B93982CC1A2F800D6B8FD /* AnimeTrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CA2B93762CC1A2F700D6B8FD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					CA2B937D2CC1A2F700D6B8FD = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					CA2B938D2CC1A2F800D6B8FD = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = CA2B937D2CC1A2F700D6B8FD;
+					};
+					CA2B93972CC1A2F800D6B8FD = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = CA2B937D2CC1A2F700D6B8FD;
+					};
+				};
+			};
+			buildConfigurationList = CA2B93792CC1A2F700D6B8FD /* Build configuration list for PBXProject "AnimeTracker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CA2B93752CC1A2F700D6B8FD;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CA2B937F2CC1A2F700D6B8FD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CA2B937D2CC1A2F700D6B8FD /* AnimeTracker */,
+				CA2B938D2CC1A2F800D6B8FD /* AnimeTrackerTests */,
+				CA2B93972CC1A2F800D6B8FD /* AnimeTrackerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CA2B937C2CC1A2F700D6B8FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA2B938C2CC1A2F800D6B8FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA2B93962CC1A2F800D6B8FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CA2B937A2CC1A2F700D6B8FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA2B938A2CC1A2F800D6B8FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA2B93942CC1A2F800D6B8FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA2B93902CC1A2F800D6B8FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA2B937D2CC1A2F700D6B8FD /* AnimeTracker */;
+			targetProxy = CA2B938F2CC1A2F800D6B8FD /* PBXContainerItemProxy */;
+		};
+		CA2B939A2CC1A2F800D6B8FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA2B937D2CC1A2F700D6B8FD /* AnimeTracker */;
+			targetProxy = CA2B93992CC1A2F800D6B8FD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CA2B93A02CC1A2F800D6B8FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CA2B93A12CC1A2F800D6B8FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CA2B93A32CC1A2F800D6B8FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AnimeTracker/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Taha-Rashid.AnimeTracker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CA2B93A42CC1A2F800D6B8FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AnimeTracker/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Taha-Rashid.AnimeTracker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CA2B93A62CC1A2F800D6B8FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Taha-Rashid.AnimeTrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnimeTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AnimeTracker";
+			};
+			name = Debug;
+		};
+		CA2B93A72CC1A2F800D6B8FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Taha-Rashid.AnimeTrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnimeTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AnimeTracker";
+			};
+			name = Release;
+		};
+		CA2B93A92CC1A2F800D6B8FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Taha-Rashid.AnimeTrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AnimeTracker;
+			};
+			name = Debug;
+		};
+		CA2B93AA2CC1A2F800D6B8FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Taha-Rashid.AnimeTrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AnimeTracker;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CA2B93792CC1A2F700D6B8FD /* Build configuration list for PBXProject "AnimeTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA2B93A02CC1A2F800D6B8FD /* Debug */,
+				CA2B93A12CC1A2F800D6B8FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA2B93A22CC1A2F800D6B8FD /* Build configuration list for PBXNativeTarget "AnimeTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA2B93A32CC1A2F800D6B8FD /* Debug */,
+				CA2B93A42CC1A2F800D6B8FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA2B93A52CC1A2F800D6B8FD /* Build configuration list for PBXNativeTarget "AnimeTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA2B93A62CC1A2F800D6B8FD /* Debug */,
+				CA2B93A72CC1A2F800D6B8FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA2B93A82CC1A2F800D6B8FD /* Build configuration list for PBXNativeTarget "AnimeTrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA2B93A92CC1A2F800D6B8FD /* Debug */,
+				CA2B93AA2CC1A2F800D6B8FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CA2B93762CC1A2F700D6B8FD /* Project object */;
+}
