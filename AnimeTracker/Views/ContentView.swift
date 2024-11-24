@@ -10,10 +10,8 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
             Text("Hello, world!")
+            Text(animes[0].imageName)
         }
         .padding()
     }
@@ -21,4 +19,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+//    BoxImage(image: Image("ao_no_hako_box_image"))
+    BoxImage(image: Image(animes[0].imageName))
 }
