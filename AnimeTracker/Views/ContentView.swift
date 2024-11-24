@@ -8,17 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
+    //default value of .featured
+    @State private var selection: Tab = .animeStatus
+    
+    enum Tab {
+        case animeStatus
+        case list
+    }
+    
     var body: some View {
-        VStack {
-            Text("Hello, world!")
-            Text(animes[0].imageName)
+        //binding the selection input as a reference to the "selection" variable. Adding the $ makes it into a binding, which allows us to dynamically change the value
+        TabView(selection: $selection) {
+            CategoriesHome()
+                //giving a name and icon, seen in the bottom menu bar
+                .tabItem {
+                    Label("Anime Status", systemImage: "star")
+                }
+                //changes the value of "selection" to show this view
+                .tag(Tab.animeStatus)
+            
+            AnimeList()
+                //giving a name and icon, seen in the bottom menu bar
+                .tabItem {
+                    Label("Anime List", systemImage: "list.bullet")
+                }
+                //changes the value of "selection" to show this view
+                .tag(Tab.list)
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
-//    BoxImage(image: Image("ao_no_hako_box_image"))
-    BoxImage(image: Image(animes[0].imageName))
+        .environment(AnimeData())
 }

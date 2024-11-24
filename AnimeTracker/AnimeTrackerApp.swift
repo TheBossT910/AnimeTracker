@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct AnimeTrackerApp: App {
+    @State private var animeData = AnimeData()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(animeData)
         }
     }
 }
