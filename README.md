@@ -13,7 +13,7 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 
 - Weekly anime release calendar (This is the main feature of the app)
 - Sync to Google Calendar
-- View animes by genere
+- View animes by genre
 - Episode progress tracking (check off which episodes you have watched)
 - Integration with anime databases like MyAnimeList or AniList
 - Add links to streaming services
