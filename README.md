@@ -29,4 +29,15 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 ## Contact  
 
 - **Developer**: Taha Rashid  
-- **LinkedIn**: [Taha Rashid](https://www.linkedin.com/in/taha-rashid192)  
+- **LinkedIn**: [Taha Rashid](https://www.linkedin.com/in/taha-rashid192)
+
+## Currently Implemented Views
+<img width="304" alt="Anime Status View" src="https://github.com/user-attachments/assets/61bb490b-7ad8-4888-98e3-c7176fde18e0">
+<img width="309" alt="View Shows" src="https://github.com/user-attachments/assets/bab94b3c-0715-4f06-8ce4-251792c30d81">
+<img width="312" alt="View Favourites" src="https://github.com/user-attachments/assets/2e38cca1-457b-4f33-a3cc-da05219ff7bc">
+<img width="317" alt="View Details" src="https://github.com/user-attachments/assets/dc6f8234-a30a-47bf-972e-78a7f4367215">
+<img width="304" alt="View Schedule Item" src="https://github.com/user-attachments/assets/368b713f-5e66-4506-816d-63102991d5b4">
+
+## Figma Designs
+<img width="402" alt="Figma Home" src="https://github.com/user-attachments/assets/e225f253-b4f8-4a2b-8957-3a29c28a4d18">
+<img width="407" alt="Figma Schedule" src="https://github.com/user-attachments/assets/76b176d0-88ae-4b87-aadb-2cd113030ea4">
