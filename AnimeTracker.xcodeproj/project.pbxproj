@@ -27,6 +27,7 @@
 		CA2B937E2CC1A2F700D6B8FD /* AnimeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnimeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA2B938E2CC1A2F800D6B8FD /* AnimeTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimeTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA2B93982CC1A2F800D6B8FD /* AnimeTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimeTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA43C4082CF82DCD00A6EBE8 /* AnimeTracker.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AnimeTracker.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		CA2B93752CC1A2F700D6B8FD = {
 			isa = PBXGroup;
 			children = (
+				CA43C4082CF82DCD00A6EBE8 /* AnimeTracker.xctestplan */,
 				CA2B93802CC1A2F700D6B8FD /* AnimeTracker */,
 				CA2B93912CC1A2F800D6B8FD /* AnimeTrackerTests */,
 				CA2B939B2CC1A2F800D6B8FD /* AnimeTrackerUITests */,

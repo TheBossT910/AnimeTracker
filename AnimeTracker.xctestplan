@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "CBE5549D-CC4F-4186-BDD2-B6707E896172",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AnimeTracker.xcodeproj",
+      "identifier" : "CA2B937D2CC1A2F700D6B8FD",
+      "name" : "AnimeTracker"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AnimeTracker.xcodeproj",
+        "identifier" : "CA2B938D2CC1A2F800D6B8FD",
+        "name" : "AnimeTrackerTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AnimeTracker.xcodeproj",
+        "identifier" : "CA2B93972CC1A2F800D6B8FD",
+        "name" : "AnimeTrackerUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
