@@ -13,6 +13,7 @@
         "rating": "PG-13",
         "categoryStatus": "Plan to Watch",
         "imageName": "ao_no_hako_box_image",
+        "splashName": "ao_no_hako_splash",
         "description": "Taiki Inomata, a third-year student in junior high, attends Eimei Academy, an integrated school with a major sports program. Having joined the high school badminton team, Taiki tries to attend open practice as early as possible. But no matter how early he goes, he always arrives second in the gymnasium. The person one step ahead of him is Chinatsu Kano, a first-year student in senior high and Taiki's crush.\n\nChinatsu is the rising star of the basketball team, and the gap between her and Taiki could not be greater. Although Taiki is a decent badminton player, his popularity is nowhere near Chinatsu's, making it even less likely for his feelings to be reciprocated. However, in a strange twist of fate, she ends up living in Taiki's house!\n\nWanting to become a worthy match for Chinatsu, Taiki pursues the same dream as his crush: to partake in the Nationals. Taiki starts training harder than ever before, all for the sake of building a strong relationship with his new housemate.",
     },
     {
@@ -29,6 +30,7 @@
         "rating": "PG-13",
         "categoryStatus": "Completed",
         "imageName": "oshi_no_ko_box_image",
+        "splashName": "oshi_no_ko_splash",
         "description": "With the help of producer Masaya Kaburagi, Aquamarine 'Aqua' Hoshino and Kana Arima have landed the roles of Touki and Tsurugi in Lala Lai Theatrical Company's stage adaptation of the popular manga series Tokyo Blade. Co-starring with them is Aqua's girlfriend, Akane Kurokawa, who plays Touki's fiancée, Princess Saya. Due to the fanbase preferring Tsurugi as Touki's love interest, Saya has made fewer and fewer appearances in the manga, making it difficult for Akane to fully immerse herself in the role. Her struggles are compounded by differences between the play's script and the original work—differences that also frustrate Tokyo Blade's author, Abiko Samejima. \n\nAqua, however, is more concerned with his personal goals than he is with the play. He has only one objective in mind: to grow closer to director Toshirou Kindaichi and find out what he knows about Aqua's mother, Ai.",
     },
     {
@@ -45,6 +47,7 @@
             "rating": "PG-13",
             "categoryStatus": "Watching",
             "imageName": "frieren_beyond_journeys_end_box_image",
+            "splashName": "frieren_beyond_journeys_end_splash",
             "description": "After defeating the Demon King, the hero party disbands, and Frieren, the elven mage, embarks on a journey to learn more about humanity. With her companions long gone, she reflects on the ephemeral nature of life. But as she meets new allies and faces new challenges, she begins to understand what it means to live for others."
         },
         {
@@ -61,6 +64,7 @@
             "rating": "R-17",
             "categoryStatus": "Dropped",
             "imageName": "jujutsu_kaisen_season_2_box_image",
+            "splashName": "jujutsu_kaisen_season_2_splash",
             "description": "Following the events of the Shibuya Incident, the world of Jujutsu sorcery is in chaos. Yuji Itadori, Megumi Fushiguro, and their allies must confront their most dangerous enemies yet, as Sukuna's influence grows stronger. The battle for survival intensifies, with new curses and enemies emerging from the shadows."
         },
         {
@@ -77,6 +81,7 @@
             "rating": "PG-13",
             "categoryStatus": "Dropped",
             "imageName": "bocchi_the_rock_box_image",
+            "splashName": "bocchi_the_rock_splash",
             "description": "Hitori Gotou, a socially anxious high school girl, spends most of her time alone, playing guitar in her room. Dreaming of joining a band, she gets her chance when she's invited to play with a struggling group called 'Kessoku Band.' Together, they navigate the ups and downs of friendship, music, and high school life."
         },
         {
@@ -93,6 +98,7 @@
             "rating": "R-17",
             "categoryStatus": "Plan to Watch",
             "imageName": "attack_on_titan_final_season_box_image",
+            "splashName": "attack_on_titan_final_season_splash",
             "description": "Eren Yeager's assault on Marley has sparked a war that threatens to consume the entire world. As the truth about the Titans and the history of Eldia unfolds, the fate of humanity hangs in the balance. Will the Survey Corps be able to stop Eren's destructive rampage, or is it already too late?"
         },
         {
@@ -109,6 +115,7 @@
             "rating": "R-17",
             "categoryStatus": "Plan to Watch",
             "imageName": "death_note_box_image",
+            "splashName": "death_note_splash",
             "description": "High school student Light Yagami stumbles upon the Death Note, a notebook with the power to kill anyone whose name is written in it. With his newfound power, Light sets out to cleanse the world of criminals. But his plans are thwarted by the brilliant detective L, who is determined to stop him. A battle of wits ensues, with lives hanging in the balance."
         },
         {
@@ -125,6 +132,7 @@
             "rating": "PG-13",
             "categoryStatus": "Completed",
             "imageName": "demon_slayer_swordsmith_village_box_image",
+            "splashName": "demon_slayer_swordsmith_village_splash",
             "description": "Tanjiro Kamado, along with his friends Zenitsu and Inosuke, embarks on a new mission in the Swordsmith Village. They must protect the village and its inhabitants from powerful demons, while Tanjiro seeks to unlock new techniques with the help of a legendary swordsmith."
         },
         {
@@ -141,6 +149,7 @@
             "rating": "R-17",
             "categoryStatus": "Watching",
             "imageName": "chainsaw_man_box_image",
+            "splashName": "chainsaw_man_splash",
             "description": "Denji, a young man burdened with debt, is forced to work as a devil hunter to survive. After a near-fatal encounter with a devil, he merges with his pet devil Pochita to become the Chainsaw Man. With his newfound power, Denji takes on deadly devils and learns the harsh realities of life as a devil hunter."
         },
         {
@@ -157,6 +166,7 @@
             "rating": "PG-13",
             "categoryStatus": "Dropped",
             "imageName": "spy_x_family_season_2_box_image",
+            "splashName": "spy_x_family_season_2_splash",
             "description": "Twilight, an elite spy, is given a mission to create a fake family in order to infiltrate an elite school. He adopts a daughter, Anya, who can read minds, and marries Yor, an assassin. The three must navigate the challenges of their fake family life while keeping their true identities hidden."
         },
         {
@@ -173,6 +183,7 @@
             "rating": "R-17",
             "categoryStatus": "Watching",
             "imageName": "re_zero_season_2_box_image",
+            "splashName": "re_zero_season_2_splash",
             "description": "Subaru Natsuki is transported to a fantasy world where he gains the ability to return from death. However, each death brings with it immense suffering, and Subaru must navigate the complexities of this new world while trying to protect those he cares about."
         },
         {
@@ -189,6 +200,7 @@
             "rating": "PG-13",
             "categoryStatus": "Completed",
             "imageName": "lycoris_recoil_box_image",
+            "splashName": "lycoris_recoil_splash",
             "description": "In a world where a secret organization maintains peace through covert assassinations, Takina Inoue, a young agent, is sent to a quiet café called LycoReco. There, she meets Chisato Nishikigi, a carefree and cheerful agent who shows her a different side to life. Together, they face dangerous missions while building a bond of friendship."
         }
 ]

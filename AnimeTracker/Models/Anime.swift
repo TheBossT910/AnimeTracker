@@ -28,10 +28,16 @@ struct Anime: Codable, Hashable, Identifiable {
     var isFavorite: Bool
     var isRecommended: Bool
     
-    //getting the image
+    //getting the box image
     private var imageName: String
     var image: Image {
         Image(imageName)
+    }
+    
+    //getting the splash image
+    private var splashName: String
+    var splash: Image {
+        Image(splashName)
     }
     
     //NOTE: this variable should have the same name as the one in the json!

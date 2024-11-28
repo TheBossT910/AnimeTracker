@@ -10,6 +10,8 @@ import SwiftUI
 struct CategoriesHome: View {
     //making AnimeData accessible through animeData
     @Environment(AnimeData.self) var animeData
+    
+    //hard-coded top image
     var splashImage: Image {
         Image("oshi_no_ko_splash")
     }

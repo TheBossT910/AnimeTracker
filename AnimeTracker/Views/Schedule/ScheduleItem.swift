@@ -5,12 +5,17 @@
 //  Created by Taha Rashid on 2024-11-23.
 //
 
+
+//To-do:
+//make it so that each data value (time, summary, title, episode name) is connected to each show/episode. It is hard-coded right now! -> Database?!
+
 import SwiftUI
 
 struct ScheduleItem: View {
-    var splashImage: Image {
-        Image("oshi_no_ko_splash")
-    }
+//    var splashImage: Image {
+//        Image("oshi_no_ko_splash")
+//    }
+    var splashImage: Image
     
     
     var body: some View {
@@ -56,15 +61,21 @@ struct ScheduleItem: View {
                 .frame(width: 350)
                 Text("Recap: Aqua shines in the Tokyo Blade play, channeling his pain into a powerful performance while reflecting on Ai's tragic past. A vivid scene imagines a world where Ai survives, adding emotional depth and fueling Aqua's drive for answers")
                     .font(.caption)
+                    //explicitly leading so it shows us correctly in ScheduleRow
+                    .multilineTextAlignment(.leading)
 
             }
             //limiting the height of the frame
             //        .frame(height: 200)
         }
+        //explicit properties so it shows us correctly in ScheduleRow
+        .padding(.bottom)
+        .foregroundStyle(.primary)
+
         
     }
 }
 
 #Preview {
-    ScheduleItem()
+    ScheduleItem(splashImage: Image("oshi_no_ko_splash"))
 }
