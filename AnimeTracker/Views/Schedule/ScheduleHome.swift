@@ -8,7 +8,7 @@
 //To-do
 //There is a page indictor, but is is not clearly visible. Change its apperance!
 //Create the "current schedule" view
-
+//text is blue for some reason... fix!
 
 import SwiftUI
 

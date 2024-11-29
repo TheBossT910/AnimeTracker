@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 @Observable
 class AnimeData {
     //grabbing data from animeData.json file and putting into our own Anime objects.
@@ -48,3 +49,5 @@ func load<T: Decodable>(_ filename: String) -> T {
         fatalError("Couldn't decode \(filename): \(error)")
     }
 }
+
+
