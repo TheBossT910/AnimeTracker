@@ -9,7 +9,7 @@ import FirebaseFirestore
 
 class AnimeDataFirebase: ObservableObject {
     //Dictionary to store document data, dictionary in a dictionary
-    @Published var docs: [String: [String: Any]]
+    @Published var docs: [String: general]
     var collection: String
     
     // Initialize and fetch data
@@ -28,11 +28,11 @@ class AnimeDataFirebase: ObservableObject {
             let query = try await db.collection(collection).getDocuments()
             
             //making an empty dictionary
-            var docDict: [String: [String: Any]] = [:]
+            var docDict: [String: general] = [:]
             
             //adding each document data (value) with key of document id
-            query.documents.forEach { document in
-                docDict[document.documentID] = document.data()
+            try query.documents.forEach { document in
+                docDict[document.documentID] =  try document.data(as: general.self)
             }
             //assigning to object variable
             self.docs = docDict

@@ -21,13 +21,15 @@ struct FirebaseTest2: View {
                 
                 Text("____SPACER____")
                 
-                //get the dictionary at key "general" and display it
-                let temp = viewModel.docs["general"]
-                Text(temp?.description ?? "Nothing found")
-                //shows specific value from the dicitonary
-                let temp2 = temp?["rating"]
-                //NOTE: I think I need to "cast" this into a struct to access it... look at the AnimeFirebaseData class!
-                Text(temp2.debugDescription)
+                //get the dictionary at key "description" and display it
+                let temp = viewModel.docs["description"]
+                Text(temp.debugDescription)
+                
+                Text("____SPACER____")
+                
+                //show data!
+                Text(temp?.anime ?? "No desc")
+
                 
             } else {
                 Text("Loading...")
