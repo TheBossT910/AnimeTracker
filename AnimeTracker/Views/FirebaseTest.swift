@@ -21,13 +21,21 @@ struct AnimeFirebase: Identifiable, Decodable {
     let watched: Bool
 }
 
+
 struct FirebaseTest: View {
     @FirestoreQuery(collectionPath: "animeGeneral") var animes: [AnimeFirebase]
+    
+    //getting a sub collection! -> I had to delete and remake it for some reason
+    @FirestoreQuery(collectionPath: "/animeGeneral/AXYHtEVx4zq1UWPdB53t/OshiNoKo") var animes2: [AnimeFirebase]
+    
     //can filter our results using predicates
 //    @FirestoreQuery(collectionPath: "animeGeneral", predicates: .where(field: "watched", isEqualTo: true)) var animes: [AnimeFirebase]
     
     var body: some View {
         List(animes) {anime in
+            Text(anime.title)
+        }
+        List(animes2) {anime in
             Text(anime.title)
         }
     }
