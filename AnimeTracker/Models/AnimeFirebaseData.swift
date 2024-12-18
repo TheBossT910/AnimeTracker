@@ -9,15 +9,16 @@ import FirebaseFirestore
 
 class AnimeDataFirebase: ObservableObject {
     //Dictionary to store document data, dictionary in a dictionary
-    @Published var docs: [String: general]
-    var collection: String
+    @Published var docs: [String]
+    @Published var animes: [String: [String: general]]
     
     // Initialize and fetch data
-    init(collection: String) {
-        self.collection = collection
-        self.docs = [:]
+    init() {
+        self.docs = []
+        self.animes = [:]
         Task {
             await getDocuments()
+            await getAnimes()
         }
     }
     
@@ -25,32 +26,46 @@ class AnimeDataFirebase: ObservableObject {
     func getDocuments() async {
         do {
             let db = Firestore.firestore()
-            let query = try await db.collection(collection).getDocuments()
+            let query = try await db.collection("/animes/").getDocuments()
             
             //making an empty dictionary
-            var docDict: [String: general] = [:]
+            var docArr: [String] = []
             
-            //adding each document data (value) with key of document id
-            try query.documents.forEach { document in
-                docDict[document.documentID] =  try document.data(as: general.self)
+            //for each document in Anime
+            query.documents.forEach { document in
+                docArr.append(document.documentID)
             }
             //assigning to object variable
-            self.docs = docDict
+            self.docs = docArr
             
         } catch {
             
         }
     }
-}
-    
+        
+        func getAnimes() async {
+            let db = Firestore.firestore()
+            var innerDocDict: [String: general] = [:]
+            for document in docs {
+                do {
+                    let innerQuery = try await db.collection("/animes/\(document)/s1").getDocuments()
+                    try innerQuery.documents.forEach { innerDoc in
+                        innerDocDict[innerDoc.documentID] = try innerDoc.data(as: general.self)
+                    }
+                    self.animes[document] = innerDocDict
+                    
+                } catch {
+                    
+                }
+            }
+        }
+    }
 
-
-// Define your model
+//TODO: create different structs for each specific type of document in Firebase
 struct general: Identifiable, Decodable {
     @DocumentID var id: String?  // Maps Firestore's document ID
     let title: String?
     let watched: Bool?
     let anime: String?
+    let engTitle: String?
 }
-
-

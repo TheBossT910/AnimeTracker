@@ -9,32 +9,42 @@ import SwiftUI
 
 struct FirebaseTest2: View {
 
-    @StateObject private var viewModel = AnimeDataFirebase(collection: "/animes/6KaHVRxICvkkrRYsDiMY/s1")
+    @StateObject private var viewModel = AnimeDataFirebase()
+    //"/animes/6KaHVRxICvkkrRYsDiMY/s1"
 
     var body: some View {
         VStack {
             //show data if the dictionary has items
             if viewModel.docs.isEmpty == false {
-                //number of dictionary items
-                Text("Anime: \(viewModel.docs.count)")
+                //number of documents and document ids
+                Text("Show Documents: \(viewModel.docs.count)")
                 Text(viewModel.docs.description)
                 
                 Text("____SPACER____")
                 
-                //get the dictionary at key "description" and display it
-                let temp = viewModel.docs["description"]
-                Text(temp.debugDescription)
+                //number of animes (same as number of documents)
+                Text("Anime Count: \(viewModel.animes.count)")
+//                Text(viewModel.animes.description)
                 
-                Text("____SPACER____")
+                //see the first key (the inner documents of animes)
+//                let keys = viewModel.animes.keys
+//                Text(keys.first ?? "N/A")
                 
-                //show data!
-                Text(temp?.anime ?? "No desc")
-
+                //see a specific anime
+//                Text(viewModel.animes["6KaHVRxICvkkrRYsDiMY"]?.debugDescription ?? "None")
+//                Text(viewModel.animes["6KaHVRxICvkkrRYsDiMY"]?.keys.first ?? "N/A")
+                
+                //gets the anime at that doc id
+                let cur = viewModel.animes["6KaHVRxICvkkrRYsDiMY"]
+                //goes through its properties
+//                Text(cur?["general"].debugDescription ?? "N/A")
+                Text(cur?["general"]?.engTitle ?? "N/A")
+                Text(cur?["description"]?.anime ?? "N/A")
                 
             } else {
                 Text("Loading...")
             }
-            
+        
         }
         .onAppear {
             // Trigger fetching data when the view appears (if needed)
