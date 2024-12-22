@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FirebaseTest2: View {
 
-    @StateObject private var viewModel = AnimeDataFirebase()
+    @StateObject private var viewModel = AnimeDataFirebase(collection: "s1")
     //"/animes/6KaHVRxICvkkrRYsDiMY/s1"
 
     var body: some View {
@@ -18,7 +18,7 @@ struct FirebaseTest2: View {
             if viewModel.docs.isEmpty == false {
                 //number of documents and document ids
                 Text("Show Documents: \(viewModel.docs.count)")
-                Text(viewModel.docs.description)
+//                Text(viewModel.docs.description)
                 
                 Text("____SPACER____")
                 
@@ -36,10 +36,29 @@ struct FirebaseTest2: View {
                 
                 //gets the anime at that doc id
                 let cur = viewModel.animes["6KaHVRxICvkkrRYsDiMY"]
+                
                 //goes through its properties
+//                Text(cur?["description"].debugDescription ?? "N/A")
 //                Text(cur?["general"].debugDescription ?? "N/A")
-                Text(cur?["general"]?.engTitle ?? "N/A")
-                Text(cur?["description"]?.anime ?? "N/A")
+//                Text(cur?["files"].debugDescription ?? "N/A")
+//                Text(cur?["recap"].debugDescription ?? "N/A")
+                
+//                let description = cur?["description"] as? description
+                let files = cur?["files"] as? files
+                let general = cur?["general"] as? general
+//                let recap = cur?["recap"] as? recap
+                let media = cur?["media"] as? media
+                
+                //Text(curObj.debugDescription)
+//                Text(description?.anime ?? "N/A")
+                Text(files?.boxImage ?? "N/A")
+                Text(general?.engTitle ?? "N/A")
+//                Text(recap?.recap?["1"] ?? "N/A")
+//                Text(media?.episodes?["1"]?["air_day"] ?? "N/A")
+//                Text(media?.episodes?.debugDescription ?? "N/A")
+//                Text(media.debugDescription)
+                Text(media?.episodes?["1"]?.air_day ?? "N/A")
+                Text(media?.movies?["1"]?.name_eng ?? "N/A")
                 
             } else {
                 Text("Loading...")
