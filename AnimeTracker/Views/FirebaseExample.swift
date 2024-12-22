@@ -1,5 +1,5 @@
 //
-//  FirebaseTest2.swift
+//  FirebaseExample.swift
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2024-11-29.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FirebaseTest2: View {
+struct FirebaseExample: View {
 
     @StateObject private var viewModel = AnimeDataFirebase(collection: "s1")
     //"/animes/6KaHVRxICvkkrRYsDiMY/s1"
@@ -72,5 +72,5 @@ struct FirebaseTest2: View {
 }
 
 #Preview {
-    FirebaseTest2()
+    FirebaseExample()
 }
