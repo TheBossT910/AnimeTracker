@@ -94,11 +94,11 @@ class AnimeDataFirebase: ObservableObject {
                 isRecommended: isRecommended)
             return obj
             
-        case "description":
-            let anime = raw["anime"] as? String
-            let episodes = raw["episodes"] as? [String: String]
-            let obj = description(anime: anime, episodes: episodes)
-            return obj
+//        case "description":
+//            let anime = raw["anime"] as? String
+//            let episodes = raw["episodes"] as? [String: String]
+//            let obj = description(anime: anime, episodes: episodes)
+//            return obj
         
         case "files":
             let boxImage = raw["boxImage"] as? String
@@ -106,13 +106,12 @@ class AnimeDataFirebase: ObservableObject {
             let obj = files(boxImage: boxImage, splashImage: splashImage)
             return obj
             
-        case "recap":
-            let recapInfo = raw["recap"] as? [String: String]
-            let obj = recap(recap: recapInfo)
-            return obj
+//        case "recap":
+//            let recapInfo = raw["recap"] as? [String: String]
+//            let obj = recap(recap: recapInfo)
+//            return obj
             
         case "media":
-            //TODO: get movies, etc. other medias as well. Currently hard-coded to only get episodes!
             let episodeInfo = raw["episodes"] as? [String: [String: String]]
             let episodes = fetchMediaInfo(media: episodeInfo!)
             
@@ -177,18 +176,18 @@ struct files: Identifiable, Decodable {
     let boxImage: String?
     let splashImage: String?
 }
-//TODO: Delete this -> deprecated. Using media now!
-struct description: Identifiable, Decodable {
-    @DocumentID var id: String?
-    let anime: String?
-    let episodes: [String: String]?
-}
-
-//TODO: Still need to properly set up recap on Firebase -> we are deleting this
-struct recap: Identifiable, Decodable {
-    @DocumentID var id: String?
-    let recap: [String: String]?
-}
+////TODO: Delete this -> deprecated. Using media now!
+//struct description: Identifiable, Decodable {
+//    @DocumentID var id: String?
+//    let anime: String?
+//    let episodes: [String: String]?
+//}
+//
+////TODO: Still need to properly set up recap on Firebase -> we are deleting this
+//struct recap: Identifiable, Decodable {
+//    @DocumentID var id: String?
+//    let recap: [String: String]?
+//}
 
 struct media: Identifiable, Decodable {
     @DocumentID var id: String?
