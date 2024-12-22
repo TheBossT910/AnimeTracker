@@ -28,6 +28,7 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 
 ## Docs
 [Docs at Notion](https://axiomatic-number-f0f.notion.site/AnimeTracker-Docs-164cff81b50d80caa06ad6cf25622b0e)
+[OneNote Log](https://1drv.ms/o/c/973d071f62ac6126/EiZhrGIfBz0ggJcYAgAAAAABiIXTkuhpgqgp0Fq6liObGQ)
 
 ## Contact  
 
