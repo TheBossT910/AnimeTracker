@@ -38,27 +38,28 @@ struct FirebaseExample: View {
                 let cur = viewModel.animes["6KaHVRxICvkkrRYsDiMY"]
                 
                 //goes through its properties
-//                Text(cur?["description"].debugDescription ?? "N/A")
 //                Text(cur?["general"].debugDescription ?? "N/A")
 //                Text(cur?["files"].debugDescription ?? "N/A")
-//                Text(cur?["recap"].debugDescription ?? "N/A")
+//                Text(cur?["media"].debugDescription ?? "N/A")
                 
-//                let description = cur?["description"] as? description
                 let files = cur?["files"] as? files
                 let general = cur?["general"] as? general
-//                let recap = cur?["recap"] as? recap
                 let media = cur?["media"] as? media
                 
                 //Text(curObj.debugDescription)
-//                Text(description?.anime ?? "N/A")
-                Text(files?.boxImage ?? "N/A")
-                Text(general?.engTitle ?? "N/A")
-//                Text(recap?.recap?["1"] ?? "N/A")
-//                Text(media?.episodes?["1"]?["air_day"] ?? "N/A")
-//                Text(media?.episodes?.debugDescription ?? "N/A")
-//                Text(media.debugDescription)
+                Text(files?.box_image ?? "N/A")
+                Text(general?.title_eng ?? "N/A")
+                Text(general?.description ?? "N/A")
                 Text(media?.episodes?["1"]?.air_day ?? "N/A")
                 Text(media?.movies?["1"]?.name_eng ?? "N/A")
+                
+                //get the titles for all animes
+                let keys = Array(viewModel.animes.keys).sorted()
+                ForEach(keys, id: \.self) { key in
+                    let currentAnime = viewModel.animes[key]
+                    let general = currentAnime?["general"] as? general
+                    Text(general?.title_eng ?? "N/A")
+                }
                 
             } else {
                 Text("Loading...")

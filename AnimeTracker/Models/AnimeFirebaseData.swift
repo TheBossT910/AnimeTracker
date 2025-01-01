@@ -41,7 +41,7 @@ class AnimeDataFirebase: ObservableObject {
             self.docs = docArr
             
         } catch {
-            
+            print("Error fetching documents: \(error.localizedDescription)")
         }
     }
         
@@ -50,7 +50,7 @@ class AnimeDataFirebase: ObservableObject {
             var innerDocDict: [String: Any] = [:]
         
             //going through each document for an anime collection
-            for document in docs {
+            for document in self.docs {
                 do {
                     //fetching a collection
                     let innerQuery = try await db.collection("/animes/\(document)/\(collection)").getDocuments()
@@ -73,43 +73,37 @@ class AnimeDataFirebase: ObservableObject {
         //Returns an object created using the appropriate struct
         switch docID {
         case "general":
-            let engTitle = raw["engTitle"] as? String
-            let jpnTitle = raw["jpnTitle"] as? String
-            let episodes = raw["episodes"] as? Int
             let broadcast = raw["broadcast"] as? String
-            let premiere = raw["premiere"] as? String
-            let rating = raw["rating"] as? String
-            let categoryStatus = raw["categoryStatus"] as? String
+            let categoryStatus = raw["category_status"] as? String
+            let description = raw["description"] as? String
+            let titleEng = raw["title_eng"] as? String
+            let titleJp = raw["title_jp"] as? String
+            let episodes = raw["episodes"] as? Int
             let isFavorite = raw["isFavorite"] as? Bool
             let isRecommended = raw["isRecommended"] as? Bool
+            let premiere = raw["premiere"] as? String
+            let rating = raw["rating"] as? String
+            
             let obj = general(
-                engTitle: engTitle,
-                jpTitle: jpnTitle,
-                episodes: episodes,
                 broadcast: broadcast,
-                premiere: premiere,
-                rating: rating,
-                categoryStatus: categoryStatus,
+                category_status: categoryStatus,
+                description: description,
+                title_eng: titleEng,
+                title_jp: titleJp,
+                episodes: episodes,
                 isFavorite: isFavorite,
-                isRecommended: isRecommended)
+                isRecommended: isRecommended,
+                premiere: premiere,
+                rating: rating
+            )
             return obj
             
-//        case "description":
-//            let anime = raw["anime"] as? String
-//            let episodes = raw["episodes"] as? [String: String]
-//            let obj = description(anime: anime, episodes: episodes)
-//            return obj
         
         case "files":
-            let boxImage = raw["boxImage"] as? String
-            let splashImage = raw["splashImage"] as? String
-            let obj = files(boxImage: boxImage, splashImage: splashImage)
+            let boxImage = raw["box_image"] as? String
+            let splashImage = raw["splash_image"] as? String
+            let obj = files(box_image: boxImage, splash_image: splashImage)
             return obj
-            
-//        case "recap":
-//            let recapInfo = raw["recap"] as? [String: String]
-//            let obj = recap(recap: recapInfo)
-//            return obj
             
         case "media":
             let episodeInfo = raw["episodes"] as? [String: [String: String]]
@@ -159,35 +153,24 @@ class AnimeDataFirebase: ObservableObject {
 //structs for general, files, description, recap documents in each anime's collection
 struct general: Identifiable, Decodable {
     @DocumentID var id: String?
-    let engTitle: String?
-    let jpTitle: String?
-    let episodes: Int?
     let broadcast: String?
-    let premiere: String?
-    let rating: String?
-    let categoryStatus: String?
+    let category_status: String?
+    let description: String?
+    let title_eng: String?
+    let title_jp: String?
+    let episodes: Int?
     let isFavorite: Bool?
     let isRecommended: Bool?
+    let premiere: String?
+    let rating: String?
 
 }
 
 struct files: Identifiable, Decodable {
     @DocumentID var id: String?
-    let boxImage: String?
-    let splashImage: String?
+    let box_image: String?
+    let splash_image: String?
 }
-////TODO: Delete this -> deprecated. Using media now!
-//struct description: Identifiable, Decodable {
-//    @DocumentID var id: String?
-//    let anime: String?
-//    let episodes: [String: String]?
-//}
-//
-////TODO: Still need to properly set up recap on Firebase -> we are deleting this
-//struct recap: Identifiable, Decodable {
-//    @DocumentID var id: String?
-//    let recap: [String: String]?
-//}
 
 struct media: Identifiable, Decodable {
     @DocumentID var id: String?
