@@ -9,11 +9,20 @@ import SwiftUI
 
 struct CategoryItem: View {
     var anime: Anime
+    var animeFB: [String: Any]?
     
     var body: some View {
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        
+        //getting the box image
+        var boxImage: Image {
+            Image(animeFiles?.box_image ?? "N/A")
+        }
+        
         //adding the image, and changing its apperance
         VStack(alignment: .leading) {
-            anime.image
+            boxImage
                 .renderingMode(.original)
                 //.resizable()
                 //allows us to maintain the correct aspect ratio
@@ -30,7 +39,7 @@ struct CategoryItem: View {
         
             
             //adding the show name
-            Text(anime.name)
+            Text(animeGeneral?.title_eng ?? "N/A")
                 //changing the look
                 .foregroundStyle(.primary)
                 .font(.caption)
@@ -42,5 +51,10 @@ struct CategoryItem: View {
 }
 
 #Preview {
-    CategoryItem(anime: AnimeData().animes[0])
+    @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    //Oshi no Ko and Spy x Family
+//    var animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
+    let animeFB = animeDataFB.animes["OZtFGA9sVtdxtOCZZTEw"]
+    
+    CategoryItem(anime: AnimeData().animes[0], animeFB: animeFB)
 }

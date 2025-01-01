@@ -61,6 +61,7 @@ class AnimeDataFirebase: ObservableObject {
                         innerDocDict[innerDoc.documentID] = generalObj
                         
                     }
+                    //appending data to dictionary
                     self.animes[document] = innerDocDict
                     
                 } catch {

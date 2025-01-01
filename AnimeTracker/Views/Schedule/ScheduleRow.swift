@@ -12,10 +12,16 @@
 import SwiftUI
 
 struct ScheduleRow: View {
+    //Firebase
+    @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
     var items: [Anime]
     var day: String
 
     var body: some View {
+        //grabbing Oshi no Ko
+        let animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
+        
         ScrollView(.vertical) {
             Text(day)
                 .font(.title)
@@ -23,7 +29,7 @@ struct ScheduleRow: View {
             ForEach(items, id: \.self) { anime in
                 //NavigationLink allows us to navigate to AnimeDetail when clicked (when importing this view into another view)
                 NavigationLink {
-                    AnimeDetail(anime: anime)
+                    AnimeDetail(anime: anime, animeFB: animeFB)
                 } label: {
                     ScheduleItem(splashImage: anime.image)
                 }

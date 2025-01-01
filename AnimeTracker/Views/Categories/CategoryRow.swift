@@ -8,10 +8,19 @@
 import SwiftUI
 
 struct CategoryRow: View {
+    //Firebase
+    @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
     var categoryName: String
     var items: [Anime]
     
     var body: some View {
+        //grabbing the keys of all animes
+        let animeKeys = Array(animeDataFB.animes.keys).sorted()
+        
+        //TODO: fully implement Firebase so we don't need to depend on Anime objects
+        let anime = items.first!
+        
         VStack(alignment: .leading) {
             //displaying the category name
             Text(categoryName)
@@ -24,13 +33,21 @@ struct CategoryRow: View {
                 //putting everything horizontally
                 HStack(alignment: .top, spacing: 0) {
                     //displaying each item
-                    ForEach(items) { anime in
-                        //having it link to the correct details page
-                        NavigationLink {
-                            AnimeDetail(anime: anime)
-                            //image of the anime
-                        } label: {
-                            CategoryItem(anime: anime)
+                    ForEach(animeKeys, id: \.self) { animeKey in
+                        //get the categoryStatus of the current anime
+                        let currentAnime = animeDataFB.animes[animeKey]!
+                        let animeGeneral = currentAnime["general"] as? general
+                        let categoryStatus = animeGeneral?.category_status ?? "N/A"
+                        
+                        //only display an anime if it is in the category we want
+                        if (categoryStatus == categoryName) {
+                            //having it link to the correct details page
+                            NavigationLink {
+                                AnimeDetail(anime: anime, animeFB: currentAnime)
+                                //image of the anime
+                            } label: {
+                                CategoryItem(anime: anime, animeFB: currentAnime)
+                            }
                         }
                     }
                 }
@@ -40,7 +57,7 @@ struct CategoryRow: View {
     }
 }
 
-#Preview {
+#Preview {    
     let animes = AnimeData().animes
     return CategoryRow(
         categoryName: animes[0].categoryStatus.rawValue,

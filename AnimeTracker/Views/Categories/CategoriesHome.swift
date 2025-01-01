@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CategoriesHome: View {
+    //Firebase
+    @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
     //making AnimeData accessible through animeData
     @Environment(AnimeData.self) var animeData
     
@@ -17,9 +20,11 @@ struct CategoriesHome: View {
     }
     
     var body: some View {
+        //stating the categories we have
+        let categories = ["Watching", "Completed", "Plan to Watch", "Dropped"]
+        
         NavigationSplitView {
             List {
-                
                 splashImage
                     .resizable()
                     //allows the image to fill the entire container (will mean some of our image lies outside of the view, thus will look cropped)
@@ -28,10 +33,11 @@ struct CategoriesHome: View {
                     //allows the image to be displayed to the edge of the screen
                     .listRowInsets(EdgeInsets())
                 
-                //displaying each anime in its respective status category
-                ForEach(animeData.categoryStatus.keys.sorted(), id: \.self) { key in
-                    CategoryRow(categoryName: key, items: animeData.categoryStatus[key]!)
+                //display each category with its respective animes
+                ForEach(categories, id: \.self) { category in
+                    CategoryRow(categoryName: category, items: animeData.animes)
                 }
+                
                 //allows the content to be extended to the edge of the display
                 .listRowInsets(EdgeInsets())
             }

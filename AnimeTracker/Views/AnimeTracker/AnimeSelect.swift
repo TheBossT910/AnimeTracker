@@ -9,20 +9,28 @@ import SwiftUI
 
 struct AnimeSelect: View {
     var anime: Anime
+    var animeFB: [String: Any]?
+    
     var body: some View {
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        
         VStack {
             HStack {
-                Text(anime.premiere)
+                Text(animeGeneral?.premiere ?? "N/A")
                     .font(.caption2)
                     .fontWeight(.heavy)
                     .foregroundColor(Color.black)
-                Text(anime.rating)
+                Text(animeGeneral?.rating ?? "N/A")
                     .font(.caption2)
             }
 
             //making the image
             VStack {
-                anime.image
+                var boxImage: Image {
+                    Image(animeFiles?.box_image ?? "N/A")
+                }
+                boxImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     //the ratio for fitting it is 11/15 (width/height)
@@ -34,6 +42,7 @@ struct AnimeSelect: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.black, lineWidth: 4)
                         //padding()
+                        //TODO: Implement favorite with Firebase
                         if anime.isFavorite {
                             Image(systemName: "heart.fill")
                                 .resizable()
@@ -47,9 +56,9 @@ struct AnimeSelect: View {
 
             }
 
-            Text(anime.name)
+            Text(animeGeneral?.title_eng ?? "N/A")
                 .font(.headline)
-            Text(anime.jpTitle)
+            Text(animeGeneral?.title_jp ?? "N/A")
             //                .padding(.bottom, 10)
             //
 
@@ -62,5 +71,8 @@ struct AnimeSelect: View {
 }
 
 #Preview {
-    AnimeSelect(anime: AnimeData().animes[1])
+    @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    let animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
+    
+    AnimeSelect(anime: AnimeData().animes[1], animeFB: animeFB)
 }

@@ -18,30 +18,41 @@ struct AnimeDetail: View {
         animeData.animes.firstIndex(where: { $0.id == anime.id })!
     }
     
+    //Firebase
+    var animeFB: [String: Any]?
+    
     var body: some View {
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        
         @Bindable var animeData = animeData
         ScrollView {
-            //hardcoded image
-            BoxImage(image: anime.image)
+            //getting the box image
+            var boxImage: Image {
+                Image(animeFiles?.box_image ?? "N/A")
+            }
+            BoxImage(image: boxImage)
             
             //Putting all the text stuff within a VStack
             VStack(alignment: .leading) {
                 HStack {
                     
                     //Title and favourite button
-                    Text(anime.name)
+                    Text(animeGeneral?.title_eng ?? "N/A")
                         .font(.title)
                     Spacer()
                     
+                    //TODO: implement favorite button with Firebase
                     //add favorite button
                     FavoriteButton(isSet: $animeData.animes[animeIndex].isFavorite)
                 }
                 HStack {
                     //Release schedule info?
-                    Text(anime.broadcast)
+                    Text(animeGeneral?.broadcast ?? "N/A")
                     Spacer()
-                    //Anime season info?
-                    Text("S\(anime.season), \(anime.premiere)")
+                    //TODO: Implement show season with Firebase. Disabled for now
+                    //Anime season info
+                    Text(animeGeneral?.premiere ?? "N/A")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -54,7 +65,7 @@ struct AnimeDetail: View {
                     .padding(.bottom, 10)
         
                 }
-                    Text(anime.description)
+            Text(animeGeneral?.description ?? "N/A")
             
 //Trying to make a cool shadow effect, not working properly right now! :(
 //                        .background(
@@ -69,8 +80,13 @@ struct AnimeDetail: View {
 }
 
 #Preview {
+    @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    //Oshi no Ko and Spy x Family
+//    var animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
+    let animeFB = animeDataFB.animes["OZtFGA9sVtdxtOCZZTEw"]
+    
     let animeData = AnimeData()
-    AnimeDetail(anime: animeData.animes[0])
+    AnimeDetail(anime: animeData.animes[0], animeFB: animeFB)
         //We need this because we reference @Environment in the code
         .environment(animeData)
 }

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct AnimeList: View {
+    //Firebase
+    @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
     //stuff for making favorites
     @Environment(AnimeData.self) var animeData
     @State private var showFavoritesOnly: Bool = false
@@ -23,6 +26,12 @@ struct AnimeList: View {
     }
 
     var body: some View {
+        //grabbing the keys of all animes
+        let animeKeys = Array(animeDataFB.animes.keys).sorted()
+        
+        //TEMPORARY! TODO: implement favoruties with Firebase, so that we dont need this!
+        let anime = animeData.animes.first!
+        
         NavigationStack {
             //favorites toggle
             Toggle(isOn: $showFavoritesOnly) {
@@ -33,9 +42,10 @@ struct AnimeList: View {
             //displaying all of our shows
             ScrollView {
                 LazyVGrid(columns: columns) {
-                    ForEach(filteredAnimes) { anime in
-                        NavigationLink(destination: AnimeDetail(anime: anime)) {
-                            AnimeSelect(anime: anime)
+                    ForEach(animeKeys, id: \.self) { animeKey in
+                        let currentAnime = animeDataFB.animes[animeKey]
+                        NavigationLink(destination: AnimeDetail(anime: anime, animeFB: currentAnime)) {
+                            AnimeSelect(anime: anime, animeFB: currentAnime)
                         }
                     }
                 }
