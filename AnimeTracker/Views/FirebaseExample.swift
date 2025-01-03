@@ -61,6 +61,16 @@ struct FirebaseExample: View {
                     Text(general?.title_eng ?? "N/A")
                 }
                 
+                Text("_______SPACER_______")
+                
+                //testing Firebase update function
+//                Text("Testing Firebase update function")
+//                Text("animeDocumentID: 6KaHVRxICvkkrRYsDiMY")
+//                Text("updateDocument: general")
+//                Text("updateItems: [\"isFavorite\": true]")
+                Text("isFav value before was TRUE")
+                Text("isFav value AFTER: \(general?.isFavorite)")
+                
             } else {
                 Text("Loading...")
             }
@@ -68,6 +78,7 @@ struct FirebaseExample: View {
         }
         .onAppear {
             // Trigger fetching data when the view appears (if needed)
+            viewModel.updateData(animeDocumentID: "6KaHVRxICvkkrRYsDiMY", updateDocument: "general", updateItems: ["isFavorite": true])
         }
     }
 }
