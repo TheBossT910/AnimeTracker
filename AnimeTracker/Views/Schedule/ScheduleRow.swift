@@ -5,7 +5,7 @@
 //  Created by Taha Rashid on 2024-11-27.
 //
 
-//To-do:
+//TODO:
 //Add the "top shows" section
 //Format the day of the week properly
 
@@ -29,8 +29,8 @@ struct ScheduleRow: View {
             ForEach(items, id: \.self) { anime in
                 //NavigationLink allows us to navigate to AnimeDetail when clicked (when importing this view into another view)
                 NavigationLink {
-                    //TODO: implement isFavorite properly
-                    AnimeDetail(animeFB: animeFB)
+                    //TODO: implement animeID properly. This is simply hard-coded
+                    AnimeDetail(animeID: "6KaHVRxICvkkrRYsDiMY", animeFB: animeFB)
                 } label: {
                     ScheduleItem(splashImage: anime.image)
                 }

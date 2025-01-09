@@ -44,7 +44,7 @@ struct CategoryRow: View {
                             //having it link to the correct details page
                             //TODO: implement isFavorite properly
                             NavigationLink {
-                                AnimeDetail(animeFB: currentAnime)
+                                AnimeDetail(animeID: animeKey, animeFB: currentAnime)
                                 //image of the anime
                             } label: {
                                 CategoryItem(anime: anime, animeFB: currentAnime)

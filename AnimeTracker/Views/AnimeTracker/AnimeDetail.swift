@@ -12,12 +12,13 @@ struct AnimeDetail: View {
     //Firebase
     @EnvironmentObject var animeDataFB: AnimeDataFirebase
 //    var animeDataFB: AnimeDataFirebase
+    var animeID: String
     var animeFB: [String: Any]?
     
     var body: some View {
         //get Firebase doc objects
         //TODO: temporary hard-code to reference Oshi no Ko directly from EnvironmentObject. IT IS WORKING!!!!! IT FIXES EVERYTHING!!!!
-        var animeGeneral = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]?["general"] as? general
+        var animeGeneral = animeDataFB.animes[animeID]?["general"] as? general
 //        var animeGeneral = animeFB?["general"] as? general
         let animeFiles = animeFB?["files"] as? files
         let animeDocID = animeFiles?.doc_id_anime ?? "N/A"
@@ -106,7 +107,7 @@ struct AnimeDetail: View {
     let animeData = AnimeData()
     let animeDataFB = AnimeDataFirebase(collection: "s1")
     
-    AnimeDetail(animeFB: animeFB)
+    AnimeDetail(animeID: "6KaHVRxICvkkrRYsDiMY", animeFB: animeFB)
     //We need this because we reference @Environment in the code
         .environment(animeData)
         .environmentObject(animeDataFB)

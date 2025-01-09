@@ -49,7 +49,7 @@ struct AnimeList: View {
                 LazyVGrid(columns: columns) {
                     ForEach(animeKeys, id: \.self) { animeKey in
                         let currentAnime = animeDataFB.animes[animeKey]
-                        NavigationLink(destination: AnimeDetail( animeFB: currentAnime)) {
+                        NavigationLink(destination: AnimeDetail(animeID: animeKey, animeFB: currentAnime)) {
                             AnimeSelect(animeFB: currentAnime)
                         }
                         .onChange(of: showFavoritesOnly) {
@@ -69,17 +69,17 @@ struct AnimeList: View {
         .animation(.default, value: showFavoritesOnly)
     }
     
-    func createFavoriteList() {
-        print("Creating favorite list")
-    }
-    
-    func addFavorite() {
-        print("Adding favorite")
-    }
-    
-    func removeFavorite() {
-        print("Removing favorite")
-    }
+//    func createFavoriteList() {
+//        print("Creating favorite list")
+//    }
+//    
+//    func addFavorite() {
+//        print("Adding favorite")
+//    }
+//    
+//    func removeFavorite() {
+//        print("Removing favorite")
+//    }
 }
 
 
