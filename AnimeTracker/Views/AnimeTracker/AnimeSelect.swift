@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct AnimeSelect: View {
-    var anime: Anime
+//    @StateObject var animeDataTEST = AnimeDataFirebase(collection: "s1")
     var animeFB: [String: Any]?
     
     var body: some View {
         let animeGeneral = animeFB?["general"] as? general
         let animeFiles = animeFB?["files"] as? files
+        let isFavorite = animeGeneral?.isFavorite ?? false
         
         VStack {
             HStack {
@@ -42,8 +43,8 @@ struct AnimeSelect: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.black, lineWidth: 4)
                         //padding()
-                        //TODO: Implement favorite with Firebase
-                        if anime.isFavorite {
+
+                        if isFavorite {
                             Image(systemName: "heart.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -67,6 +68,7 @@ struct AnimeSelect: View {
         //        .padding(.bottom, 10)
         //        .padding(.leading, 10)
         //        .padding(.trailing, 10)
+            
     }
 }
 
@@ -74,5 +76,5 @@ struct AnimeSelect: View {
     @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
     let animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
     
-    AnimeSelect(anime: AnimeData().animes[1], animeFB: animeFB)
+    AnimeSelect(animeFB: animeFB)
 }

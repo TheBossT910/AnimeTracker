@@ -42,8 +42,9 @@ struct CategoryRow: View {
                         //only display an anime if it is in the category we want
                         if (categoryStatus == categoryName) {
                             //having it link to the correct details page
+                            //TODO: implement isFavorite properly
                             NavigationLink {
-                                AnimeDetail(anime: anime, animeFB: currentAnime)
+                                AnimeDetail(animeFB: currentAnime)
                                 //image of the anime
                             } label: {
                                 CategoryItem(anime: anime, animeFB: currentAnime)

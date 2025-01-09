@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct FavoriteButtonFB: View {
-    var animeDataFB: AnimeDataFirebase
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase
     var animeGeneral: general?
     var animeFiles: files?
     
-    @State var isFavorite: Bool
+    @State var isFavorite: Bool = false
     
-    init(animeDataFB: AnimeDataFirebase, animeGeneral: general?, animeFiles : files?) {
-        self.animeDataFB = animeDataFB
+    //TODO: perhaps remove this init, or make it consistent between files
+    init(animeGeneral: general?, animeFiles : files?) {
         self.animeGeneral = animeGeneral
         self.animeFiles = animeFiles
         
         //setting intial value of favorite as false
-        self.isFavorite = false
+//        self.isFavorite = false
     }
     
     var body: some View {
@@ -52,11 +52,19 @@ struct FavoriteButtonFB: View {
 }
 
 #Preview {
+    //for the dummy data
     //We only take in the animeGeneral object, nothing else
-    @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
-    var animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]    //Oshi no Ko
+    @Previewable @StateObject var animeDataFB2 = AnimeDataFirebase(collection: "s1")
+    
+    //dummy data
+    var animeFB = animeDataFB2.animes["6KaHVRxICvkkrRYsDiMY"]    //Oshi no Ko
     var animeGeneral = animeFB?["general"] as? general
     var animeFiles = animeFB?["files"] as? files
     
-    FavoriteButtonFB(animeDataFB: animeDataFB, animeGeneral: animeGeneral, animeFiles: animeFiles)
+    //environment objects
+    let animeDataFB = AnimeDataFirebase(collection: "s1")
+    
+    FavoriteButtonFB(animeGeneral: animeGeneral, animeFiles: animeFiles)
+        .environmentObject(animeDataFB)
+    
 }

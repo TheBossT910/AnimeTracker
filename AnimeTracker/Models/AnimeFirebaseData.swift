@@ -164,11 +164,11 @@ class AnimeDataFirebase: ObservableObject {
         
         //TODO: make this work with isRecommended in the future, and clean up the code!
         //now, lets update our currently stored data
-        var oldObj = self.animes[animeDocumentID]?["general"] as? general
-        print("before: \(oldObj?.isFavorite)")
-        oldObj?.isFavorite = updateItems["isFavorite"] as? Bool
-        self.animes[animeDocumentID]?["general"] = oldObj
-        print("after: \(oldObj?.isFavorite)")
+//        var oldObj = self.animes[animeDocumentID]?["general"] as? general
+//        print("before: \(oldObj?.isFavorite)")
+//        oldObj?.isFavorite = updateItems["isFavorite"] as? Bool
+//        self.animes[animeDocumentID]?["general"] = oldObj
+//        print("after: \(oldObj?.isFavorite)")
         
 //        let newObj = general(broadcast: oldObj?.broadcast, category_status: oldObj?.category_status, description: oldObj?.description, title_eng: oldObj?.title_eng, title_jp: oldObj?.title_jp, episodes: oldObj?.episodes, isFavorite: updateItems["isFavorite"] as? Bool, isRecommended: oldObj?.isRecommended, premiere: oldObj?.premiere, rating: oldObj?.rating)
 //        self.animes[animeDocumentID]?["general"] = newObj
@@ -177,7 +177,6 @@ class AnimeDataFirebase: ObservableObject {
 //        var temp = self.animes[animeDocumentID]?["general"] as? general
 //        print("from here: \(updateItems["isFavorite"] as? Bool))")
 //        print("from here: \(temp?.isFavorite ?? false)")
-        
 
         }
 }

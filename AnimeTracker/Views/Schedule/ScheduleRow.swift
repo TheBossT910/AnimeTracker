@@ -29,7 +29,8 @@ struct ScheduleRow: View {
             ForEach(items, id: \.self) { anime in
                 //NavigationLink allows us to navigate to AnimeDetail when clicked (when importing this view into another view)
                 NavigationLink {
-                    AnimeDetail(anime: anime, animeFB: animeFB)
+                    //TODO: implement isFavorite properly
+                    AnimeDetail(animeFB: animeFB)
                 } label: {
                     ScheduleItem(splashImage: anime.image)
                 }
