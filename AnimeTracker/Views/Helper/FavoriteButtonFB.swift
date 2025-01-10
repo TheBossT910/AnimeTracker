@@ -2,69 +2,37 @@
 //  FavoriteButtonFB.swift
 //  AnimeTracker
 //
-//  Created by Taha Rashid on 2025-01-02.
+//  Created by Taha Rashid on 2025-01-03.
 //
 
 import SwiftUI
 
 struct FavoriteButtonFB: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase
-    var animeGeneral: general?
-    var animeFiles: files?
-    
-    @State var isFavorite: Bool = false
-    
-    //TODO: perhaps remove this init, or make it consistent between files
-    init(animeGeneral: general?, animeFiles : files?) {
-        self.animeGeneral = animeGeneral
-        self.animeFiles = animeFiles
-        
-        //setting intial value of favorite as false
-//        self.isFavorite = false
-    }
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //AnimeDataFirebase object
+    var animeID: String //the document ID of an anime
+    @Binding var favorite: Bool //holds the favorite value of the represented anime
     
     var body: some View {
-        //get favorite value from Firebase
-        let setFavorite = animeGeneral?.isFavorite ?? false
-        
-        Button(
-            //the logic to update the favorites value in the database when the button is clicked
-            action: {
-                //update Firebase
-                let animeDocumentID = animeFiles?.doc_id_anime ?? "N/A"
-                let updateDocument = "general"
-                //we give the opposite  value of isFavorite here
-                let updateItems: [String : Any] = ["isFavorite": !isFavorite]
-                animeDataFB.updateData(animeDocumentID: animeDocumentID, updateDocument: updateDocument, updateItems: updateItems)
-            },
-            //setting the heart display
-            label: {
-                Label("Toggle favorite", systemImage: isFavorite ? "heart.fill" : "heart")
-                    .labelStyle(.iconOnly)
-                    .foregroundStyle(isFavorite ? .red : .primary)
-            }
-        )
-        .onChange(of: setFavorite ) {
-            //this updates our isFavorite value when the actual database gets its value updated
-            isFavorite = setFavorite
-        }
+        Button(action: {
+            favorite.toggle()
+            
+            //update favorite in Firebase
+            let updateDocument = "general"
+            let updateItems: [String : Any] = ["isFavorite": favorite]
+            animeDataFB.updateData(animeID: animeID, updateDocument: updateDocument, updateItems: updateItems)
+        }, label: {
+            //displaying a filled/unfilled heart depending on if favorite is true/false
+            Label("Toggle favorite", systemImage: favorite ? "heart.fill" : "heart")
+                .labelStyle(.iconOnly)
+                .foregroundStyle(favorite ? .red : .primary)
+        })
     }
 }
 
 #Preview {
-    //for the dummy data
-    //We only take in the animeGeneral object, nothing else
-    @Previewable @StateObject var animeDataFB2 = AnimeDataFirebase(collection: "s1")
-    
-    //dummy data
-    var animeFB = animeDataFB2.animes["6KaHVRxICvkkrRYsDiMY"]    //Oshi no Ko
-    var animeGeneral = animeFB?["general"] as? general
-    var animeFiles = animeFB?["files"] as? files
-    
-    //environment objects
+    //environment object
     let animeDataFB = AnimeDataFirebase(collection: "s1")
     
-    FavoriteButtonFB(animeGeneral: animeGeneral, animeFiles: animeFiles)
+    FavoriteButtonFB(animeID: "6KaHVRxICvkkrRYsDiMY", favorite: .constant(true))
         .environmentObject(animeDataFB)
-    
 }

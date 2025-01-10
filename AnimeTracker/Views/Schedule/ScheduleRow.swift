@@ -20,7 +20,7 @@ struct ScheduleRow: View {
 
     var body: some View {
         //grabbing Oshi no Ko
-        let animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
+//        let animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
         
         ScrollView(.vertical) {
             Text(day)
@@ -30,7 +30,7 @@ struct ScheduleRow: View {
                 //NavigationLink allows us to navigate to AnimeDetail when clicked (when importing this view into another view)
                 NavigationLink {
                     //TODO: implement animeID properly. This is simply hard-coded
-                    AnimeDetail(animeID: "6KaHVRxICvkkrRYsDiMY", animeFB: animeFB)
+                    AnimeDetail(animeID: "6KaHVRxICvkkrRYsDiMY")
                 } label: {
                     ScheduleItem(splashImage: anime.image)
                 }

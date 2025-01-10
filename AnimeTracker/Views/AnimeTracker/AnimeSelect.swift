@@ -8,15 +8,20 @@
 import SwiftUI
 
 struct AnimeSelect: View {
-//    @StateObject var animeDataTEST = AnimeDataFirebase(collection: "s1")
-    var animeFB: [String: Any]?
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase //holds an AnimeDataFirebase object, with Firebase data
+    var animeID: String //holds the document id to a specific anime
     
     var body: some View {
+        //getting anime object
+        let animeFB = animeDataFB.animes[animeID]
+        //getting anime data objects
         let animeGeneral = animeFB?["general"] as? general
         let animeFiles = animeFB?["files"] as? files
+        //getting anime favorite value
         let isFavorite = animeGeneral?.isFavorite ?? false
         
         VStack {
+            //displaying top text, premiere and rating
             HStack {
                 Text(animeGeneral?.premiere ?? "N/A")
                     .font(.caption2)
@@ -26,11 +31,14 @@ struct AnimeSelect: View {
                     .font(.caption2)
             }
 
-            //making the image
+            //displaying the image
             VStack {
+                //getting the image
                 var boxImage: Image {
                     Image(animeFiles?.box_image ?? "N/A")
                 }
+                
+                //formatting the image
                 boxImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -42,8 +50,8 @@ struct AnimeSelect: View {
 
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.black, lineWidth: 4)
-                        //padding()
-
+                        
+                        //display/hide a heart if favorite is true/false
                         if isFavorite {
                             Image(systemName: "heart.fill")
                                 .resizable()
@@ -56,25 +64,18 @@ struct AnimeSelect: View {
                     }
 
             }
-
+            //display the english and japanese title at the bottom
             Text(animeGeneral?.title_eng ?? "N/A")
                 .font(.headline)
             Text(animeGeneral?.title_jp ?? "N/A")
-            //                .padding(.bottom, 10)
-            //
-
         }
         .padding(10)
-        //        .padding(.bottom, 10)
-        //        .padding(.leading, 10)
-        //        .padding(.trailing, 10)
-            
     }
 }
 
 #Preview {
-    @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
-    let animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
-    
-    AnimeSelect(animeFB: animeFB)
+    //environment
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    AnimeSelect(animeID: "6KaHVRxICvkkrRYsDiMY")
+        .environmentObject(animeDataFB)
 }

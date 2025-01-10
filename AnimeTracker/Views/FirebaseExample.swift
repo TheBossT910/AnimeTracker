@@ -78,7 +78,7 @@ struct FirebaseExample: View {
         }
         .onAppear {
             // Trigger fetching data when the view appears (if needed)
-            viewModel.updateData(animeDocumentID: "6KaHVRxICvkkrRYsDiMY", updateDocument: "general", updateItems: ["isFavorite": true])
+            viewModel.updateData(animeID: "6KaHVRxICvkkrRYsDiMY", updateDocument: "general", updateItems: ["isFavorite": true])
         }
     }
 }

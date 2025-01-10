@@ -30,7 +30,7 @@ struct Tester: View {
             }
         )
         
-//        FavoriteButtonTester(animeDataFB: animeDataFB, animeGeneral: animeGeneral, animeFiles: animeFiles, favorite: favoriteBinding)
+//        FavoriteButtonFB(animeDataFB: animeDataFB, animeGeneral: animeGeneral, animeFiles: animeFiles, favorite: favoriteBinding)
     }
 }
 

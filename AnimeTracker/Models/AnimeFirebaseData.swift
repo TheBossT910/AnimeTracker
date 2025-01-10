@@ -152,11 +152,11 @@ class AnimeDataFirebase: ObservableObject {
     
     //updates data in Firebase
     //animeDocumentID is the anime, updateDocument is the general/files/media sections
-    func updateData(animeDocumentID: String, updateDocument: String, updateItems: [String: Any]) {
+    func updateData(animeID: String, updateDocument: String, updateItems: [String: Any]) {
         //get the requested Anime document, where we want to update the data
         let query = self.db
             .collection("/animes/")
-            .document(animeDocumentID)
+            .document(animeID)
             .collection("/s1")
             .document(updateDocument)
         //update the fields

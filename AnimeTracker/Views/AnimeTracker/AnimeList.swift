@@ -5,26 +5,19 @@
 //  Created by Taha Rashid on 2024-10-17.
 //
 
-//BUG: unfavoriting animes when "show favorites only" is clicked doesn't update the heart to be empty
-
 import SwiftUI
 
 struct AnimeList: View {
-    //Firebase
-//    @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase
-    @State private var showFavoritesOnly: Bool = false
-    
-    //TODO: Remove this, and implement @Environment with AnimeDataFirebase instead
-    @Environment(AnimeData.self) var animeData
-    
-    //    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeFirebase object, with Firebase data
+    @State private var showFavoritesOnly: Bool = false  //a toggle to show favorite shows only (true) or not (false)
+
+    //for the LazyVGrid. Tells it how to organize/display the items in the grid
     //alignment: .top makes it so that all items are aligned at the top (and not in the center by default!)
     let columns = [GridItem(.adaptive(minimum: 150), alignment: .top)]
 
-    //gives us animes depending if we want to see all or only favorites
-    //NOTE: So whats going on is that when we unfavorite an anime, it removes it from this filteredAnimes list and therefore breaks the binding.
+    //a filtered list of animes based on if we want to show all shows or only favorite shows
     var filteredAnimes: [String: [String: Any]] {
+        //going through all animes in animeDataFB
         animeDataFB.animes.filter { anime in
             let curGeneral = anime.value["general"] as? general
             let curFavorite = curGeneral?.isFavorite ?? false
@@ -35,7 +28,6 @@ struct AnimeList: View {
     var body: some View {
         //grabbing the keys of all animes we want to see
         let animeKeys = Array(filteredAnimes.keys).sorted()
-        var favMem: [String] = []
         
         NavigationStack {
             //favorites toggle
@@ -44,50 +36,28 @@ struct AnimeList: View {
             }
             .padding()
 
-            //displaying all of our shows
+            //display all shows
             ScrollView {
                 LazyVGrid(columns: columns) {
                     ForEach(animeKeys, id: \.self) { animeKey in
-                        let currentAnime = animeDataFB.animes[animeKey]
-                        NavigationLink(destination: AnimeDetail(animeID: animeKey, animeFB: currentAnime)) {
-                            AnimeSelect(animeFB: currentAnime)
-                        }
-                        .onChange(of: showFavoritesOnly) {
-                            if (showFavoritesOnly) {
-                                print("fav showed!")
-                            }
+                        //showing the AnimeSelect view. Clicking on it leads to the AnimeDetail view
+                        NavigationLink(destination: AnimeDetail(animeID: animeKey)) {
+                            AnimeSelect(animeID: animeKey)
                         }
                     }
                     
-                }
-                .onAppear() {
-                    //do something
                 }
             }
         }
         //animation when switching between favorites only and all animes view
         .animation(.default, value: showFavoritesOnly)
     }
-    
-//    func createFavoriteList() {
-//        print("Creating favorite list")
-//    }
-//    
-//    func addFavorite() {
-//        print("Adding favorite")
-//    }
-//    
-//    func removeFavorite() {
-//        print("Removing favorite")
-//    }
 }
-
 
 #Preview {
     //environment objects
-    let animeData = AnimeData()
     let animeDataFB = AnimeDataFirebase(collection: "s1")
+    
     AnimeList()
-        .environment(AnimeData())
         .environmentObject(animeDataFB)
 }

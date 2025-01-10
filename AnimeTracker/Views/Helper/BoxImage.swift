@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct BoxImage: View {
-    var image: Image
+    var image: Image    //holds the image to display
+    
     var body: some View {
         VStack {
             image
@@ -24,10 +25,9 @@ struct BoxImage: View {
 //                .offset(y: -150)
         }
         .padding()
-    
     }
 }
 
 #Preview {
-    BoxImage(image: Image("ao_no_hako_box_image"))
+    BoxImage(image: Image("ao_no_hako_box"))
 }
