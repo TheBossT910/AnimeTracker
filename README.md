@@ -6,7 +6,7 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 
 - Add anime to favourites
 - Sort by favourite anime
-- View "Completed", "Dropped", "Plan to Watch" and "Watching" Animes
+- View animes by the "Completed", "Dropped", "Plan to Watch" and "Watching" watchlists
 - View anime details
 
 ## Future Plans (In No Particular Order)
