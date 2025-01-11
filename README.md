@@ -27,6 +27,7 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 - Better UI/UX
 
 ## Next Steps (Potential Future Extensions of This Project)
+- iPadOS and MacOS version of app
 - Chrome extension that syncs with the app, allowing automatic tracking of which shows a user has watched
 - Android App (React Native? Flutter? Android Native?)
 - Website (NextJS + React + Tailwind CSS?)
