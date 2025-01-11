@@ -6,25 +6,30 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 
 - Add anime to favourites
 - Sort by favourite anime
-- View animes by the "Completed", "Dropped", "Plan to Watch" and "Watching" watchlists
 - View anime details
+
+## Currently Implementing
+
+- Weekly anime release calendar (This is the main feature of the app)
+- View animes by the "Completed", "Dropped", "Plan to Watch" and "Watching" watchlists
+  - This feature was previously avaliable before migrating to Firebase, but wasn't implemented fully
 
 ## Future Plans (In No Particular Order)
 
-- Weekly anime release calendar (This is the main feature of the app)
 - Sync to Google Calendar
 - View animes by genre
-- Episode progress tracking (check off which episodes you have watched)
+- Search for animes
+- Episode progress tracking (check off which episodes you have watched) (in the Schedule view)
 - Integration with anime databases like MyAnimeList or AniList
-- Add links to streaming services
+- Add links to streaming services (in the details view)
 - AI or ML powered anime recommendations, and anime episode recaps
-- "Most watched" and "currently watching" leaderboard
+- "Most watched" and "currently watching" leaderboard (new "leaderboards" view?)
 - Better UI/UX
 
 ## Next Steps (Potential Future Extensions of This Project)
 - Chrome extension that syncs with the app, allowing automatic tracking of which shows a user has watched
-- Android App (React Native?)
-- Website (React?)
+- Android App (React Native? Flutter? Android Native?)
+- Website (NextJS + React + Tailwind CSS?)
 
 ## Docs
 [Docs at Notion](https://axiomatic-number-f0f.notion.site/AnimeTracker-Docs-164cff81b50d80caa06ad6cf25622b0e)
