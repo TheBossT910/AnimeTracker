@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FavoriteButtonFB: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //AnimeDataFirebase object
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with data from Firebase
     var animeID: String //the document ID of an anime
     @Binding var favorite: Bool //holds the favorite value of the represented anime
     

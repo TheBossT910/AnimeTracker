@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AnimeList: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeFirebase object, with Firebase data
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase data
     @State private var showFavoritesOnly: Bool = false  //a toggle to show favorite shows only (true) or not (false)
 
     //for the LazyVGrid. Tells it how to organize/display the items in the grid
