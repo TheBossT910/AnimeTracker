@@ -8,14 +8,10 @@
 import SwiftUI
 
 struct CategoriesHome: View {
-    //Firebase
-    @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
-    
-    //making AnimeData accessible through animeData
-    @Environment(AnimeData.self) var animeData
-    
-    //hard-coded top image
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with data from Firebase
+
     var splashImage: Image {
+        //hard-coded top image for now
         Image("oshi_no_ko_splash")
     }
     
@@ -35,7 +31,7 @@ struct CategoriesHome: View {
                 
                 //display each category with its respective animes
                 ForEach(categories, id: \.self) { category in
-                    CategoryRow(categoryName: category, items: animeData.animes)
+                    CategoryRow(categoryName: category)
                 }
                 
                 //allows the content to be extended to the edge of the display
@@ -49,6 +45,9 @@ struct CategoriesHome: View {
 }
 
 #Preview {
+    //environment objects
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
     CategoriesHome()
-        .environment(AnimeData())
+        .environmentObject(animeDataFB)
 }

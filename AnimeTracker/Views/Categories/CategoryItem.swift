@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct CategoryItem: View {
-    var anime: Anime
-    var animeFB: [String: Any]?
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with data from Firebase
+    var animeID: String //holds the document id for a specific anime
     
     var body: some View {
+        //getting an anime object
+        let animeFB = animeDataFB.animes[animeID]
+        //gettting anime data objects
         let animeGeneral = animeFB?["general"] as? general
         let animeFiles = animeFB?["files"] as? files
         
@@ -51,10 +54,9 @@ struct CategoryItem: View {
 }
 
 #Preview {
-    @Previewable @StateObject var animeDataFB = AnimeDataFirebase(collection: "s1")
-    //Oshi no Ko and Spy x Family
-//    var animeFB = animeDataFB.animes["6KaHVRxICvkkrRYsDiMY"]
-    let animeFB = animeDataFB.animes["OZtFGA9sVtdxtOCZZTEw"]
+    //environment object
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
     
-    CategoryItem(anime: AnimeData().animes[0], animeFB: animeFB)
+    CategoryItem(animeID: "OZtFGA9sVtdxtOCZZTEw")
+        .environmentObject(animeDataFB)
 }
