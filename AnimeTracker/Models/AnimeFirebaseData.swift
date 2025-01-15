@@ -3,11 +3,10 @@
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2024-11-29.
-//
 
 import FirebaseFirestore
 
-class AnimeDataFirebase: ObservableObject {
+@MainActor class AnimeDataFirebase: ObservableObject {
     //Dictionary to store document data, dictionary in a dictionary
     @Published var docs: [String]
     @Published var animes: [String: [String: Any]]
@@ -40,35 +39,33 @@ class AnimeDataFirebase: ObservableObject {
             }
             //assigning to object variable
             self.docs = docArr
-            
         } catch {
-            print("Error fetching documents: \(error.localizedDescription)")
+            print("Error fetching documents")
         }
     }
-        
+    
     func getAnimes(collection: String) async {
-            var innerDocDict: [String: Any] = [:]
+        var innerDocDict: [String: Any] = [:]
         
-            //going through each document for an anime collection
-            for document in self.docs {
-                do {
-                    //fetching a collection
-                    let innerQuery = try await self.db.collection("/animes/\(document)/\(collection)").getDocuments()
-                    //structuring the data
-                     innerQuery.documents.forEach { innerDoc in
-                        let raw = innerDoc.data()
-                         let generalObj = structureData(docID: innerDoc.documentID, raw: raw)
-                        innerDocDict[innerDoc.documentID] = generalObj
-                        
-                    }
-                    //appending data to dictionary
-                    self.animes[document] = innerDocDict
-                    
-                } catch {
-                    
+        //going through each document for an anime collection
+        for document in self.docs {
+            do {
+                //fetching a collection
+                let innerQuery = try await self.db.collection("/animes/\(document)/\(collection)").getDocuments()
+                //structuring the data
+                innerQuery.documents.forEach { innerDoc in
+                    let raw = innerDoc.data()
+                    let generalObj = structureData(docID: innerDoc.documentID, raw: raw)
+                    innerDocDict[innerDoc.documentID] = generalObj
                 }
+                //appending data to dictionary
+                self.animes[document] = innerDocDict
+                
+            } catch {
+                print("Error fetching animes from document")
             }
         }
+    }
     
     func structureData(docID: String, raw: [String: Any]) -> Any {
         //Returns an object created using the appropriate struct
@@ -99,7 +96,7 @@ class AnimeDataFirebase: ObservableObject {
             )
             return obj
             
-        
+            
         case "files":
             let boxImage = raw["box_image"] as? String
             let splashImage = raw["splash_image"] as? String
@@ -145,9 +142,7 @@ class AnimeDataFirebase: ObservableObject {
             let innerObj = mediaContent(air_day: airDay, air_time: airTime, description: description, name_eng: nameEng, name_jp: nameJP, recap: recap)
             dict[key] = innerObj
         }
-        
         return dict
-    
     }
     
     //updates data in Firebase
@@ -161,24 +156,7 @@ class AnimeDataFirebase: ObservableObject {
             .document(updateDocument)
         //update the fields
         query.updateData(updateItems)
-        
-        //TODO: make this work with isRecommended in the future, and clean up the code!
-        //now, lets update our currently stored data
-//        var oldObj = self.animes[animeDocumentID]?["general"] as? general
-//        print("before: \(oldObj?.isFavorite)")
-//        oldObj?.isFavorite = updateItems["isFavorite"] as? Bool
-//        self.animes[animeDocumentID]?["general"] = oldObj
-//        print("after: \(oldObj?.isFavorite)")
-        
-//        let newObj = general(broadcast: oldObj?.broadcast, category_status: oldObj?.category_status, description: oldObj?.description, title_eng: oldObj?.title_eng, title_jp: oldObj?.title_jp, episodes: oldObj?.episodes, isFavorite: updateItems["isFavorite"] as? Bool, isRecommended: oldObj?.isRecommended, premiere: oldObj?.premiere, rating: oldObj?.rating)
-//        self.animes[animeDocumentID]?["general"] = newObj
-        
-//        //debug
-//        var temp = self.animes[animeDocumentID]?["general"] as? general
-//        print("from here: \(updateItems["isFavorite"] as? Bool))")
-//        print("from here: \(temp?.isFavorite ?? false)")
-
-        }
+    }
 }
 
 
