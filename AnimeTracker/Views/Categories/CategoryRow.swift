@@ -14,8 +14,6 @@ struct CategoryRow: View {
     var body: some View {
         //grabbing the keys of all animes
         let animeKeys = Array(animeDataFB.animes.keys).sorted()
-        let aight = animeKeys.count
-        Text("\(aight)")
         
         VStack(alignment: .leading) {
             //displaying the category name
