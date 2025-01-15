@@ -3,7 +3,7 @@
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2024-10-17.
-//
+//  DEPRECATED, planned for deletion
 
 import Foundation
 import SwiftUI

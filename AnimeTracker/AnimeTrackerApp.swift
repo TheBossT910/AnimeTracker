@@ -14,12 +14,10 @@ struct AnimeTrackerApp: App {
         FirebaseApp.configure()
     }
     
-    @State private var animeData = AnimeData()
     @StateObject private var animeDataFB = AnimeDataFirebase(collection: "s1")
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(animeData)
                 .environmentObject(animeDataFB)
         }
     }
