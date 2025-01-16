@@ -173,7 +173,6 @@ struct general: Identifiable, Decodable {
     let isRecommended: Bool?
     let premiere: String?
     let rating: String?
-
 }
 
 struct files: Identifiable, Decodable {
