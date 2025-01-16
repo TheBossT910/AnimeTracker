@@ -5,15 +5,16 @@
 //  Created by Taha Rashid on 2024-11-27.
 //
 
-//To-do
+//TODO:
 //There is a page indictor, but is is not clearly visible. Change its apperance!
 //Create the "current schedule" view
 //text is blue for some reason... fix!
+//show shows by release day (currently hard-coded, all days show the same data)
 
 import SwiftUI
 
 struct ScheduleHome: View {
-    @Environment(AnimeData.self) var animeData
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase information
     var week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
     var body: some View {
@@ -26,7 +27,7 @@ struct ScheduleHome: View {
             TabView {
                 ForEach(week, id: \.self) { day in
                     //temporarily displaying the same set of data for every day
-                    ScheduleRow(items: animeData.animes, day: day)
+                    ScheduleRow(day: day)
                 }
             }
             .tabViewStyle(.page)
@@ -37,6 +38,8 @@ struct ScheduleHome: View {
 }
 
 #Preview {
+    //environment object
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
     ScheduleHome()
-        .environment(AnimeData())
+        .environmentObject(animeDataFB)
 }

@@ -5,18 +5,12 @@
 //  Created by Taha Rashid on 2024-11-23.
 //
 
-
-//To-do:
-//make it so that each data value (time, summary, title, episode name) is connected to each show/episode. It is hard-coded right now! -> Database?!
+//TODO: make it so that each data value (time, summary, title, episode name) is connected to each show/episode. It is hard-coded right now! -> Database?!
 
 import SwiftUI
 
 struct ScheduleItem: View {
-//    var splashImage: Image {
-//        Image("oshi_no_ko_splash")
-//    }
     var splashImage: Image
-    
     
     var body: some View {
         HStack(alignment: .bottom) {
