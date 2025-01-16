@@ -8,27 +8,17 @@
 import SwiftUI
 import Firebase
 
-//class AppDelegate: NSObject, UIApplicationDelegate {
-//  func application(_ application: UIApplication,
-//                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-//    FirebaseApp.configure()
-//
-//    return true
-//  }
-//}
-
 @main
 struct AnimeTrackerApp: App {
-//    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
         FirebaseApp.configure()
     }
     
-    @State private var animeData = AnimeData()
+    @StateObject private var animeDataFB = AnimeDataFirebase(collection: "s1")
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(animeData)
+                .environmentObject(animeDataFB)
         }
     }
 }

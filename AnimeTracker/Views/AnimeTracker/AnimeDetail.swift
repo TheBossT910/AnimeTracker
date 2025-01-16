@@ -8,55 +8,71 @@
 import SwiftUI
 
 struct AnimeDetail: View {
-    
-    //our variables
-    @Environment(AnimeData.self) var animeData
-    //We make it into a state variable so we can change the value during program run
-    var anime: Anime
-    var animeIndex: Int {
-        //the ! unwraps the data into the Int type
-        animeData.animes.firstIndex(where: { $0.id == anime.id })!
-    }
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase data
+    var animeID: String //holds the document ID to a specific anime
     
     var body: some View {
-        @Bindable var animeData = animeData
+        //getting anime object
+        let animeFB = animeDataFB.animes[animeID]
+        //getting anime data objects
+        var animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        
+        // Computed Binding, courtesy of ChatGPT
+        //TODO: code it yourslef to fully understand it, and create relevant comments
+        let favoriteBinding = Binding<Bool>(
+            get: { animeGeneral?.isFavorite ?? false },
+            set: { newValue in
+                // Update the model's isFavorite
+                animeGeneral?.isFavorite = newValue
+                
+                // Update animeDataFB or notify about the change
+                // Persist changes back to animeFB
+                   if let generalUpdated = animeGeneral {
+                       animeDataFB.animes[animeID]?["general"] = generalUpdated
+                   }
+            }
+        )
+        
         ScrollView {
-            //hardcoded image
-            BoxImage(image: anime.image)
+            //getting the box image
+            var boxImage: Image {
+                Image(animeFiles?.box_image ?? "N/A")
+            }
+            BoxImage(image: boxImage)
             
-            //Putting all the text stuff within a VStack
             VStack(alignment: .leading) {
                 HStack {
-                    
                     //Title and favourite button
-                    Text(anime.name)
+                    Text(animeGeneral?.title_eng ?? "N/A")
                         .font(.title)
                     Spacer()
-                    
-                    //add favorite button
-                    FavoriteButton(isSet: $animeData.animes[animeIndex].isFavorite)
+                    FavoriteButtonFB(animeID: animeID, favorite: favoriteBinding)
                 }
+                
                 HStack {
-                    //Release schedule info?
-                    Text(anime.broadcast)
+                    //display release and schedule info
+                    Text(animeGeneral?.broadcast ?? "N/A")
                     Spacer()
-                    //Anime season info?
-                    Text("S\(anime.season), \(anime.premiere)")
+                    //TODO: Implement displaying the show's season (s1, s2, etc.) with Firebase
+                    Text(animeGeneral?.premiere ?? "N/A")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 
                 Divider()
                 
-                //adding description stuff
+                //adding "Description" title
                 Text("Description")
                     .font(.title2)
                     .padding(.bottom, 10)
         
                 }
-                    Text(anime.description)
             
-//Trying to make a cool shadow effect, not working properly right now! :(
+            //displaying the actual description
+            Text(animeGeneral?.description ?? "N/A")
+            
+//Trying to make a cool shadow effect for around the text, not working properly right now! :(
 //                        .background(
 //                            RoundedRectangle(cornerRadius: 10)
 //                                .fill(.white)
@@ -69,8 +85,9 @@ struct AnimeDetail: View {
 }
 
 #Preview {
-    let animeData = AnimeData()
-    AnimeDetail(anime: animeData.animes[0])
-        //We need this because we reference @Environment in the code
-        .environment(animeData)
+    //environment
+    let animeDataFB = AnimeDataFirebase(collection: "s1")
+    
+    AnimeDetail(animeID: "6KaHVRxICvkkrRYsDiMY")
+        .environmentObject(animeDataFB)
 }

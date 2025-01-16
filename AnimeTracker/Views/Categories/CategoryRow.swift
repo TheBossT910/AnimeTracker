@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct CategoryRow: View {
-    var categoryName: String
-    var items: [Anime]
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds a AnimeDataFirebase object, with data from Firebase
+    var categoryName: String    //holds the name of the category we want to display
     
     var body: some View {
+        //grabbing the keys of all animes
+        let animeKeys = Array(animeDataFB.animes.keys).sorted()
+        
         VStack(alignment: .leading) {
             //displaying the category name
             Text(categoryName)
@@ -24,13 +27,21 @@ struct CategoryRow: View {
                 //putting everything horizontally
                 HStack(alignment: .top, spacing: 0) {
                     //displaying each item
-                    ForEach(items) { anime in
-                        //having it link to the correct details page
-                        NavigationLink {
-                            AnimeDetail(anime: anime)
-                            //image of the anime
-                        } label: {
-                            CategoryItem(anime: anime)
+                    ForEach(animeKeys, id: \.self) { animeKey in
+                        //get the categoryStatus of the current anime
+                        let currentAnime = animeDataFB.animes[animeKey]!
+                        let animeGeneral = currentAnime["general"] as? general
+                        let categoryStatus = animeGeneral?.category_status ?? "N/A"
+                        
+                        //only display an anime if it is in the category we want
+                        if (categoryStatus == categoryName) {
+                            //having it link to the correct details page
+                            NavigationLink {
+                                AnimeDetail(animeID: animeKey)
+                            } label: {
+                                //image of the anime
+                                CategoryItem(animeID: animeKey)
+                            }
                         }
                     }
                 }
@@ -41,10 +52,10 @@ struct CategoryRow: View {
 }
 
 #Preview {
-    let animes = AnimeData().animes
-    return CategoryRow(
-        categoryName: animes[0].categoryStatus.rawValue,
-        //this is just getting the first 4 items, don't worry about it not matching the actual category. Just using this to see how everything looks!
-        items: Array(animes.prefix(4))
-    )
+    //environment object
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
+    //implemented category names are "Dropped", "Completed", "Watching", "Plan to Watch"
+    CategoryRow(categoryName: "Dropped")
+        .environmentObject(animeDataFB)
 }

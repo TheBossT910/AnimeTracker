@@ -8,21 +8,38 @@
 import SwiftUI
 
 struct AnimeSelect: View {
-    var anime: Anime
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase //holds an AnimeDataFirebase object, with Firebase data
+    var animeID: String //holds the document id to a specific anime
+    
     var body: some View {
+        //getting anime object
+        let animeFB = animeDataFB.animes[animeID]
+        //getting anime data objects
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        //getting anime favorite value
+        let isFavorite = animeGeneral?.isFavorite ?? false
+        
         VStack {
+            //displaying top text, premiere and rating
             HStack {
-                Text(anime.premiere)
+                Text(animeGeneral?.premiere ?? "N/A")
                     .font(.caption2)
                     .fontWeight(.heavy)
                     .foregroundColor(Color.black)
-                Text(anime.rating)
+                Text(animeGeneral?.rating ?? "N/A")
                     .font(.caption2)
             }
 
-            //making the image
+            //displaying the image
             VStack {
-                anime.image
+                //getting the image
+                var boxImage: Image {
+                    Image(animeFiles?.box_image ?? "N/A")
+                }
+                
+                //formatting the image
+                boxImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     //the ratio for fitting it is 11/15 (width/height)
@@ -33,8 +50,9 @@ struct AnimeSelect: View {
 
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.black, lineWidth: 4)
-                        //padding()
-                        if anime.isFavorite {
+                        
+                        //display/hide a heart if favorite is true/false
+                        if isFavorite {
                             Image(systemName: "heart.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -46,21 +64,18 @@ struct AnimeSelect: View {
                     }
 
             }
-
-            Text(anime.name)
+            //display the english and japanese title at the bottom
+            Text(animeGeneral?.title_eng ?? "N/A")
                 .font(.headline)
-            Text(anime.jpTitle)
-            //                .padding(.bottom, 10)
-            //
-
+            Text(animeGeneral?.title_jp ?? "N/A")
         }
         .padding(10)
-        //        .padding(.bottom, 10)
-        //        .padding(.leading, 10)
-        //        .padding(.trailing, 10)
     }
 }
 
 #Preview {
-    AnimeSelect(anime: AnimeData().animes[1])
+    //environment
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    AnimeSelect(animeID: "6KaHVRxICvkkrRYsDiMY")
+        .environmentObject(animeDataFB)
 }

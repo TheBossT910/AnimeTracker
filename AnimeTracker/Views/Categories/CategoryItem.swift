@@ -8,12 +8,24 @@
 import SwiftUI
 
 struct CategoryItem: View {
-    var anime: Anime
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with data from Firebase
+    var animeID: String //holds the document id for a specific anime
     
     var body: some View {
+        //getting an anime object
+        let animeFB = animeDataFB.animes[animeID]
+        //gettting anime data objects
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        
+        //getting the box image
+        var boxImage: Image {
+            Image(animeFiles?.box_image ?? "N/A")
+        }
+        
         //adding the image, and changing its apperance
         VStack(alignment: .leading) {
-            anime.image
+            boxImage
                 .renderingMode(.original)
                 //.resizable()
                 //allows us to maintain the correct aspect ratio
@@ -30,7 +42,7 @@ struct CategoryItem: View {
         
             
             //adding the show name
-            Text(anime.name)
+            Text(animeGeneral?.title_eng ?? "N/A")
                 //changing the look
                 .foregroundStyle(.primary)
                 .font(.caption)
@@ -42,5 +54,9 @@ struct CategoryItem: View {
 }
 
 #Preview {
-    CategoryItem(anime: AnimeData().animes[0])
+    //environment object
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    
+    CategoryItem(animeID: "OZtFGA9sVtdxtOCZZTEw")
+        .environmentObject(animeDataFB)
 }
