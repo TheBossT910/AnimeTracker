@@ -16,7 +16,7 @@ struct ScheduleItem: View {
         HStack(alignment: .bottom) {
             //roatating the time vertically
             GeometryReader { geometry in
-                Text("8:00 am")
+                Text("9:00 am")
                     .rotationEffect(.degrees(-90), anchor: .topLeading)
                     //assigning the height and width of the Geometry reader as the vice versa for the text frame
                     .frame(width: geometry.size.height, height: geometry.size.width, alignment: .leading)
