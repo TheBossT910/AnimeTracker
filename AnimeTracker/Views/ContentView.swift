@@ -47,6 +47,8 @@ struct ContentView: View {
 }
 
 #Preview {
+    //environment objects
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
     ContentView()
-        .environment(AnimeData())
+        .environmentObject(animeDataFB)
 }
