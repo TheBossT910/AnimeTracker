@@ -33,7 +33,7 @@ struct ScheduleRow: View {
                 NavigationLink {
                     AnimeDetail(animeID: animeKey)
                 } label: {
-                    ScheduleItem(splashImage: Image(splashImage))
+                    ScheduleItem(animeID: animeKey, splashImage: Image(splashImage))
                 }
             }
         }

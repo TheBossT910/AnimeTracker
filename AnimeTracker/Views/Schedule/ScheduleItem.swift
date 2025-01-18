@@ -10,13 +10,26 @@
 import SwiftUI
 
 struct ScheduleItem: View {
-    var splashImage: Image
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //object of AnimeDataFirebase, holds Firebase data
+    let animeID: String //currently selected anime's iD
+    var splashImage: Image  //holds image to be displayed
     
     var body: some View {
+        //getting Firebase data objects
+        let animeFB = animeDataFB.animes[animeID]
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        let animeMedia = animeFB?["media"] as? media
+        
+        //getting specific data
+        let animeSplash = animeFiles?.splash_image ?? "N/A"
+        //TODO: Figure out a way to know what episode data to show automaticaly. This is hard-coded to only show episode 1 for all shows!
+        let animeEp1 = animeMedia?.episodes?["1"] as? mediaContent
+        
         HStack(alignment: .bottom) {
             //roatating the time vertically
             GeometryReader { geometry in
-                Text("9:00 am")
+                Text(animeEp1?.air_time ?? "N/A")
                     .rotationEffect(.degrees(-90), anchor: .topLeading)
                     //assigning the height and width of the Geometry reader as the vice versa for the text frame
                     .frame(width: geometry.size.height, height: geometry.size.width, alignment: .leading)
@@ -24,23 +37,25 @@ struct ScheduleItem: View {
             //setting thr height/width of GeometryReader. Aligns the position of the text within the HStack
             .frame(width: 20, height: 95)
             
-
+            
             VStack(alignment: .leading) {
+                //TODO: check if we even need this .top alignemnt
                 HStack(alignment: .top) {
                     //main image
-                    splashImage
+                    Image(animeSplash)
                         .resizable()
                         .scaledToFill()
                         .frame(width: 211.2, height: 100)
                         .clipped()
                     
                     VStack(alignment: .leading) {
-                        Text("Oshi no Ko: S2")
+                        //TODO: The title being different lengths messes with the picture alignment
+                        Text("\(animeGeneral?.title_eng ?? "N/A"): S1")
                             .font(.title3)
                         HStack {
                             //temporary fake checkmark. Plan to implement real "marking" system later
                             Text("☑")
-                            Text("Ep 8: 迷う")
+                            Text("Ep 1: \(animeEp1?.name_jp ?? "N/A")")
                                 .font(.subheadline)
                         }
                         
@@ -52,8 +67,9 @@ struct ScheduleItem: View {
                     
                 }
                 .fixedSize(horizontal: true, vertical: false)
-                .frame(width: 350)
-                Text("Recap: Aqua shines in the Tokyo Blade play, channeling his pain into a powerful performance while reflecting on Ai's tragic past. A vivid scene imagines a world where Ai survives, adding emotional depth and fueling Aqua's drive for answers")
+                //.leading aligns HStack to left side
+                .frame(width: 350, alignment: .leading)
+                Text(animeEp1?.recap ?? "N/A")
                     .font(.caption)
                     //explicitly leading so it shows us correctly in ScheduleRow
                     .multilineTextAlignment(.leading)
@@ -71,5 +87,8 @@ struct ScheduleItem: View {
 }
 
 #Preview {
-    ScheduleItem(splashImage: Image("oshi_no_ko_splash"))
+    //environment object
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    ScheduleItem(animeID: "6KaHVRxICvkkrRYsDiMY", splashImage: Image("oshi_no_ko_splash"))
+        .environmentObject(animeDataFB)
 }
