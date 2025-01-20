@@ -63,23 +63,25 @@ struct ScheduleItem: View {
                         Text("Watch Now")
                         Spacer()
                     }
-                    .frame(height: 100)
+                    .frame(width: 100, height: 100)
                     
                 }
                 .fixedSize(horizontal: true, vertical: false)
                 //.leading aligns HStack to left side
                 .frame(width: 350, alignment: .leading)
-                Text(animeEp1?.recap ?? "N/A")
-                    .font(.caption)
+                DisclosureGroup("\(animeGeneral?.title_eng ?? "N/A"): S1") {
+                    Text(animeEp1?.recap ?? "N/A")
+                        .font(.caption)
                     //explicitly leading so it shows us correctly in ScheduleRow
-                    .multilineTextAlignment(.leading)
+                        .multilineTextAlignment(.leading)
+                }
 
             }
             //limiting the height of the frame
             //        .frame(height: 200)
         }
         //explicit properties so it shows us correctly in ScheduleRow
-        .padding(.bottom)
+        .padding()
         .foregroundStyle(.primary)
 
         
