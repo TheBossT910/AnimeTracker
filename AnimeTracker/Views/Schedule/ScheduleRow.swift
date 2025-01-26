@@ -7,7 +7,7 @@
 
 //TODO:
 //Add the "top shows" section
-//Format the day of the week properly
+//Format/sort by day of the week properly
 
 import SwiftUI
 
