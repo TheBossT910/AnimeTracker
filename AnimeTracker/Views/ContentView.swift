@@ -14,7 +14,7 @@ struct ContentView: View {
     enum Tab {
         case animeStatus
         case list
-//        case schedule
+        case schedule
     }
     
     var body: some View {
@@ -36,12 +36,11 @@ struct ContentView: View {
                 //changes the value of "selection" to show this view
                 .tag(Tab.list)
             
-            //TEMPORARY!
-//            ScheduleRow(items: AnimeData().animes)
-//                .tabItem {
-//                    Label("Schedule", systemImage: "calendar")
-//                }
-//                .tag(Tab.schedule)
+            ScheduleHome()
+                .tabItem {
+                    Label("Schedule", systemImage: "calendar")
+                }
+                .tag(Tab.schedule)
         }
     }
 }
