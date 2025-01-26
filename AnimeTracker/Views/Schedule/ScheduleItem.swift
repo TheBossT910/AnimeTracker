@@ -28,14 +28,14 @@ struct ScheduleItem: View {
         
         HStack(alignment: .bottom) {
             //roatating the time vertically
-            GeometryReader { geometry in
-                Text(animeEp1?.air_time ?? "N/A")
-                    .rotationEffect(.degrees(-90), anchor: .topLeading)
-                    //assigning the height and width of the Geometry reader as the vice versa for the text frame
-                    .frame(width: geometry.size.height, height: geometry.size.width, alignment: .leading)
-            }
-            //setting thr height/width of GeometryReader. Aligns the position of the text within the HStack
-            .frame(width: 20, height: 95)
+//            GeometryReader { geometry in
+//                Text(animeEp1?.air_time ?? "N/A")
+//                    .rotationEffect(.degrees(-90), anchor: .topLeading)
+//                    //assigning the height and width of the Geometry reader as the vice versa for the text frame
+//                    .frame(width: geometry.size.height, height: geometry.size.width, alignment: .leading)
+//            }
+//            //setting thr height/width of GeometryReader. Aligns the position of the text within the HStack
+//            .frame(width: 20, height: 95)
             
             
             VStack(alignment: .leading) {
@@ -49,36 +49,54 @@ struct ScheduleItem: View {
                         .clipped()
                     
                     VStack(alignment: .leading) {
-                        //TODO: The title being different lengths messes with the picture alignment
-                        Text("\(animeGeneral?.title_eng ?? "N/A"): S1")
-                            .font(.title3)
+                        //I am embedding the text items in HStacks to horizontally center the text
                         HStack {
-                            //temporary fake checkmark. Plan to implement real "marking" system later
-                            Text("☑")
+                            //TODO: The episode name being different lengths messes/breaks the picture alignment. Fix!
+                            Spacer()
                             Text("Ep 1: \(animeEp1?.name_jp ?? "N/A")")
+                                .font(.title3)
+                                //allows for text wrapping
+                                .fixedSize(horizontal: false, vertical: true)
+                            Spacer()
+                        }
+                        
+                        Spacer()
+                        
+                        HStack {
+                            //TODO: Make this a button that leads to service providers
+                            Spacer()
+                            Text("Watch Now")
+                            Spacer()
+                        }
+                        
+                        Spacer()
+                        
+                        HStack {
+                            //TODO: temporary fake checkmark. Plan to implement real "marking" system later
+                            Text("☑")
+                            Spacer()
+                            Text(animeEp1?.air_time ?? "N/A")
                                 .font(.subheadline)
                         }
                         
                         Spacer()
-                        Text("Watch Now")
-                        Spacer()
+                        
                     }
-                    .frame(width: 100, height: 100)
+                    .frame(maxWidth: .infinity, maxHeight: 100);
                     
                 }
-                .fixedSize(horizontal: true, vertical: false)
                 //.leading aligns HStack to left side
-                .frame(width: 350, alignment: .leading)
+                .frame(alignment: .leading)   //temp comment out
                 DisclosureGroup("\(animeGeneral?.title_eng ?? "N/A"): S1") {
                     Text(animeEp1?.recap ?? "N/A")
                         .font(.caption)
-                    //explicitly leading so it shows us correctly in ScheduleRow
+                    //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
                 }
 
             }
             //limiting the height of the frame
-            //        .frame(height: 200)
+                    .frame(height: 200)
         }
         //explicit properties so it shows us correctly in ScheduleRow
         .padding()
@@ -91,6 +109,8 @@ struct ScheduleItem: View {
 #Preview {
     //environment object
     var animeDataFB = AnimeDataFirebase(collection: "s1")
+    //OZtFGA9sVtdxtOCZZTEw  //Spy x Family
+    //6KaHVRxICvkkrRYsDiMY  //Oshi no Ko
     ScheduleItem(animeID: "6KaHVRxICvkkrRYsDiMY", splashImage: Image("oshi_no_ko_splash"))
         .environmentObject(animeDataFB)
 }
