@@ -96,7 +96,7 @@ struct ScheduleItem: View {
 
             }
             //limiting the height of the frame
-                    .frame(height: 200)
+//                    .frame(height: 200)
         }
         //explicit properties so it shows us correctly in ScheduleRow
         .padding()
