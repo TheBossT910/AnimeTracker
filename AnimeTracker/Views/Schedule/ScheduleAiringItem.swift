@@ -6,10 +6,12 @@
 //
 
 //displays currently airing shows
+//we want a show's icon, a show's splash, and its air time
+//we want air time to compare to current time, and appropriately create the "load"/watch bar
 
 import SwiftUI
 
-struct ScheduleAiring: View {
+struct ScheduleAiringItem: View {
     @EnvironmentObject var animeDataFB: AnimeDataFirebase   //stores an object to hold Firebase data
     var animeID: String
     //TODO: fetch time properly
@@ -18,16 +20,14 @@ struct ScheduleAiring: View {
     var playLocation: CGFloat = 150
     
     var body: some View {
-        //we want a show's icon, a show's splash, and its air time
-        //we want air time to compare to current time, and appropriately create the "load"/watch bar
-        
         //getting current anime data
         let animeFB = animeDataFB.animes[animeID]
-        let animeGeneral = animeFB?["general"] as? general
+//        let animeGeneral = animeFB?["general"] as? general
         let animeFiles = animeFB?["files"] as? files
         
         //getting specific variables we want to use
         let splash = animeFiles?.splash_image ?? "N/A"
+        let icon = animeFiles?.icon ?? "N/A"
         //TODO: split time into a seperate var in Firebase. This is temporary!
         //Not implemented yet
 //        let broadcastTime = animeGeneral?.broadcast?.split(separator: " ")[1]
@@ -37,7 +37,7 @@ struct ScheduleAiring: View {
             Image(splash)
                 .resizable()
                 .scaledToFill()
-                .frame(height: 150)
+                .frame(height: 100)
                 .clipped()
                 .padding()
                 .overlay(alignment: .bottom) {
@@ -70,7 +70,7 @@ struct ScheduleAiring: View {
             //logo
             HStack {
                 //TODO: add icon file path in Firebase
-                Image("oshi_no_ko_icon")
+                Image(icon)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100)
@@ -97,6 +97,6 @@ struct ScheduleAiring: View {
 #Preview {
     //environment object
     let animeDataFB = AnimeDataFirebase(collection: "s1")
-    ScheduleAiring(animeID: "6KaHVRxICvkkrRYsDiMY")
+    ScheduleAiringItem(animeID: "6KaHVRxICvkkrRYsDiMY")
         .environmentObject(animeDataFB)
 }
