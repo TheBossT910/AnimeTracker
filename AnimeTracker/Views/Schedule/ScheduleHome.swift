@@ -9,7 +9,7 @@
 //There is a page indictor, but is is not clearly visible. Change its apperance!
 //Create the "current schedule" view
 //text is blue for some reason... fix!
-//show shows by release day (currently hard-coded, all days show the same data)
+//show shows by release day (currently hard-coded, all days show the same datas)
 
 import SwiftUI
 
