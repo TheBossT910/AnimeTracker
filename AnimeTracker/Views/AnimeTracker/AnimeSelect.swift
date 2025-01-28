@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AnimeSelect: View {
     @EnvironmentObject var animeDataFB: AnimeDataFirebase //holds an AnimeDataFirebase object, with Firebase data
+    @Environment(\.colorScheme) var colorScheme //used to detect light/dark mode
     var animeID: String //holds the document id to a specific anime
     
     var body: some View {
@@ -26,7 +27,8 @@ struct AnimeSelect: View {
                 Text(animeGeneral?.premiere ?? "N/A")
                     .font(.caption2)
                     .fontWeight(.heavy)
-                    .foregroundColor(Color.black)
+                    //changes color depending on light/dark mode
+                    .foregroundColor(colorScheme == .light ? Color.black : Color.white)
                 Text(animeGeneral?.rating ?? "N/A")
                     .font(.caption2)
             }
@@ -49,7 +51,8 @@ struct AnimeSelect: View {
                     .overlay {
 
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.black, lineWidth: 4)
+                            //changes the color of the outline based on light/dark modes
+                            .stroke(colorScheme == .light ? Color.black : Color.white, lineWidth: 4)
                         
                         //display/hide a heart if favorite is true/false
                         if isFavorite {
