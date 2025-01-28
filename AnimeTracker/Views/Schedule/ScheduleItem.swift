@@ -34,7 +34,8 @@ struct ScheduleItem: View {
                     Image(animeSplash)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 211.2, height: 100)
+                        //trying to make the image dynamically size
+                        .frame(minWidth: 211.2, maxWidth: .infinity, minHeight: 100, maxHeight: 130)
                         .clipped()
                     
                     VStack(alignment: .leading) {
