@@ -27,17 +27,6 @@ struct ScheduleItem: View {
         let animeEp1 = animeMedia?.episodes?["1"] as? mediaContent
         
         HStack(alignment: .bottom) {
-            //roatating the time vertically
-//            GeometryReader { geometry in
-//                Text(animeEp1?.air_time ?? "N/A")
-//                    .rotationEffect(.degrees(-90), anchor: .topLeading)
-//                    //assigning the height and width of the Geometry reader as the vice versa for the text frame
-//                    .frame(width: geometry.size.height, height: geometry.size.width, alignment: .leading)
-//            }
-//            //setting thr height/width of GeometryReader. Aligns the position of the text within the HStack
-//            .frame(width: 20, height: 95)
-            
-            
             VStack(alignment: .leading) {
                 //TODO: check if we even need this .top alignemnt
                 HStack(alignment: .top) {
