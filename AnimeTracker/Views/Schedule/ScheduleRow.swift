@@ -31,10 +31,13 @@ struct ScheduleRow: View {
         
         ScrollView(.vertical) {
             Text(day)
-                .font(.title)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.top)
             
             //default text for when no animes are found
             Text(animeKeys.isEmpty ? "No Animes Found" : "")
+                .font(.headline)
             
             //displays each splash image... using normal image for now
             ForEach(animeKeys, id: \.self) { animeKey in
@@ -49,13 +52,11 @@ struct ScheduleRow: View {
                 } label: {
                     ScheduleItem(animeID: animeKey, splashImage: Image(splashImage))
                 }
+                //fixes the bug where all text is highlighted blue in views that use this view
+                .buttonStyle(.plain)
             }
         }
 
-    }
-    
-    func runTest() -> Text {
-       return Text("aight")
     }
 }
 

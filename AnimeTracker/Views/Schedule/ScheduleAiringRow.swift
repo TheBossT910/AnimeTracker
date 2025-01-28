@@ -14,7 +14,11 @@ struct ScheduleAiringRow: View {
     
     var body: some View {
         ForEach (animeAiringIDs, id: \.self) { animeAiringID in
-            ScheduleAiringItem(animeID: animeAiringID)
+            NavigationLink {
+                AnimeDetail(animeID: animeAiringID)
+            } label: {
+                ScheduleAiringItem(animeID: animeAiringID)
+            }
         }
     }
 }

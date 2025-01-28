@@ -73,7 +73,7 @@ struct ScheduleAiringItem: View {
                 Image(icon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100)
+                    .frame(width: 100, height: 30)
                     .clipped()
                     .padding()  //allows for the blur to go around the logo
                     .background(.ultraThinMaterial) //creates a blur effect

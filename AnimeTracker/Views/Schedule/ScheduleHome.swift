@@ -18,27 +18,30 @@ struct ScheduleHome: View {
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
     
     var body: some View {
-        ScrollView {
-            Text("Airing Right Now")
-            ScheduleAiringRow()
-            
-            Text("Current Anime Schedule")
-            
-            //allows us to display different pages we can swipbe between
-            TabView {
-                ForEach(week, id: \.self) { day in
-                    //wrap ScheduleRow in a container so it is displayed properly by TabView
-                    VStack {
-                        ScheduleRow(day: day)
+        NavigationStack {
+            ScrollView {
+                Text("Airing Right Now")
+                ScheduleAiringRow()
+                
+                Text("Current Anime Schedule")
+                
+                //allows us to display different pages we can swipbe between
+                TabView {
+                    ForEach(week, id: \.self) { day in
+                        //wrap ScheduleRow in a container so it is displayed properly by TabView
+                        VStack {
+                            ScheduleRow(day: day)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .tabViewStyle(.page)
+                //height is relative to device height. Explicitly coded so that TabView HAS a height as it was automatically resizing to be really small
+                .frame(height: UIScreen.main.bounds.height / 1.5)
+                .background(Color.gray.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 50))
+                .padding()
             }
-            .tabViewStyle(.page)
-            //height is relative to device height. Explicitly coded so that TabView HAS a height as it was automatically resizing to be really small
-            .frame(height: UIScreen.main.bounds.height / 1.5)
-            .background(Color.gray.opacity(0.1))
-            .padding()
         }
     }
 }
