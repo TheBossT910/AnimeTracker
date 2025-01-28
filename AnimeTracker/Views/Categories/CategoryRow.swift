@@ -42,6 +42,8 @@ struct CategoryRow: View {
                                 //image of the anime
                                 CategoryItem(animeID: animeKey)
                             }
+                            //fixes blue highlighted text when used in other views
+                            .buttonStyle(.plain)
                         }
                     }
                 }
