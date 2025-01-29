@@ -5,71 +5,107 @@
 //  Created by Taha Rashid on 2024-11-23.
 //
 
-//TODO: make it so that each data value (time, summary, title, episode name) is connected to each show/episode. It is hard-coded right now! -> Database?!
-
 import SwiftUI
 
 struct ScheduleItem: View {
-    var splashImage: Image
-    
-    var body: some View {
-        HStack(alignment: .bottom) {
-            //roatating the time vertically
-            GeometryReader { geometry in
-                Text("9:00 am")
-                    .rotationEffect(.degrees(-90), anchor: .topLeading)
-                    //assigning the height and width of the Geometry reader as the vice versa for the text frame
-                    .frame(width: geometry.size.height, height: geometry.size.width, alignment: .leading)
-            }
-            //setting thr height/width of GeometryReader. Aligns the position of the text within the HStack
-            .frame(width: 20, height: 95)
-            
+    @EnvironmentObject var animeDataFB: AnimeDataFirebase  //object of AnimeDataFirebase, holds Firebase data
+    let animeID: String  //currently selected anime's iD
+    var splashImage: Image  //holds image to be displayed
 
+    var body: some View {
+        //getting Firebase data objects
+        let animeFB = animeDataFB.animes[animeID]
+        let animeGeneral = animeFB?["general"] as? general
+        let animeFiles = animeFB?["files"] as? files
+        let animeMedia = animeFB?["media"] as? media
+
+        //getting specific data
+        let animeSplash = animeFiles?.splash_image ?? "N/A"
+        //TODO: Figure out a way to know what episode data to show automaticaly. This is hard-coded to only show episode 1 for all shows!
+        let animeEp1 = animeMedia?.episodes?["1"] as? mediaContent
+
+        HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
+                //TODO: check if we even need this .top alignemnt
                 HStack(alignment: .top) {
                     //main image
-                    splashImage
+                    Image(animeSplash)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 211.2, height: 100)
+                        //trying to make the image dynamically size
+                        .frame(
+                            minWidth: 211.2, maxWidth: .infinity,
+                            minHeight: 100, maxHeight: 130
+                        )
                         .clipped()
-                    
-                    VStack(alignment: .leading) {
-                        Text("Oshi no Ko: S2")
-                            .font(.title3)
-                        HStack {
-                            //temporary fake checkmark. Plan to implement real "marking" system later
-                            Text("☑")
-                            Text("Ep 8: 迷う")
-                                .font(.subheadline)
-                        }
-                        
-                        Spacer()
-                        Text("Watch Now")
-                        Spacer()
-                    }
-                    .frame(height: 100)
-                    
-                }
-                .fixedSize(horizontal: true, vertical: false)
-                .frame(width: 350)
-                Text("Recap: Aqua shines in the Tokyo Blade play, channeling his pain into a powerful performance while reflecting on Ai's tragic past. A vivid scene imagines a world where Ai survives, adding emotional depth and fueling Aqua's drive for answers")
-                    .font(.caption)
-                    //explicitly leading so it shows us correctly in ScheduleRow
-                    .multilineTextAlignment(.leading)
 
+                    VStack(alignment: .leading) {
+                        //I am embedding the text items in HStacks to horizontally center the text
+                        HStack(alignment: .top) {
+                            Spacer()
+                            Text("Ep 1: \(animeEp1?.name_jp ?? "N/A")")
+                                .font(.title3)
+                                //allows for text wrapping
+                                .fontWeight(.medium)
+                                .fixedSize(horizontal: false, vertical: true)
+                                //limits the number of lines we can display so it doesn't break out of position
+                                .lineLimit(3)
+                            Spacer()
+                        }
+
+                        Spacer()
+
+                        HStack {
+                            //TODO: Make this a button that leads to service providers
+                            Spacer()
+                            Text("Watch Now")
+                                //allows for text wrapping
+                                .fixedSize(horizontal: false, vertical: true)
+                            Spacer()
+                        }
+
+                        Spacer()
+
+                        HStack {
+                            //TODO: temporary fake checkmark. Plan to implement real "marking" system later
+                            Text("☑")
+                            Spacer()
+                            Text(animeEp1?.air_time ?? "N/A")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                        }
+
+                        Spacer()
+
+                    }
+                    //match the sizing to the splash image sizing so the whole card stays the same dimmensions
+                    .frame(maxWidth: .infinity, minHeight: 100, maxHeight: 130)
+
+                }
+                //.leading aligns HStack to left side
+                .frame(alignment: .leading)
+                DisclosureGroup("**\(animeGeneral?.title_eng ?? "N/A"): S1**") {
+                    Text(animeEp1?.recap ?? "N/A")
+                        .font(.caption)
+                        //explicitly set text to leading so it displays correctly in ScheduleRow
+                        .multilineTextAlignment(.leading)
+                }
             }
-            //limiting the height of the frame
-            //        .frame(height: 200)
         }
         //explicit properties so it shows us correctly in ScheduleRow
-        .padding(.bottom)
+        .padding()
         .foregroundStyle(.primary)
-
-        
     }
 }
 
 #Preview {
-    ScheduleItem(splashImage: Image("oshi_no_ko_splash"))
+    //environment object
+    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    //OZtFGA9sVtdxtOCZZTEw  //Spy x Family
+    //6KaHVRxICvkkrRYsDiMY  //Oshi no Ko
+    //HgChfzTmhx1Fxiw6XbWq  //Death Note
+    ScheduleItem(
+        animeID: "HgChfzTmhx1Fxiw6XbWq", splashImage: Image("oshi_no_ko_splash")
+    )
+    .environmentObject(animeDataFB)
 }

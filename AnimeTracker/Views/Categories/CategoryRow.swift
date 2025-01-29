@@ -20,7 +20,7 @@ struct CategoryRow: View {
             Text(categoryName)
                 .font(.headline)
                 .padding(.leading, 15)
-                .padding(.top, 5)
+                .padding(.top, 20)
             
             //lets us scroll horizontally. showIndicators: false means don't show a scrollbar
             ScrollView(.horizontal, showsIndicators: false) {
@@ -42,6 +42,8 @@ struct CategoryRow: View {
                                 //image of the anime
                                 CategoryItem(animeID: animeKey)
                             }
+                            //fixes blue highlighted text when used in other views
+                            .buttonStyle(.plain)
                         }
                     }
                 }

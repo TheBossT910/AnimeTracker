@@ -100,8 +100,9 @@ import FirebaseFirestore
         case "files":
             let boxImage = raw["box_image"] as? String
             let splashImage = raw["splash_image"] as? String
+            let icon = raw["icon"] as? String
             let docIDAnime = raw["doc_id_anime"] as? String
-            let obj = files(box_image: boxImage, splash_image: splashImage, doc_id_anime: docIDAnime)
+            let obj = files(box_image: boxImage, splash_image: splashImage, icon: icon, doc_id_anime: docIDAnime)
             return obj
             
         case "media":
@@ -179,6 +180,7 @@ struct files: Identifiable, Decodable {
     @DocumentID var id: String?
     let box_image: String?
     let splash_image: String?
+    let icon: String?
     let doc_id_anime: String?
 }
 
