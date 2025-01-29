@@ -5,26 +5,28 @@
 //  Created by Taha Rashid on 2024-11-27.
 //
 
-//TODO:
-//There is a page indictor, but is is not clearly visible. Change its apperance!
-//Create the "current schedule" view
-//text is blue for some reason... fix!
-//show shows by release day (currently hard-coded, all days show the same data)
-
 import SwiftUI
 
 struct ScheduleHome: View {
     @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase information
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
+    var currentlyAiringIDs: [String] = ["6KaHVRxICvkkrRYsDiMY", "eqIKQyLZ7eMe8GmMOB6O", "323Prp20ZeyevdQQcyl9"]
     
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
                 ScrollView {
                     Text("Airing Right Now")
-                    ScheduleAiringRow()
+                        .font(.title2)
+                        .fontWeight(.heavy)
+                        .padding(.top)
+                    ScheduleAiringRow(animeAiringIDs: currentlyAiringIDs)
                     
-                    Text("Current Anime Schedule")
+                    Text("My Anime Schedule")
+                        .font(.title2)
+                        .fontWeight(.heavy)
+                        .padding(.top)
+                        
                     
                     //allows us to display different pages we can swipbe between
                     TabView {
@@ -38,7 +40,7 @@ struct ScheduleHome: View {
                     }
                     .tabViewStyle(.page)
                     //height is relative to device height. Explicitly coded so that TabView HAS a height as it was automatically resizing to be really small
-                    .frame(height: geometry.size.height / 1.5)
+                    .frame(height: geometry.size.height / 1.3)
                     
                     .background(Color.gray.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 50))
