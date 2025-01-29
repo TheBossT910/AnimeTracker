@@ -5,8 +5,6 @@
 //  Created by Taha Rashid on 2024-11-23.
 //
 
-//TODO: make it so that each data value (time, summary, title, episode name) is connected to each show/episode. It is hard-coded right now! -> Database?!
-
 import SwiftUI
 
 struct ScheduleItem: View {
@@ -44,7 +42,6 @@ struct ScheduleItem: View {
                     VStack(alignment: .leading) {
                         //I am embedding the text items in HStacks to horizontally center the text
                         HStack(alignment: .top) {
-                            //TODO: The episode name being different lengths messes/breaks the picture alignment. Fix!
                             Spacer()
                             Text("Ep 1: \(animeEp1?.name_jp ?? "N/A")")
                                 .font(.title3)
@@ -93,7 +90,6 @@ struct ScheduleItem: View {
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
                 }
-
             }
         }
         //explicit properties so it shows us correctly in ScheduleRow

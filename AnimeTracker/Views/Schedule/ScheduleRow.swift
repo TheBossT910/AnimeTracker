@@ -5,9 +5,7 @@
 //  Created by Taha Rashid on 2024-11-27.
 //
 
-//TODO:
-//Add the "top shows" section
-//Format/sort by day of the week properly
+//TODO: Add the "top shows" section
 
 import SwiftUI
 

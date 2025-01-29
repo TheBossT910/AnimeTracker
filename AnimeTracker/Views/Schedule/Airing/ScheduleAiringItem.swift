@@ -5,10 +5,6 @@
 //  Created by Taha Rashid on 2025-01-26.
 //
 
-//displays currently airing shows
-//we want a show's icon, a show's splash, and its air time
-//we want air time to compare to current time, and appropriately create the "load"/watch bar
-
 import SwiftUI
 
 struct ScheduleAiringItem: View {
@@ -90,7 +86,6 @@ struct ScheduleAiringItem: View {
             }
             .padding()
         }
-        
     }
 }
 
