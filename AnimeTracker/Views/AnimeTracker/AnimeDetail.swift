@@ -78,7 +78,7 @@ struct AnimeDetail: View {
             //displaying the actual description
             Text(animeGeneral?.description ?? "N/A")
                 .font(.body)
-                .fontWeight(.semibold)
+                .fontWeight(.medium)
             
 //Trying to make a cool shadow effect for around the text, not working properly right now! :(
 //                        .background(
