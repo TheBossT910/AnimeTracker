@@ -59,6 +59,7 @@ struct ScheduleItem: View {
                             //TODO: Make this a button that leads to service providers
                             Spacer()
                             Text("Watch Now")
+                                .fontWeight(.semibold)
                                 //allows for text wrapping
                                 .fixedSize(horizontal: false, vertical: true)
                             Spacer()
@@ -84,11 +85,16 @@ struct ScheduleItem: View {
                 }
                 //.leading aligns HStack to left side
                 .frame(alignment: .leading)
-                DisclosureGroup("**\(animeGeneral?.title_eng ?? "N/A"): S1**") {
+
+                DisclosureGroup(content: {
                     Text(animeEp1?.recap ?? "N/A")
                         .font(.caption)
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
+                }) {
+                    Text("\(animeGeneral?.title_eng ?? "N/A")")
+                        .font(.title2)
+                        .fontWeight(.heavy)
                 }
             }
         }
