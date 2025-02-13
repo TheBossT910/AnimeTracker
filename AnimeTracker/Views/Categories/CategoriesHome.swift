@@ -36,6 +36,7 @@ struct CategoriesHome: View {
                 
                 //allows the content to be extended to the edge of the display
                 .listRowInsets(EdgeInsets())
+                .listRowSeparatorTint(Color.gray)
             }
             .navigationTitle("Anime Status")
         } detail: {
