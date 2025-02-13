@@ -18,10 +18,11 @@ struct CategoryRow: View {
         VStack(alignment: .leading) {
             //displaying the category name
             Text(categoryName)
-                .font(.headline)
+                .font(.title2)
+                .fontWeight(.heavy)
                 .padding(.leading, 15)
                 .padding(.top, 20)
-            
+
             //lets us scroll horizontally. showIndicators: false means don't show a scrollbar
             ScrollView(.horizontal, showsIndicators: false) {
                 //putting everything horizontally
