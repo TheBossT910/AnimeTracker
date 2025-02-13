@@ -43,9 +43,10 @@ struct CategoryItem: View {
             
             //adding the show name
             Text(animeGeneral?.title_eng ?? "N/A")
+                .fontWeight(.semibold)
                 //changing the look
                 .foregroundStyle(.primary)
-                .font(.caption)
+                .font(.callout)
         }
         //allows us to space each item out when put together in another view
         .padding(.leading, 15)
