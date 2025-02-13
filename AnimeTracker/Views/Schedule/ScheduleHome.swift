@@ -11,6 +11,7 @@ struct ScheduleHome: View {
     @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase information
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
     var currentlyAiringIDs: [String] = ["6KaHVRxICvkkrRYsDiMY", "eqIKQyLZ7eMe8GmMOB6O", "323Prp20ZeyevdQQcyl9"]
+    // TODO: Bocchi the Rock! (the last item) was accidently deleted off of Firebase, which is why it displays nothing for the last item!!
     
     var body: some View {
         GeometryReader { geometry in
