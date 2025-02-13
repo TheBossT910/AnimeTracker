@@ -19,13 +19,13 @@ struct CategoriesHome: View {
         //stating the categories we have
         let categories = ["Watching", "Completed", "Plan to Watch", "Dropped"]
         
-        NavigationSplitView {
+        NavigationStack {
             List {
                 splashImage
                     .resizable()
                     //allows the image to fill the entire container (will mean some of our image lies outside of the view, thus will look cropped)
                     .scaledToFill()
-                    .frame(width: 368, height: 267)
+                    .frame(width: .infinity, height: 267)
                     //allows the image to be displayed to the edge of the screen
                     .listRowInsets(EdgeInsets())
                 
@@ -39,9 +39,10 @@ struct CategoriesHome: View {
                 .listRowSeparatorTint(Color.gray)
             }
             .navigationTitle("Anime Status")
-        } detail: {
-            Text("Select an anime to view its details.")
         }
+//        detail: {
+//            Text("Select an anime to view its details.")
+//        }
     }
 }
 
