@@ -33,6 +33,8 @@ struct AnimeList: View {
             //favorites toggle
             Toggle(isOn: $showFavoritesOnly) {
                 Text("Show Favorites Only")
+                    .font(.title2)
+                    .fontWeight(.heavy)
             }
             .padding()
 
