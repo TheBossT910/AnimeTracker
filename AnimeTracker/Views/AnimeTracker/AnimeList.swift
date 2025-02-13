@@ -10,10 +10,18 @@ import SwiftUI
 struct AnimeList: View {
     @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase data
     @State private var showFavoritesOnly: Bool = false  //a toggle to show favorite shows only (true) or not (false)
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
 
     //for the LazyVGrid. Tells it how to organize/display the items in the grid
     //alignment: .top makes it so that all items are aligned at the top (and not in the center by default!)
-    let columns = [GridItem(.adaptive(minimum: 150), alignment: .top)]
+    
+//    let columns = [GridItem(.adaptive(minimum: 150), alignment: .top)]
+    
+    var columns: [GridItem] {
+        let minSize: CGFloat = (horizontalSizeClass == .regular) ? 200 : 180
+        return [GridItem(.adaptive(minimum: minSize), alignment: .top)]
+    }
 
     //a filtered list of animes based on if we want to show all shows or only favorite shows
     var filteredAnimes: [String: [String: Any]] {
