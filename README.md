@@ -41,11 +41,29 @@ A simple iOS app to help you track anime you're watching or planning to watch.
 - **LinkedIn**: [Taha Rashid](https://www.linkedin.com/in/taha-rashid192)
 
 ## Currently Implemented Views
-<img width="304" alt="Anime Status View" src="https://github.com/user-attachments/assets/61bb490b-7ad8-4888-98e3-c7176fde18e0">
-<img width="309" alt="View Shows" src="https://github.com/user-attachments/assets/bab94b3c-0715-4f06-8ce4-251792c30d81">
-<img width="312" alt="View Favourites" src="https://github.com/user-attachments/assets/2e38cca1-457b-4f33-a3cc-da05219ff7bc">
-<img width="317" alt="View Details" src="https://github.com/user-attachments/assets/dc6f8234-a30a-47bf-972e-78a7f4367215">
-<img width="304" alt="View Schedule Item" src="https://github.com/user-attachments/assets/368b713f-5e66-4506-816d-63102991d5b4">
+## Status
+<img src="https://github.com/user-attachments/assets/26216f9e-346a-4b27-89c2-e974aaad33dc" height="800">
+<img src="https://github.com/user-attachments/assets/18284daa-1cf3-4bbf-be4b-ec179bfecd31" height="800">
+
+## List
+<img src="https://github.com/user-attachments/assets/339b95f0-3c02-458a-a0ff-5e428201726a" height="800">
+<img src="https://github.com/user-attachments/assets/79f08b6d-6fe8-4e86-b20e-c6eab1bfb291" height="800">
+<img src="https://github.com/user-attachments/assets/135b9cd7-6cd0-4a58-b21a-8354e948cc67" height="800">
+<img src="https://github.com/user-attachments/assets/855f68c4-669c-4698-90c7-5f92f9e03bc3" width="500">
+
+
+## Schedule
+<img src="https://github.com/user-attachments/assets/8d61327e-dcdc-4645-9108-0d9871e4a638" height="800">
+<img src="https://github.com/user-attachments/assets/1eca2db9-13a9-42e5-a6a3-a6d359f2c6b7" height="800">
+<img src="https://github.com/user-attachments/assets/02512421-513c-44ce-98f4-1cf7b20652e4" height="800">
+<img src="https://github.com/user-attachments/assets/75e149bb-c3e0-4370-a626-f6982efb9d5c" height="800">
+<img src="https://github.com/user-attachments/assets/9053ed65-bce1-406d-a16b-96fe4ea17082" height="800">
+<img src="https://github.com/user-attachments/assets/dd73a54b-9c0d-4ad5-8a27-cbd18eb9a0b3" width="500">
+
+## Details
+<img src="https://github.com/user-attachments/assets/c4f2a2d2-c8ec-4029-89cf-8d3b055c597b" height="800">
+<img src="https://github.com/user-attachments/assets/3ea0c961-6ac5-4141-9956-b08919839b87" height="800">
+
 
 ## Figma Designs
 <img width="402" alt="Figma Home" src="https://github.com/user-attachments/assets/e225f253-b4f8-4a2b-8957-3a29c28a4d18">
