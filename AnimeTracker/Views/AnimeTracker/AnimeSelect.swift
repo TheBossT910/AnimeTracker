@@ -25,12 +25,13 @@ struct AnimeSelect: View {
             //displaying top text, premiere and rating
             HStack {
                 Text(animeGeneral?.premiere ?? "N/A")
-                    .font(.caption2)
+                    .font(.caption)
                     .fontWeight(.heavy)
                     //changes color depending on light/dark mode
                     .foregroundColor(colorScheme == .light ? Color.black : Color.white)
                 Text(animeGeneral?.rating ?? "N/A")
-                    .font(.caption2)
+                    .font(.caption)
+                    .fontWeight(.semibold)
             }
 
             //displaying the image
@@ -69,8 +70,10 @@ struct AnimeSelect: View {
             }
             //display the english and japanese title at the bottom
             Text(animeGeneral?.title_eng ?? "N/A")
-                .font(.headline)
+                .font(.title3)
+                .fontWeight(.bold)
             Text(animeGeneral?.title_jp ?? "N/A")
+                .font(.callout)
         }
         .padding(10)
     }

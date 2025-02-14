@@ -46,6 +46,7 @@ struct AnimeDetail: View {
                     //Title and favourite button
                     Text(animeGeneral?.title_eng ?? "N/A")
                         .font(.title)
+                        .fontWeight(.heavy)
                     Spacer()
                     FavoriteButtonFB(animeID: animeID, favorite: favoriteBinding)
                 }
@@ -53,9 +54,13 @@ struct AnimeDetail: View {
                 HStack {
                     //display release and schedule info
                     Text(animeGeneral?.broadcast ?? "N/A")
+                        .font(.callout)
+                        .fontWeight(.semibold)
                     Spacer()
                     //TODO: Implement displaying the show's season (s1, s2, etc.) with Firebase
                     Text(animeGeneral?.premiere ?? "N/A")
+                        .font(.callout)
+                        .fontWeight(.semibold)
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -65,12 +70,15 @@ struct AnimeDetail: View {
                 //adding "Description" title
                 Text("Description")
                     .font(.title2)
+                    .fontWeight(.bold)
                     .padding(.bottom, 10)
         
                 }
             
             //displaying the actual description
             Text(animeGeneral?.description ?? "N/A")
+                .font(.body)
+                .fontWeight(.medium)
             
 //Trying to make a cool shadow effect for around the text, not working properly right now! :(
 //                        .background(

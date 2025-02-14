@@ -65,7 +65,7 @@ struct ScheduleAiringItem: View {
             
             //logo
             HStack {
-                //TODO: add icon file path in Firebase
+                //TODO: add icon file path to all shows in Firebase
                 Image(icon)
                     .resizable()
                     .scaledToFit()
