@@ -8,5 +8,5 @@
 
 //import Foundation
 protocol DatabaseProtocol {
-    // TODO: Create functions here. 
+    // TODO: Create functions here.
 }
