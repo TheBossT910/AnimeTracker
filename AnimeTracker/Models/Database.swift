@@ -97,6 +97,48 @@ import FirebaseFirestore
 // temporarily creating structs here for testing.
 // in real implementation, structs would be declared in a seperate file!
 
+// stores each anime's data into an easy-to-access struct
+struct Anime: Codable {
+    @DocumentID var id: String?
+    var main: main?
+    var data: data?
+    var episodes: [episodes]?
+}
+
+struct main: Codable {
+    @DocumentID var id: String?
+    var anilist_id: Int?
+    var db_version: Int?
+    var doc_id: Int?
+    var mal_id: Int?
+    var title: String?
+    var tvdb_id: Int?
+}
+
+struct data: Codable {
+    @DocumentID var id: String?
+    var files: files2?
+    var general: general2?
+}
+
+// TODO: deprecate files and geenral structs, rename these structs to files and general
+struct files2: Codable {
+    @DocumentID var id: String?
+    var box_image: String?
+    var icon_image: String?
+    var splash_image: String?
+}
+
+struct general2: Codable {
+    @DocumentID var id: String?
+    var description: String?
+    var episodes: Int?
+    var premiered: String?
+    var rating: String?
+    var title_english: String?
+    var title_native: String?
+}
+
 struct episodes: Codable {
     @DocumentID var id: String?
     var anilist_id: Int?
