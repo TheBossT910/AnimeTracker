@@ -15,11 +15,13 @@ import FirebaseFirestore
 
 @MainActor class Database : DatabaseProtocol, ObservableObject {
     @Published var anime_data: [String: [String: [String: [String : Any]]]]
+    @Published var structEpisodeTest: [String: [episodes]]
     private var db: Firestore
     
     // constructor
     init() {
         self.anime_data = [:]
+        self.structEpisodeTest = [:]
         // creating a Firestore instance
         self.db = Firestore.firestore()
         
@@ -44,13 +46,15 @@ import FirebaseFirestore
 //                anime_data[animeID]?["main"] = document.data()
             }
             
-            // creating arrays to store data for their respective documents
-            var dataArray: [String: [String: Any]] = [:]
-            var episodeArray: [String: [String: Any]] = [:]
-            
             // parsing each anime
             var counter: Int = 0
             for animeID in animeArray {
+                // creating arrays to store data for their respective documents
+                var dataArray: [String: [String: Any]] = [:]
+                var episodeArray: [String: [String: Any]] = [:]
+                // this is for the struct test
+                var newEpisodes: [episodes] = []
+                
                 // getting all data documents
                 let queryData = try await self.db.collection("/anime_data/\(animeID)/data").getDocuments()
                 queryData.documents.forEach { document in
@@ -62,13 +66,23 @@ import FirebaseFirestore
                 let queryEpisodes = try await self.db.collection("/anime_data/\(animeID)/episodes").getDocuments()
                 queryEpisodes.documents.forEach { document in
                     // add each episode document to array
-                    episodeArray[document.documentID] = document.data()
+//                    episodeArray[document.documentID] = document.data()
+                    do {
+                        var newEp: episodes
+                        newEp = try document.data(as: episodes.self)
+                        newEpisodes.append(newEp)
+                    }
+                    catch {
+                        print("failed to decode episode data into struct")
+                    }
                 }
                 
                 let queryMain = try await self.db.collection("/anime_data/").document(animeID).getDocument()
                 let  mainData = queryMain.data()!
                 
                 anime_data[animeID] = ["anime": ["main": mainData], "data": dataArray, "episodes": episodeArray]
+                // FB struct test
+                structEpisodeTest[animeID] = newEpisodes
                 counter = counter + 1
                 print("\(counter)/200")
             }
@@ -78,4 +92,19 @@ import FirebaseFirestore
             print("Error fetching documents: \(error)")
         }
     }
+}
+
+// temporarily creating structs here for testing.
+// in real implementation, structs would be declared in a seperate file!
+
+struct episodes: Codable {
+    @DocumentID var id: String?
+    var anilist_id: Int?
+    var box_image: String?
+    var broadcast: Int?
+    var description: String?
+    var recap: String?
+    var runtime: Int?
+    var title_episode: String?
+    var tvdb_id: Int?
 }
