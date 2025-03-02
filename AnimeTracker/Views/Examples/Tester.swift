@@ -10,20 +10,35 @@ import SwiftUI
 struct Tester2: View {
     @ObservedObject var dbTest: Database = Database()
     var body: some View {
-        let animeID = "163134"
+//        let animeID = "107372"  // first show in DB
+//        let animeID = "186621"  //last show in DB
+        let animeID = "163134"  // ReZero S3
         
-        // episodes struct test
-        var debug = dbTest.structEpisodeTest[animeID]?.debugDescription ?? "N/A"
-        var firstEp = dbTest.structEpisodeTest[animeID]?.first
+        let currentAnime = dbTest.animeNew[animeID]
+        let mainDebug = currentAnime?.main.debugDescription ?? "main not found"
+        let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
+        let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"
         
-        var anilist_id = firstEp?.anilist_id
-        var tvdb_id = firstEp?.tvdb_id
-        var box = firstEp?.box_image
-        var broadcast = firstEp?.broadcast
-        var desc = firstEp?.description
-        var recap = firstEp?.recap
-        var runtime = firstEp?.runtime
-        var title = firstEp?.title_episode
+//        Text(mainDebug)
+//        Spacer()
+//        Text(dataDebug)
+//        Spacer()
+//        Text(episodesDebug)
+        
+//        let title = currentAnime?.data?.general?.title_english ?? "N/A"
+//        Text(title)
+        
+        // episodes 1 data
+        let firstEp = currentAnime?.episodes?.first
+        
+        let anilist_id = firstEp?.anilist_id
+        let tvdb_id = firstEp?.tvdb_id
+        let box = firstEp?.box_image
+        let broadcast = firstEp?.broadcast
+        let desc = firstEp?.description
+        let recap = firstEp?.recap
+        let runtime = firstEp?.runtime
+        let title = firstEp?.title_episode
 
         
         Text("\(anilist_id ?? 0)")
@@ -36,10 +51,8 @@ struct Tester2: View {
         Text("\(title ?? "N/A")")
         
         
-        Text(dbTest.anime_data[animeID]?["anime"]?["main"]?["title"] as? String ?? "N/A")
-//        Text(dbTest.anime_data["107372"]?["data"]?["files"]?["box_image"] as? String ?? "N/A")
-        
-        var boxImage = URL(string: dbTest.anime_data[animeID]?["data"]?["files"]?["box_image"] as? String ?? "N/A")
+        // displaying images
+        var boxImage = URL(string: currentAnime?.data?.files?.box_image ?? "N/A")
         
         // displaying the box image
         AsyncImage(url: boxImage) { image in
@@ -67,8 +80,7 @@ struct Tester2: View {
         }
         
         // displaying the splash image
-        var splashImage = URL(string: dbTest.anime_data[animeID]?["data"]?["files"]?["splash_image"] as? String ?? "N/A")
-        
+        var splashImage = URL(string: currentAnime?.data?.files?.splash_image ?? "N/A")
         
         AsyncImage(url: splashImage) { image in
             image
