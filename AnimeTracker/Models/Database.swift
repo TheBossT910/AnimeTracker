@@ -19,6 +19,7 @@ import FirebaseFirestore
 @MainActor class Database : DatabaseProtocol, ObservableObject {
     @Published var anime_data: [String: [String: [String: [String : Any]]]]
     @Published var animeNew: [String: anime]
+    @Published var userData: [String : user_data]
     private var db: Firestore
     
     // constructor
@@ -26,6 +27,7 @@ import FirebaseFirestore
         // initial values
         self.anime_data = [:]
         self.animeNew = [:]
+        self.userData = [:]
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
@@ -33,6 +35,7 @@ import FirebaseFirestore
         // running async tasks
         Task {
             await getDocuments()
+            await getUserDocuments()
         }
     }
     
@@ -104,6 +107,44 @@ import FirebaseFirestore
             print("Error getting documents: \(error)")
         }
     }
+    
+    func getUserDocuments() async {
+        do {
+            let queryUsers = try await db.collection("/user_data/").getDocuments()
+            try queryUsers.documents.forEach { document in
+                // add each user to array
+                userData[document.documentID] = try document.data(as: user_data.self)
+            }
+        }
+        catch {
+            print("Error getting documents: \(error)")
+        }
+    }
+    
+    // this function updates user-defined variables
+    // currently, it only updates the favorite button
+    func updateFavorite(userID: String, isFavorite: Bool, animeID: Int) {
+        var myUser: user_data = userData[userID]!
+        
+        // not in favorites and we want to add to favorites
+        if ((myUser.favorites?.contains(animeID)) == false) && isFavorite {
+            // add to array
+            myUser.favorites?.append(animeID)
+
+            // update database
+            db.collection("/user_data/").document(userID).updateData(["favorites": myUser.favorites as Any])
+            // update local copy
+            userData[userID] = myUser
+        } else if ((myUser.favorites?.contains(animeID)) == true) && !isFavorite {   // in favorites, and we want to remove from favorites
+            // remove from array
+            myUser.favorites?.removeAll { $0 == animeID }
+            
+            // update database
+            db.collection("/user_data/").document(userID).updateData(["favorites": myUser.favorites as Any])
+            // update local copy
+            userData[userID] = myUser
+        }
+    }
 }
 
 // temporarily creating structs here for testing.
@@ -162,4 +203,10 @@ struct episodes: Codable {
     var runtime: Int?
     var title_episode: String?
     var tvdb_id: Int?
+}
+
+struct user_data: Codable {
+    @DocumentID var id: String?
+    var user_name: String?
+    var favorites: [Int]?
 }
