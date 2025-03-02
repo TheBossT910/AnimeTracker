@@ -19,6 +19,20 @@ struct Tester2: View {
         let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
         let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"
         
+        let currentUser = dbTest.userData["hlvTw2YGh1ySqS4eKeEh"]
+//        dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: true, animeID: Int(animeID) ?? -1)
+        var favorite: Bool = currentUser?.favorites?.contains(Int(animeID) ?? -1) ?? false
+        
+        Button(action: {
+            dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: !favorite, animeID: Int(animeID) ?? -1)
+            print("clicked!")
+        }, label: {
+            //displaying a filled/unfilled heart depending on if favorite is true/false
+            Label("Toggle favorite", systemImage: favorite ? "heart.fill" : "heart")
+                .labelStyle(.iconOnly)
+                .foregroundStyle(favorite ? .red : .primary)
+        })
+        
 //        Text(mainDebug)
 //        Spacer()
 //        Text(dataDebug)
