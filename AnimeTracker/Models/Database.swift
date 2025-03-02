@@ -10,18 +10,23 @@
 // TODO: Implement new database code. We are using the new database structure for Firebase. See Notion for more details
 // TODO: Create an interface (called Protocols) for all of the methods in this file. This is to make it easier in the future if we change databases
 
+
+// TODO: fetch documents async
+
 import Foundation
 import FirebaseFirestore
 
 @MainActor class Database : DatabaseProtocol, ObservableObject {
     @Published var anime_data: [String: [String: [String: [String : Any]]]]
-    @Published var structEpisodeTest: [String: [episodes]]
+    @Published var animeNew: [String: anime]
     private var db: Firestore
     
     // constructor
     init() {
+        // initial values
         self.anime_data = [:]
-        self.structEpisodeTest = [:]
+        self.animeNew = [:]
+        
         // creating a Firestore instance
         self.db = Firestore.firestore()
         
@@ -31,65 +36,72 @@ import FirebaseFirestore
         }
     }
     
-    // getting all documents from Firebase
+    // getting all documents from Firebase (async)
     func getDocuments() async {
+        // getting all anime ids
+        var animeIDs : [String] = []
         do {
-            // get all documents (all animes) in anime_data
-            var animeArray: [String] = []
-            let queryAnime = try await self.db.collection("/anime_data/").getDocuments()
+            // fetch all anime documents
+            let queryAnime = try await self.db.collection("/anime_data").getDocuments()
             queryAnime.documents.forEach { document in
-                // append all anime IDs to array
-                let animeID = document.documentID
-                animeArray.append(animeID)
+                // add to array
+                animeIDs.append(document.documentID)
+            }
+        }
+        catch {
+            print("Error fetching documents: \(error)")
+        }
+        
+        do {
+            // storing async response in 'response' variable
+            var response: [String: anime] = [:]
+            response = try await withThrowingTaskGroup(of: (String, anime).self) { group in
+                // going through each animeID
+                for animeID in animeIDs {
+                    // creating a task for each anime
+                    group.addTask {
+                        // for main
+                        let currentMain = try await self.db.collection("/anime_data/").document(animeID).getDocument(as: main.self)
+                        
+                        // for data
+                        let currentFile = try await self.db.collection("/anime_data/\(animeID)/data").document("files").getDocument(as: files2.self)
+                        let currentGeneral = try await self.db.collection("/anime_data/\(animeID)/data").document("general").getDocument(as: general2.self)
+                        
+                        // for episodes
+                        var currentEpisodes: [episodes] = []
+                        let queryEpisodes = try await self.db.collection("/anime_data/\(animeID)/episodes").getDocuments()
+                        queryEpisodes.documents.forEach { document in
+                            currentEpisodes.append(try! document.data(as: episodes.self))
+                        }
+                        
+                        // creating anime object
+                        let currentAnime: anime = anime(
+                            id: animeID,
+                            main: currentMain,
+                            data: data(files: currentFile, general: currentGeneral),
+                            episodes: currentEpisodes
+                        )
+                        
+                        return (animeID, currentAnime)
+                        }
+                    }
                 
-                // adding main document to array
-//                anime_data[animeID]?["main"] = document.data()
+                // parsing data
+                var animes = [String: anime]()
+                for try await (animeID, currentAnime) in group {
+                    // adding data to proper spots in array
+                    animes[animeID] = currentAnime
+                }
+                
+                // return parsed data (to response)
+                return animes
             }
             
-            // parsing each anime
-            var counter: Int = 0
-            for animeID in animeArray {
-                // creating arrays to store data for their respective documents
-                var dataArray: [String: [String: Any]] = [:]
-                var episodeArray: [String: [String: Any]] = [:]
-                // this is for the struct test
-                var newEpisodes: [episodes] = []
-                
-                // getting all data documents
-                let queryData = try await self.db.collection("/anime_data/\(animeID)/data").getDocuments()
-                queryData.documents.forEach { document in
-                    // add each data document to array
-                    dataArray[document.documentID] = document.data()
-                }
-                
-                //getting all episode documents
-                let queryEpisodes = try await self.db.collection("/anime_data/\(animeID)/episodes").getDocuments()
-                queryEpisodes.documents.forEach { document in
-                    // add each episode document to array
-//                    episodeArray[document.documentID] = document.data()
-                    do {
-                        var newEp: episodes
-                        newEp = try document.data(as: episodes.self)
-                        newEpisodes.append(newEp)
-                    }
-                    catch {
-                        print("failed to decode episode data into struct")
-                    }
-                }
-                
-                let queryMain = try await self.db.collection("/anime_data/").document(animeID).getDocument()
-                let  mainData = queryMain.data()!
-                
-                anime_data[animeID] = ["anime": ["main": mainData], "data": dataArray, "episodes": episodeArray]
-                // FB struct test
-                structEpisodeTest[animeID] = newEpisodes
-                counter = counter + 1
-                print("\(counter)/200")
-            }
-        
+            // set anime to response data
+            animeNew = response
             
         } catch {
-            print("Error fetching documents: \(error)")
+            print("Error getting documents: \(error)")
         }
     }
 }
@@ -98,7 +110,7 @@ import FirebaseFirestore
 // in real implementation, structs would be declared in a seperate file!
 
 // stores each anime's data into an easy-to-access struct
-struct Anime: Codable {
+struct anime: Codable {
     @DocumentID var id: String?
     var main: main?
     var data: data?
@@ -108,9 +120,10 @@ struct Anime: Codable {
 struct main: Codable {
     @DocumentID var id: String?
     var anilist_id: Int?
-    var db_version: Int?
+    var db_version: String?
     var doc_id: Int?
     var mal_id: Int?
+    var relation_id: String?
     var title: String?
     var tvdb_id: Int?
 }
