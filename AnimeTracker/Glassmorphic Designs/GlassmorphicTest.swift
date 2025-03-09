@@ -1,5 +1,5 @@
 //
-//  GlassmorhpicTest.swift
+//  GlassmorphicTest.swift
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2025-03-08.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GlassmorhpicTest: View {
+struct GlassmorphicTest: View {
     var body: some View {
         ZStack {
             // creating a color gradient
@@ -50,5 +50,5 @@ struct GlassmorhpicTest: View {
 }
 
 #Preview {
-    GlassmorhpicTest()
+    GlassmorphicTest()
 }
