@@ -10,6 +10,7 @@ import Firebase
 
 @main
 struct AnimeTrackerApp: App {
+    // TODO: add auth, new DB file to here!
     init() {
         FirebaseApp.configure()
     }
