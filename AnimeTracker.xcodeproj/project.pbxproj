@@ -10,6 +10,7 @@
 		CA1E692E2CF9635600656341 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CA1E692D2CF9635600656341 /* FirebaseAnalytics */; };
 		CA1E69342CF965F900656341 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CA1E69332CF965F900656341 /* FirebaseCore */; };
 		CA1E69362CF965FA00656341 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CA1E69352CF965F900656341 /* FirebaseFirestore */; };
+		CAAD14982D84A65C0097C058 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CAAD14972D84A65C0097C058 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 				CA1E69342CF965F900656341 /* FirebaseCore in Frameworks */,
 				CA1E692E2CF9635600656341 /* FirebaseAnalytics in Frameworks */,
 				CA1E69362CF965FA00656341 /* FirebaseFirestore in Frameworks */,
+				CAAD14982D84A65C0097C058 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +91,7 @@
 				CA2B93802CC1A2F700D6B8FD /* AnimeTracker */,
 				CA2B93912CC1A2F800D6B8FD /* AnimeTrackerTests */,
 				CA2B939B2CC1A2F800D6B8FD /* AnimeTrackerUITests */,
+				CAAD14962D84A65C0097C058 /* Frameworks */,
 				CA2B937F2CC1A2F700D6B8FD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,6 +104,13 @@
 				CA2B93982CC1A2F800D6B8FD /* AnimeTrackerUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CAAD14962D84A65C0097C058 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +136,7 @@
 				CA1E692D2CF9635600656341 /* FirebaseAnalytics */,
 				CA1E69332CF965F900656341 /* FirebaseCore */,
 				CA1E69352CF965F900656341 /* FirebaseFirestore */,
+				CAAD14972D84A65C0097C058 /* FirebaseAuth */,
 			);
 			productName = AnimeTracker;
 			productReference = CA2B937E2CC1A2F700D6B8FD /* AnimeTracker.app */;
@@ -598,6 +609,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA1E692C2CF9635600656341 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		CAAD14972D84A65C0097C058 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA1E692C2CF9635600656341 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
