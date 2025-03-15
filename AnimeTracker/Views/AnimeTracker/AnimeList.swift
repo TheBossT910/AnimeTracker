@@ -62,6 +62,7 @@ struct AnimeList: View {
                     }
                 }
             }
+            .scrollTargetBehavior(.paging) // Forces more preloading
         }
         //animation when switching between favorites only and all animes view
         .animation(.default, value: showFavoritesOnly)
