@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ScheduleAiringRow: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //stores an object to hold Firebase data
-    //Oshi no Ko, Attack on Titan, Boochi the Rock!
     var animeAiringIDs: [String]
     
     var body: some View {
@@ -25,9 +23,11 @@ struct ScheduleAiringRow: View {
 
 #Preview {
     //environment object
-    let animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
     
-    var currentlyAiringIDs: [String] = ["6KaHVRxICvkkrRYsDiMY", "eqIKQyLZ7eMe8GmMOB6O", "323Prp20ZeyevdQQcyl9"]
+    var currentlyAiringIDs: [String] = ["163134", "164299", "169755"]
     ScheduleAiringRow(animeAiringIDs: currentlyAiringIDs)
-        .environmentObject(animeDataFB)
+        .environmentObject(db)
+        .environmentObject(authManager)
 }
