@@ -130,7 +130,7 @@ import FirebaseFirestore
         if ((myUser.favorites?.contains(animeID)) == false) && isFavorite {
             // add to array
             myUser.favorites?.append(animeID)
-
+            
             // update database
             db.collection("/user_data/").document(userID).updateData(["favorites": myUser.favorites as Any])
             // update local copy
@@ -187,7 +187,7 @@ struct general2: Codable {
     @DocumentID var id: String?
     var description: String?
     var episodes: Int?
-    var premiered: String?
+    var premiere: String?
     var rating: String?
     var title_english: String?
     var title_native: String?
