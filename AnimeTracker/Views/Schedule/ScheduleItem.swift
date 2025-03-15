@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct ScheduleItem: View {
     @EnvironmentObject var db: Database
@@ -76,9 +77,12 @@ struct ScheduleItem: View {
                             Text("☑")
                             
                             Spacer()
-                            // TODO: Convert this to local time zone. Just showing Unix timestamp right now
-                            // We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
-                            Text(animeEp1?.broadcast?.description ?? "N/A")
+                            
+                            // TODO: Deal with cases where we don't have a broadcast time (and it defaults to 0 in the database itself I think... This is a large-scale problem for later)
+                            // NOTE: We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
+                            let unixTime: TimeInterval = Double(animeEp1?.broadcast?.description ?? "0") ?? 0
+                            let convertedTime = getFormattedTime(from: unixTime)
+                            Text(convertedTime ?? "N/A")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                         }
@@ -107,6 +111,22 @@ struct ScheduleItem: View {
         //explicit properties so it shows us correctly in ScheduleRow
         .padding()
         .foregroundStyle(.primary)
+    }
+    
+    // function courtesy of ChatGPT for converting time
+    // TODO: create your own implementation
+    func getFormattedTime(from unixTimestamp: TimeInterval) -> String {
+        let date = Date(timeIntervalSince1970: unixTimestamp)
+        let formatter = DateFormatter()
+        
+        // Set timezone to the user's current timezone
+        formatter.timeZone = TimeZone.current
+        
+        // Automatically use 12-hour or 24-hour format based on user settings
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short  // Uses system setting (e.g., "2:30 PM" or "14:30")
+        
+        return formatter.string(from: date)
     }
 }
 
