@@ -1,5 +1,5 @@
 //
-//  Tester.swift
+//  NewDB.swift
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2025-02-20.
@@ -7,31 +7,36 @@
 
 import SwiftUI
 
-struct Tester2: View {
+struct NewDB: View {
     @ObservedObject var dbTest: Database = Database()
+    @StateObject var authManager = AuthManager.shared
     var body: some View {
+        let user = authManager.userID ?? ""
+//        let user = "hlvTw2YGh1ySqS4eKeEh"
 //        let animeID = "107372"  // first show in DB
 //        let animeID = "186621"  //last show in DB
         let animeID = "163134"  // ReZero S3
         
         let currentAnime = dbTest.animeNew[animeID]
-        let mainDebug = currentAnime?.main.debugDescription ?? "main not found"
-        let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
-        let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"
+//        let mainDebug = currentAnime?.main.debugDescription ?? "main not found"
+//        let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
+//        let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"
         
-        let currentUser = dbTest.userData["hlvTw2YGh1ySqS4eKeEh"]
+        let currentUser = dbTest.userData[user]
 //        dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: true, animeID: Int(animeID) ?? -1)
         var favorite: Bool = currentUser?.favorites?.contains(Int(animeID) ?? -1) ?? false
         
-        Button(action: {
-            dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: !favorite, animeID: Int(animeID) ?? -1)
-            print("clicked!")
-        }, label: {
-            //displaying a filled/unfilled heart depending on if favorite is true/false
-            Label("Toggle favorite", systemImage: favorite ? "heart.fill" : "heart")
-                .labelStyle(.iconOnly)
-                .foregroundStyle(favorite ? .red : .primary)
-        })
+        if (currentUser != nil) {
+            Button(action: {
+                dbTest.updateFavorite(userID: user, isFavorite: !favorite, animeID: Int(animeID) ?? -1)
+                print("clicked!")
+            }, label: {
+                //displaying a filled/unfilled heart depending on if favorite is true/false
+                Label("Toggle favorite", systemImage: favorite ? "heart.fill" : "heart")
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(favorite ? .red : .primary)
+            })
+        }
         
 //        Text(mainDebug)
 //        Spacer()
@@ -119,10 +124,9 @@ struct Tester2: View {
             //adding a shadow. Gray on light mode, white on dark mode
             .shadow(color: Color.gray.opacity(0.7), radius: 10)
         }
-        
     }
 }
 
 #Preview {
-    Tester2()
+    NewDB()
 }
