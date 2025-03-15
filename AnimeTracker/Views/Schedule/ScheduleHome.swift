@@ -37,7 +37,7 @@ struct ScheduleHome: View {
                             VStack {
                                 ScheduleRow(day: day)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .frame(maxWidth: 400, maxHeight: .infinity)
                         }
                     }
                     .tabViewStyle(.page)
