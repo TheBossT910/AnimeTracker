@@ -8,28 +8,31 @@
 import SwiftUI
 
 struct ScheduleItem: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase  //object of AnimeDataFirebase, holds Firebase data
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+
     let animeID: String  //currently selected anime's iD
-    var splashImage: Image  //holds image to be displayed
 
     var body: some View {
-        //getting Firebase data objects
-        let animeFB = animeDataFB.animes[animeID]
-        let animeGeneral = animeFB?["general"] as? general
-        let animeFiles = animeFB?["files"] as? files
-        let animeMedia = animeFB?["media"] as? media
+        //getting anime data
+        let anime = db.animeNew[animeID]
+        let animeGeneral = anime?.data?.general
+        let animeFiles = anime?.data?.files
+        let animeMedia = anime?.episodes
 
         //getting specific data
-        let animeSplash = animeFiles?.splash_image ?? "N/A"
         //TODO: Figure out a way to know what episode data to show automaticaly. This is hard-coded to only show episode 1 for all shows!
-        let animeEp1 = animeMedia?.episodes?["1"] as? mediaContent
+        let animeEp1 = animeMedia?[0]
+        let animeSplash = URL(string: animeEp1?.box_image ?? "N/A")
+
 
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
                 //TODO: check if we even need this .top alignemnt
                 HStack(alignment: .top) {
                     //main image
-                    Image(animeSplash)
+                    AsyncImage(url: animeSplash) { image in
+                        image.image?
                         .resizable()
                         .scaledToFill()
                         //trying to make the image dynamically size
@@ -38,12 +41,13 @@ struct ScheduleItem: View {
                             minHeight: 100, maxHeight: 130
                         )
                         .clipped()
+                    }
 
                     VStack(alignment: .leading) {
                         //I am embedding the text items in HStacks to horizontally center the text
                         HStack(alignment: .top) {
                             Spacer()
-                            Text("Ep 1: \(animeEp1?.name_jp ?? "N/A")")
+                            Text("Ep 1: \(animeEp1?.title_episode ?? "N/A")")
                                 .font(.title3)
                                 //allows for text wrapping
                                 .fontWeight(.medium)
@@ -70,19 +74,21 @@ struct ScheduleItem: View {
                         HStack {
                             //TODO: temporary fake checkmark. Plan to implement real "marking" system later
                             Text("☑")
+                            
                             Spacer()
-                            Text(animeEp1?.air_time ?? "N/A")
+                            // TODO: Convert this to local time zone. Just showing Unix timestamp right now
+                            // We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
+                            Text(animeEp1?.broadcast?.description ?? "N/A")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                         }
-
                         Spacer()
-
                     }
+                    
                     //match the sizing to the splash image sizing so the whole card stays the same dimmensions
                     .frame(maxWidth: .infinity, minHeight: 100, maxHeight: 130)
-
                 }
+                
                 //.leading aligns HStack to left side
                 .frame(alignment: .leading)
 
@@ -92,7 +98,7 @@ struct ScheduleItem: View {
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
                 }) {
-                    Text("\(animeGeneral?.title_eng ?? "N/A")")
+                    Text("\(animeGeneral?.title_english ?? "N/A")")
                         .font(.title2)
                         .fontWeight(.heavy)
                 }
@@ -106,12 +112,11 @@ struct ScheduleItem: View {
 
 #Preview {
     //environment object
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
-    //OZtFGA9sVtdxtOCZZTEw  //Spy x Family
-    //6KaHVRxICvkkrRYsDiMY  //Oshi no Ko
-    //HgChfzTmhx1Fxiw6XbWq  //Death Note
-    ScheduleItem(
-        animeID: "HgChfzTmhx1Fxiw6XbWq", splashImage: Image("oshi_no_ko_splash")
-    )
-    .environmentObject(animeDataFB)
+    let db = Database()
+    let authManager = AuthManager.shared
+
+    //"163134" is ReZero
+    ScheduleItem(animeID: "163134")
+    .environmentObject(db)
+    .environmentObject(authManager)
 }
