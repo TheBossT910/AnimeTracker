@@ -145,6 +145,26 @@ import FirebaseFirestore
             userData[userID] = myUser
         }
     }
+    
+    // TODO: merge toggleWatchlist and updateFavorites into 1 function!
+    func toggleWatchlist(userID: String, animeID: Int, watchlist: [Int], watchlistName: String) {
+        var updatedWatchlist: [Int] = []
+        if (watchlist.contains(animeID)) {
+            // remove show
+            updatedWatchlist = watchlist.filter { $0 != animeID }
+        } else {
+            // add show
+            updatedWatchlist = watchlist + [animeID]
+        }
+        
+        // update databse
+        db.collection("/user_data/").document(userID).updateData([watchlistName: updatedWatchlist])
+        // update local copy
+        Task {
+            userData[userID] = try await db.collection("/user_data/").document(userID).getDocument(as: user_data.self)
+        }
+        
+    }
 }
 
 // temporarily creating structs here for testing.
