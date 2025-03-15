@@ -209,4 +209,9 @@ struct user_data: Codable {
     @DocumentID var id: String?
     var user_name: String?
     var favorites: [Int]?
+    //"Dropped", "Completed", "Watching", "Plan to Watch" are different watch lists
+    var dropped: [Int]?
+    var completed: [Int]?
+    var watching: [Int]?
+    var plan_to_watch: [Int]?
 }

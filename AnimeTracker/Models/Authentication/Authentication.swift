@@ -60,7 +60,7 @@ class AuthManager: ObservableObject {
 //                print("user signed up!")
                 
                 // add a new user data entry into database
-                var userData = user_data(user_name: username, favorites: [])
+                let userData = user_data(user_name: username, favorites: [], dropped: [], completed: [], watching: [], plan_to_watch: [])
                 do {
                     try self.db.collection("/user_data/").document(user.uid).setData(from: userData)
                 } catch {
