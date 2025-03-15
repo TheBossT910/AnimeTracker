@@ -15,15 +15,24 @@ struct ScheduleRow: View {
     @EnvironmentObject var authManager: AuthManager
     
     var day: String
+    @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
     
-    var filteredAnimes: [String : anime] {
-        db.animeNew.filter { anime in
+    //a filtered list of animes based on the day of the week, and if we want to show all shows or only favorite shows
+    var filteredAnimes: [String: anime] {
+        // getting all favorites
+        let userID = authManager.userID ?? ""
+        let userFavorites = db.userData[userID]?.favorites ?? []
+        
+        // going through all animes
+        return db.animeNew.filter { anime in
             // TODO: We are only basing the air date off of the 1st show... Fix this!
             let latestEpisode = anime.value.episodes?.first
             let broadcastUnix: TimeInterval = Double(latestEpisode?.broadcast ?? 0)
             let weekday = getWeekday(from: broadcastUnix)
             
-            return (weekday + "s") == day
+            let currentID = anime.value.id
+            // if we want to only see favorites, and the current show is a favorite, return
+            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1)) && ((weekday + "s") == day)
         }
     }
 
@@ -74,7 +83,7 @@ struct ScheduleRow: View {
     let db = Database()
     let authManager = AuthManager.shared
     
-    ScheduleRow(day: "Tuesdays")
+    ScheduleRow(day: "Tuesdays", showFavorites: .constant(true))
         .environmentObject(db)
         .environmentObject(authManager)
 }
