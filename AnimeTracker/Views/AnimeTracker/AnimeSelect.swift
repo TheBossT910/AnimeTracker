@@ -8,18 +8,24 @@
 import SwiftUI
 
 struct AnimeSelect: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase //holds an AnimeDataFirebase object, with Firebase data
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+    
     @Environment(\.colorScheme) var colorScheme //used to detect light/dark mode
     var animeID: String //holds the document id to a specific anime
     
     var body: some View {
-        //getting anime object
-        let animeFB = animeDataFB.animes[animeID]
-        //getting anime data objects
-        let animeGeneral = animeFB?["general"] as? general
-        let animeFiles = animeFB?["files"] as? files
-        //getting anime favorite value
-        let isFavorite = animeGeneral?.isFavorite ?? false
+        // getting current anime's data
+        let anime = db.animeNew[animeID]
+        let animeGeneral = anime?.data?.general
+        let animeFiles = anime?.data?.files
+        
+        // getting current user's data
+        let userID = authManager.userID ?? ""
+        let userData = db.userData[userID]
+        
+        //getting anime's favorite value
+        let isFavorite = userData?.favorites?.contains(Int(animeID) ?? -1) ?? false
         
         VStack {
             //displaying top text, premiere and rating
@@ -37,42 +43,41 @@ struct AnimeSelect: View {
             //displaying the image
             VStack {
                 //getting the image
-                var boxImage: Image {
-                    Image(animeFiles?.box_image ?? "N/A")
-                }
+                var boxImage = URL(string: animeFiles?.box_image ?? "N/A")
                 
                 //formatting the image
-                boxImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
+                AsyncImage(url: boxImage) { image in
+                    image.image?
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                     //the ratio for fitting it is 11/15 (width/height)
-                    .frame(width: 169, height: 230)
-                    .clipped()
-                    .cornerRadius(10)
-                    .overlay {
-
-                        RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 169, height: 230)
+                        .clipped()
+                        .cornerRadius(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
                             //changes the color of the outline based on light/dark modes
-                            .stroke(colorScheme == .light ? Color.black : Color.white, lineWidth: 4)
-                        
-                        //display/hide a heart if favorite is true/false
-                        if isFavorite {
-                            Image(systemName: "heart.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20)
+                                .stroke(colorScheme == .light ? Color.black : Color.white, lineWidth: 4)
+                            
+                            //display/hide a heart if favorite is true/false
+                            if isFavorite {
+                                Image(systemName: "heart.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 20)
                                 //x should be 1/2 of width, y should be 1/2 of height (because its 0,0 is the center of the image!)
-                                .offset(x: 84, y: 115)
-                                .foregroundColor(.red)
+                                    .offset(x: 84, y: 115)
+                                    .foregroundColor(.red)
+                            }
                         }
-                    }
+                }
 
             }
-            //display the english and japanese title at the bottom
-            Text(animeGeneral?.title_eng ?? "N/A")
+            // display the english and native title at the bottom
+            Text(animeGeneral?.title_english ?? "N/A")
                 .font(.title3)
                 .fontWeight(.bold)
-            Text(animeGeneral?.title_jp ?? "N/A")
+            Text(animeGeneral?.title_native ?? "N/A")
                 .font(.callout)
         }
         .padding(10)
@@ -81,7 +86,11 @@ struct AnimeSelect: View {
 
 #Preview {
     //environment
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
-    AnimeSelect(animeID: "6KaHVRxICvkkrRYsDiMY")
-        .environmentObject(animeDataFB)
+    let db = Database()
+    let authManager = AuthManager.shared
+    
+    //"163134" is ReZero
+    AnimeSelect(animeID: "163134")
+        .environmentObject(db)
+        .environmentObject(authManager)
 }
