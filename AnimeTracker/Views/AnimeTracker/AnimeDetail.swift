@@ -26,6 +26,14 @@ struct AnimeDetail: View {
         // favorite button initial value
         @State var favorite: Bool = userData?.favorites?.contains(Int(animeID) ?? -1) ?? false
         
+        // watchlist initial values
+        let dropped = userData?.dropped?.contains(Int(animeID) ?? -1) ?? false
+        let completed = userData?.completed?.contains(Int(animeID) ?? -1) ?? false
+        let watching = userData?.watching?.contains(Int(animeID) ?? -1) ?? false
+        let planToWatch = userData?.plan_to_watch?.contains(Int(animeID) ?? -1) ?? false
+        let watchlists = ["Dropped": dropped, "Completed": completed, "Watching": watching, "Plan to Watch": planToWatch]
+        
+        
         ScrollView {
             //getting the box image
             let boxImage = URL(string: animeFiles?.box_image ?? "N/A")!
@@ -46,6 +54,9 @@ struct AnimeDetail: View {
                     Text(animeGeneral?.premiere ?? "N/A")
                         .font(.callout)
                         .fontWeight(.semibold)
+                    Spacer()
+                    
+                    WatchlistMenu(animeID: animeID, userID: userID, watchlists: watchlists)
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
