@@ -92,7 +92,8 @@ struct AuthView: View {
             
             else {
                 Text("Authenticated!")
-                Text ("Welcome back, \(authManager.userName ?? "None")")
+                // TODO: does not show userName on ContentView screen when you initially load it
+                Text ("Welcome back, \(authManager.userName ?? "User")")
                     .padding()
                 
                 //sign out button
