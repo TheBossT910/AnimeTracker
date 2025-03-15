@@ -41,9 +41,6 @@ struct CategoriesHome: View {
             }
             .navigationTitle("Anime Status")
         }
-//        detail: {
-//            Text("Select an anime to view its details.")
-//        }
     }
 }
 
