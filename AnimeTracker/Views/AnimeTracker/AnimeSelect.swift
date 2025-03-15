@@ -47,7 +47,7 @@ struct AnimeSelect: View {
                 
                 //formatting the image
                 AsyncImage(url: boxImage) { image in
-                    image.image?
+                    image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     //the ratio for fitting it is 11/15 (width/height)
@@ -69,6 +69,17 @@ struct AnimeSelect: View {
                                     .offset(x: 84, y: 115)
                                     .foregroundColor(.red)
                             }
+                        }
+                } placeholder: {
+                    Color.gray
+                    //the ratio for fitting it is 11/15 (width/height)
+                        .frame(width: 169, height: 230)
+                        .clipped()
+                        .cornerRadius(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                            //changes the color of the outline based on light/dark modes
+                                .stroke(colorScheme == .light ? Color.black : Color.white, lineWidth: 4)
                         }
                 }
 
