@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ScheduleAiringItem: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //stores an object to hold Firebase data
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+    
     var animeID: String
     //TODO: fetch time properly
     var time: String = "23:00(JST)"
@@ -17,20 +19,20 @@ struct ScheduleAiringItem: View {
     
     var body: some View {
         //getting current anime data
-        let animeFB = animeDataFB.animes[animeID]
-//        let animeGeneral = animeFB?["general"] as? general
-        let animeFiles = animeFB?["files"] as? files
+        let anime = db.animeNew[animeID]
+        let animeFiles = anime?.data?.files
         
         //getting specific variables we want to use
-        let splash = animeFiles?.splash_image ?? "N/A"
-        let icon = animeFiles?.icon ?? "N/A"
+        let splash = URL(string: animeFiles?.splash_image ?? "N/A")
+
         //TODO: split time into a seperate var in Firebase. This is temporary!
         //Not implemented yet
 //        let broadcastTime = animeGeneral?.broadcast?.split(separator: " ")[1]
         
         ZStack {
             //splash image. The main image
-            Image(splash)
+            AsyncImage(url: splash) { image in
+                image.image?
                 .resizable()
                 .scaledToFill()
                 .frame(height: 100)
@@ -61,37 +63,28 @@ struct ScheduleAiringItem: View {
                             //padding that allows geometry reader width to be contained within the splash image
                             .padding()
                         }
+                    }
                 }
             
-            //logo
-            HStack {
-                //TODO: add icon file path to all shows in Firebase
-                Image(icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 30)
-                    .clipped()
-                    .padding()  //allows for the blur to go around the logo
-                    .background(.ultraThinMaterial) //creates a blur effect
-
-                Spacer()
-                
-                //TODO: Implement proper checkmark system
-                Text("☑")
-                    .font(.system(size: 30, weight: .bold, design: .default))
-                    //It is green to show that we have watched it. This is hard-coded to be green.
-                    //I think I should use green and orange colors to indicate watched/not watched
-                    .foregroundStyle(.green)
-                    .padding()
-            }
-            .padding()
+            //TODO: Implement proper checkmark system
+            // completion checkmark
+            Text("☑")
+                .font(.system(size: 30, weight: .bold, design: .default))
+                //It is green to show that we have watched it. This is hard-coded to be green.
+                //I think I should use green and orange colors to indicate watched/not watched
+                .foregroundStyle(.green)
+                .padding()
         }
     }
 }
 
 #Preview {
     //environment object
-    let animeDataFB = AnimeDataFirebase(collection: "s1")
-    ScheduleAiringItem(animeID: "6KaHVRxICvkkrRYsDiMY")
-        .environmentObject(animeDataFB)
+    let db = Database()
+    let authManager = AuthManager.shared
+    
+    //"163134" is ReZero
+    ScheduleAiringItem(animeID: "163134")
+        .environmentObject(db)
+        .environmentObject(authManager)
 }
