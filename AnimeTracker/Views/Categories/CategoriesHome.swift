@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct CategoriesHome: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with data from Firebase
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
 
     var splashImage: Image {
-        //hard-coded top image for now
+        // TODO: have this as a rotating carosuel. This is a hard-coded image for now
         Image("oshi_no_ko_splash")
     }
     
     var body: some View {
-        //stating the categories we have
+        // the watch lists we have
         let categories = ["Watching", "Completed", "Plan to Watch", "Dropped"]
         
         NavigationStack {
@@ -48,8 +49,10 @@ struct CategoriesHome: View {
 
 #Preview {
     //environment objects
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
     
     CategoriesHome()
-        .environmentObject(animeDataFB)
+        .environmentObject(db)
+        .environmentObject(authManager)
 }
