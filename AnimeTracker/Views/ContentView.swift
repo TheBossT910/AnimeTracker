@@ -15,6 +15,7 @@ struct ContentView: View {
         case animeStatus
         case list
         case schedule
+        case profile
     }
     
     var body: some View {
@@ -41,6 +42,11 @@ struct ContentView: View {
                     Label("Schedule", systemImage: "calendar")
                 }
                 .tag(Tab.schedule)
+            AuthView()
+                .tabItem {
+                    Label("Account", systemImage: "person.crop.circle")
+                }
+                .tag(Tab.profile)
         }
     }
 }
@@ -48,6 +54,11 @@ struct ContentView: View {
 #Preview {
     //environment objects
     var animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
+    
     ContentView()
         .environmentObject(animeDataFB)
+        .environmentObject(db)
+        .environmentObject(authManager)
 }
