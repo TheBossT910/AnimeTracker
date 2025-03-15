@@ -26,7 +26,7 @@ struct ScheduleAiringRow: View {
     let db = Database()
     let authManager = AuthManager.shared
     
-    var currentlyAiringIDs: [String] = ["163134", "164299", "169755"]
+    let currentlyAiringIDs: [String] = ["163134", "164299", "169755"]
     ScheduleAiringRow(animeAiringIDs: currentlyAiringIDs)
         .environmentObject(db)
         .environmentObject(authManager)

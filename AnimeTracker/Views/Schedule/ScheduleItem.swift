@@ -18,7 +18,6 @@ struct ScheduleItem: View {
         //getting anime data
         let anime = db.animeNew[animeID]
         let animeGeneral = anime?.data?.general
-        let animeFiles = anime?.data?.files
         let animeMedia = anime?.episodes
 
         //getting specific data
@@ -82,7 +81,7 @@ struct ScheduleItem: View {
                             // NOTE: We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
                             let unixTime: TimeInterval = Double(animeEp1?.broadcast?.description ?? "0") ?? 0
                             let convertedTime = getFormattedTime(from: unixTime)
-                            Text(convertedTime ?? "N/A")
+                            Text(convertedTime)
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                         }

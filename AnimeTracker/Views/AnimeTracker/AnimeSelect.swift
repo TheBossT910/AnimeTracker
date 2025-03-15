@@ -43,7 +43,7 @@ struct AnimeSelect: View {
             //displaying the image
             VStack {
                 //getting the image
-                var boxImage = URL(string: animeFiles?.box_image ?? "N/A")
+                let boxImage = URL(string: animeFiles?.box_image ?? "N/A")
                 
                 //formatting the image
                 AsyncImage(url: boxImage) { image in

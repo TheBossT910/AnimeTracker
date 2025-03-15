@@ -53,12 +53,10 @@ struct ContentView: View {
 
 #Preview {
     //environment objects
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
     let db = Database()
     let authManager = AuthManager.shared
     
     ContentView()
-        .environmentObject(animeDataFB)
         .environmentObject(db)
         .environmentObject(authManager)
 }
