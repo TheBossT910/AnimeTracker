@@ -96,7 +96,13 @@ struct ScheduleItem: View {
                 .frame(alignment: .leading)
 
                 DisclosureGroup(content: {
-                    Text(animeEp1?.recap ?? "N/A")
+                    // TODO: Implement recap. For now, we will replace showing the recap with showing the 1st episode's description
+//                    Text(animeEp1?.recap ?? "N/A")
+//                        .font(.caption)
+//                        //explicitly set text to leading so it displays correctly in ScheduleRow
+//                        .multilineTextAlignment(.leading)
+                    
+                    Text(animeEp1?.description ?? "N/A")
                         .font(.caption)
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
