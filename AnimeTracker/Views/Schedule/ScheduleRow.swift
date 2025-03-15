@@ -73,10 +73,8 @@ struct ScheduleRow: View {
     //environment object
     let db = Database()
     let authManager = AuthManager.shared
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
     
     ScheduleRow(day: "Tuesdays")
-        .environmentObject(animeDataFB)
         .environmentObject(db)
         .environmentObject(authManager)
 }
