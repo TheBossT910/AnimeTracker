@@ -1,5 +1,5 @@
 //
-//  NewDB.swift
+//  DatabaseExample.swift
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2025-02-20.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NewDB: View {
+struct DatabaseExample: View {
     @ObservedObject var dbTest: Database = Database()
     @StateObject var authManager = AuthManager.shared
     var body: some View {
@@ -128,5 +128,5 @@ struct NewDB: View {
 }
 
 #Preview {
-    NewDB()
+    DatabaseExample()
 }
