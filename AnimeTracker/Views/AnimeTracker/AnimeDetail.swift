@@ -33,49 +33,51 @@ struct AnimeDetail: View {
         let planToWatch = userData?.plan_to_watch?.contains(Int(animeID) ?? -1) ?? false
         let watchlists = ["Dropped": dropped, "Completed": completed, "Watching": watching, "Plan to Watch": planToWatch]
         
-        
-        ScrollView {
-            //getting the box image
-            let boxImage = URL(string: animeFiles?.box_image ?? "N/A")!
-            BoxImage(imageURL: boxImage)
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    //Title and favourite button
-                    Text(animeGeneral?.title_english ?? "N/A")
-                        .font(.title)
-                        .fontWeight(.heavy)
-                    Spacer()
-                    FavoriteButtonFB(animeID: animeID, userID: userID, favorite: $favorite)
-                }
+        GeometryReader { geometry in
+            ScrollView {
+                //getting the box image
+                let boxImage = URL(string: animeFiles?.box_image ?? "N/A")!
+                BoxImage(imageURL: boxImage)
+                    .frame(height: geometry.size.height * 0.7)
                 
-                HStack {
-                    // show premiere date
-                    Text(animeGeneral?.premiere ?? "N/A")
-                        .font(.callout)
-                        .fontWeight(.semibold)
-                    Spacer()
+                VStack(alignment: .leading) {
+                    HStack {
+                        //Title and favourite button
+                        Text(animeGeneral?.title_english ?? "N/A")
+                            .font(.title)
+                            .fontWeight(.heavy)
+                        Spacer()
+                        FavoriteButtonFB(animeID: animeID, userID: userID, favorite: $favorite)
+                    }
                     
-                    WatchlistMenu(animeID: animeID, userID: userID, watchlists: watchlists)
+                    HStack {
+                        // show premiere date
+                        Text(animeGeneral?.premiere ?? "N/A")
+                            .font(.callout)
+                            .fontWeight(.semibold)
+                        Spacer()
+                        
+                        WatchlistMenu(animeID: animeID, userID: userID, watchlists: watchlists)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    
+                    Divider()
+                    
+                    //adding "Description" title
+                    Text("Description")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 10)
                 }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
                 
-                Divider()
-                
-                //adding "Description" title
-                Text("Description")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 10)
-                }
-            
-            // displaying the actual description
-            Text(animeGeneral?.description ?? "N/A")
-                .font(.body)
-                .fontWeight(.medium)
-        }
+                // displaying the actual description
+                Text(animeGeneral?.description?.toPlainText() ?? "N/A")
+                    .font(.body)
+                    .fontWeight(.medium)
+            }
             .padding()
+        }
     }
 }
 
