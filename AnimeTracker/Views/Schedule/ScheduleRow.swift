@@ -17,7 +17,7 @@ struct ScheduleRow: View {
     var day: String
     @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
     
-    //a filtered list of animes based on the day of the week, and if we want to show all shows or only favorite shows
+    //a filtered list of animes based on the day of the week, if the show aired within a span of 2 months, and if we want to show all shows or only favorite shows
     var filteredAnimes: [String: anime] {
         // getting all favorites
         let userID = authManager.userID ?? ""
@@ -28,11 +28,16 @@ struct ScheduleRow: View {
             // TODO: We are only basing the air date off of the 1st show... Fix this!
             let latestEpisode = anime.value.episodes?.first
             let broadcastUnix: TimeInterval = Double(latestEpisode?.broadcast ?? 0)
-            let weekday = getWeekday(from: broadcastUnix)
             
+            // cheking weekday
+            let weekday = getWeekday(from: broadcastUnix)
+            // checking if aired within 6 month interval (2 cours)
+            let isActivelyAiring = isWithinTwoCours(unixTimestamp: broadcastUnix)
+            
+            // for checking favorite
             let currentID = anime.value.id
             // if we want to only see favorites, and the current show is a favorite, return
-            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1)) && ((weekday + "s") == day)
+            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1)) && ((weekday + "s") == day) && isActivelyAiring
         }
     }
 
@@ -67,6 +72,7 @@ struct ScheduleRow: View {
 
     // function courtesy of ChatGPT.
     // TODO: create your own implementation
+    // gets the weekday
     func getWeekday(from unixTimestamp: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: unixTimestamp)
         
@@ -75,6 +81,21 @@ struct ScheduleRow: View {
         formatter.timeZone = TimeZone.current  // Uses the device's timezone
         
         return formatter.string(from: date)
+    }
+    
+    // function courtesy of ChatGPT
+    // TODO: create your own implementation
+    // returns true if the airdate is within 6 months (2 cours) of the current date (false otherwise)
+    func isWithinTwoCours(unixTimestamp: TimeInterval) -> Bool {
+        let givenDate = Date(timeIntervalSince1970: unixTimestamp)
+        let currentDate = Date()
+        
+        guard let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: currentDate),
+              let sixMonthsLater = Calendar.current.date(byAdding: .month, value: 6, to: currentDate) else {
+            return false
+        }
+        
+        return givenDate >= sixMonthsAgo && givenDate <= sixMonthsLater
     }
 }
 
