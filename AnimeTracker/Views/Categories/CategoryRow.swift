@@ -17,34 +17,36 @@ struct CategoryRow: View {
         //grabbing the keys of all animes
         let animeKeys: [Int] = getKeys(category: categoryName)
         
-        
-        VStack(alignment: .leading) {
-            //displaying the category name
-            Text(categoryName)
-                .font(.title2)
-                .fontWeight(.heavy)
-                .padding(.leading, 15)
-                .padding(.top, 20)
-
-            //lets us scroll horizontally. showIndicators: false means don't show a scrollbar
-            ScrollView(.horizontal, showsIndicators: false) {
-                //putting everything horizontally
-                HStack(alignment: .top, spacing: 0) {
-                    //displaying each item
-                    ForEach(animeKeys, id: \.self) { animeKey in
-                        // link to the details page
-                        NavigationLink {
-                            AnimeDetail(animeID: String(animeKey))
-                        } label: {
-                            //image of the anime
-                            CategoryItem(animeID: String(animeKey))
+        // only displays if there are shows in the category
+        if (animeKeys.count != 0) {
+            VStack(alignment: .leading) {
+                //displaying the category name
+                Text(categoryName)
+                    .font(.title2)
+                    .fontWeight(.heavy)
+                    .padding(.leading, 15)
+                    .padding(.top, 20)
+                
+                //lets us scroll horizontally. showIndicators: false means don't show a scrollbar
+                ScrollView(.horizontal, showsIndicators: false) {
+                    //putting everything horizontally
+                    HStack(alignment: .top, spacing: 0) {
+                        //displaying each item
+                        ForEach(animeKeys, id: \.self) { animeKey in
+                            // link to the details page
+                            NavigationLink {
+                                AnimeDetail(animeID: String(animeKey))
+                            } label: {
+                                //image of the anime
+                                CategoryItem(animeID: String(animeKey))
+                            }
+                            // fixes blue highlighted text when used in other views
+                            .buttonStyle(.plain)
                         }
-                        // fixes blue highlighted text when used in other views
-                        .buttonStyle(.plain)
                     }
                 }
+                .frame(height: 350)
             }
-            .frame(height: 350)
         }
     }
     
