@@ -17,7 +17,6 @@ import Foundation
 import FirebaseFirestore
 
 @MainActor class Database : DatabaseProtocol, ObservableObject {
-    @Published var anime_data: [String: [String: [String: [String : Any]]]]
     @Published var animeNew: [String: anime]
     @Published var userData: [String : user_data]
     private var db: Firestore
@@ -25,7 +24,6 @@ import FirebaseFirestore
     // constructor
     init() {
         // initial values
-        self.anime_data = [:]
         self.animeNew = [:]
         self.userData = [:]
         
