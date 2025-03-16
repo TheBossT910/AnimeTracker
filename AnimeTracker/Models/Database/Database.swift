@@ -167,6 +167,15 @@ import FirebaseFirestore
     }
 }
 
+// TODO: Put in a Util class!
+// Replaces HTML tags with plain text
+// courtesy of https://stackoverflow.com/questions/74321827/html-text-to-plain-text-swift
+extension String {
+    func toPlainText() -> String {
+        self.replacingOccurrences(of: #"<[^>]+>"#, with: "", options: .regularExpression)
+    }
+}
+
 // temporarily creating structs here for testing.
 // in real implementation, structs would be declared in a seperate file!
 
