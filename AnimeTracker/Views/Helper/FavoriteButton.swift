@@ -1,5 +1,5 @@
 //
-//  FavoriteButtonFB.swift
+//  FavoriteButton.swift
 //  AnimeTracker
 //
 //  Created by Taha Rashid on 2025-01-03.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FavoriteButtonFB: View {
+struct FavoriteButton: View {
     @EnvironmentObject var db: Database
     @EnvironmentObject var authManager: AuthManager
 
@@ -37,7 +37,7 @@ struct FavoriteButtonFB: View {
     let db = Database()
     let authManager = AuthManager.shared
     
-    FavoriteButtonFB(animeID: "163134", userID: "T26C4LmC7zN5j8SAPNnoy7cziuS2", favorite: .constant(true))
+    FavoriteButton(animeID: "163134", userID: "T26C4LmC7zN5j8SAPNnoy7cziuS2", favorite: .constant(true))
         .environmentObject(db)
         .environmentObject(authManager)
 }

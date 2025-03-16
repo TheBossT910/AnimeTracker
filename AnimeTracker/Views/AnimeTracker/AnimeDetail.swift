@@ -47,7 +47,7 @@ struct AnimeDetail: View {
                             .font(.title)
                             .fontWeight(.heavy)
                         Spacer()
-                        FavoriteButtonFB(animeID: animeID, userID: userID, favorite: $favorite)
+                        FavoriteButton(animeID: animeID, userID: userID, favorite: $favorite)
                     }
                     
                     HStack {

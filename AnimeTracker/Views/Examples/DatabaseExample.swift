@@ -24,7 +24,7 @@ struct NewDB: View {
         
         let currentUser = dbTest.userData[user]
 //        dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: true, animeID: Int(animeID) ?? -1)
-        var favorite: Bool = currentUser?.favorites?.contains(Int(animeID) ?? -1) ?? false
+        let favorite: Bool = currentUser?.favorites?.contains(Int(animeID) ?? -1) ?? false
         
         if (currentUser != nil) {
             Button(action: {
@@ -71,7 +71,7 @@ struct NewDB: View {
         
         
         // displaying images
-        var boxImage = URL(string: currentAnime?.data?.files?.box_image ?? "N/A")
+        let boxImage = URL(string: currentAnime?.data?.files?.box_image ?? "N/A")
         
         // displaying the box image
         AsyncImage(url: boxImage) { image in
@@ -99,7 +99,7 @@ struct NewDB: View {
         }
         
         // displaying the splash image
-        var splashImage = URL(string: currentAnime?.data?.files?.splash_image ?? "N/A")
+        let splashImage = URL(string: currentAnime?.data?.files?.splash_image ?? "N/A")
         
         AsyncImage(url: splashImage) { image in
             image
