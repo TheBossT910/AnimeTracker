@@ -30,14 +30,27 @@ struct CategoriesHome: View {
                     //allows the image to be displayed to the edge of the screen
                     .listRowInsets(EdgeInsets())
                 
-                //display each category with its respective animes
-                ForEach(categories, id: \.self) { category in
-                    CategoryRow(categoryName: category)
+                if (!authManager.isAuthenticated) {
+                    //display each category with its respective animes
+                    ForEach(categories, id: \.self) { category in
+                        CategoryRow(categoryName: category)
+                    }
+                    
+                    //allows the content to be extended to the edge of the display
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparatorTint(Color.gray)
+                } else {
+                    Text("Create an account to:")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                    Text("-- Access and create watchlists!")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text("-- Save your favorite animes!")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text("Click the icon on the bottom right to sign in/create your account.")
                 }
-                
-                //allows the content to be extended to the edge of the display
-                .listRowInsets(EdgeInsets())
-                .listRowSeparatorTint(Color.gray)
             }
             .navigationTitle("Anime Status")
         }
