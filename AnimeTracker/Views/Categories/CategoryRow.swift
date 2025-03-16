@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct CategoryRow: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds a AnimeDataFirebase object, with data from Firebase
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+
     var categoryName: String    //holds the name of the category we want to display
     
     var body: some View {
         //grabbing the keys of all animes
-        let animeKeys = Array(animeDataFB.animes.keys).sorted()
+        let animeKeys: [Int] = getKeys(category: categoryName)
+        
         
         VStack(alignment: .leading) {
             //displaying the category name
@@ -29,36 +32,51 @@ struct CategoryRow: View {
                 HStack(alignment: .top, spacing: 0) {
                     //displaying each item
                     ForEach(animeKeys, id: \.self) { animeKey in
-                        //get the categoryStatus of the current anime
-                        let currentAnime = animeDataFB.animes[animeKey]!
-                        let animeGeneral = currentAnime["general"] as? general
-                        let categoryStatus = animeGeneral?.category_status ?? "N/A"
-                        
-                        //only display an anime if it is in the category we want
-                        if (categoryStatus == categoryName) {
-                            //having it link to the correct details page
-                            NavigationLink {
-                                AnimeDetail(animeID: animeKey)
-                            } label: {
-                                //image of the anime
-                                CategoryItem(animeID: animeKey)
-                            }
-                            //fixes blue highlighted text when used in other views
-                            .buttonStyle(.plain)
+                        // link to the details page
+                        NavigationLink {
+                            AnimeDetail(animeID: String(animeKey))
+                        } label: {
+                            //image of the anime
+                            CategoryItem(animeID: String(animeKey))
                         }
+                        // fixes blue highlighted text when used in other views
+                        .buttonStyle(.plain)
                     }
                 }
             }
             .frame(height: 350)
         }
     }
+    
+    // returns an Int array of anime IDs that are in the chosen category
+    func getKeys(category: String) -> [Int] {
+        let userID = authManager.userID ?? ""
+        var keys: [Int] = []
+        
+        switch category {
+            case "Dropped":
+                keys = db.userData[userID]?.dropped ?? []
+            case "Completed":
+                keys = db.userData[userID]?.completed ?? []
+            case "Watching":
+                keys = db.userData[userID]?.watching ?? []
+            case "Plan to Watch":
+                keys = db.userData[userID]?.plan_to_watch ?? []
+            default:
+                keys = []
+        }
+        
+        return keys
+    }
 }
 
 #Preview {
     //environment object
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
     
     //implemented category names are "Dropped", "Completed", "Watching", "Plan to Watch"
     CategoryRow(categoryName: "Dropped")
-        .environmentObject(animeDataFB)
+        .environmentObject(db)
+        .environmentObject(authManager)
 }

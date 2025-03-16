@@ -8,31 +8,36 @@
 import SwiftUI
 
 struct FavoriteButtonFB: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with data from Firebase
-    var animeID: String //the document ID of an anime
-    @Binding var favorite: Bool //holds the favorite value of the represented anime
+    @EnvironmentObject var db: Database
+
+    var animeID: String // the document ID of an anime
+    var userID: String  // the user's id
+    @Binding var favorite: Bool // holds the favorite value of the represented anime
     
     var body: some View {
-        Button(action: {
-            favorite.toggle()
-            
-            //update favorite in Firebase
-            let updateDocument = "general"
-            let updateItems: [String : Any] = ["isFavorite": favorite]
-            animeDataFB.updateData(animeID: animeID, updateDocument: updateDocument, updateItems: updateItems)
-        }, label: {
-            //displaying a filled/unfilled heart depending on if favorite is true/false
-            Label("Toggle favorite", systemImage: favorite ? "heart.fill" : "heart")
-                .labelStyle(.iconOnly)
-                .foregroundStyle(favorite ? .red : .primary)
-        })
+        // check if we have user data to show/assign a favorites value for
+        let userData = db.userData[userID]
+        if (userData != nil) {
+            Button(action: {
+                // toggle the favorite, and update in databse
+                favorite.toggle()
+                db.updateFavorite(userID: userID, isFavorite: !favorite, animeID: Int(animeID) ?? -1)
+            }, label: {
+                // displaying a filled/unfilled heart depending on if favorite is true/false
+                Label("Toggle favorite", systemImage: favorite ? "heart.fill" : "heart")
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(favorite ? .red : .primary)
+            })
+        }
     }
 }
 
 #Preview {
     //environment object
-    let animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
     
-    FavoriteButtonFB(animeID: "6KaHVRxICvkkrRYsDiMY", favorite: .constant(true))
-        .environmentObject(animeDataFB)
+    FavoriteButtonFB(animeID: "163134", userID: "T26C4LmC7zN5j8SAPNnoy7cziuS2", favorite: .constant(true))
+        .environmentObject(db)
+        .environmentObject(authManager)
 }

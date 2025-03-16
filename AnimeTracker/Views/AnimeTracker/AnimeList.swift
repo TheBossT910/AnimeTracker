@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct AnimeList: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase data
-    @State private var showFavoritesOnly: Bool = false  //a toggle to show favorite shows only (true) or not (false)
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+    
+    @State private var showFavoritesOnly: Bool = false  // a toggle to show favorite shows only (true) or not (false)
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
 
@@ -24,12 +26,16 @@ struct AnimeList: View {
     }
 
     //a filtered list of animes based on if we want to show all shows or only favorite shows
-    var filteredAnimes: [String: [String: Any]] {
-        //going through all animes in animeDataFB
-        animeDataFB.animes.filter { anime in
-            let curGeneral = anime.value["general"] as? general
-            let curFavorite = curGeneral?.isFavorite ?? false
-            return !showFavoritesOnly || curFavorite
+    var filteredAnimes: [String: anime] {
+        // getting all favorites
+        let userID = authManager.userID ?? ""
+        let userFavorites = db.userData[userID]?.favorites ?? []
+        
+        // going through all animes
+        return db.animeNew.filter { anime in
+            let currentID = anime.value.id
+            // if we want to only see favorites, and the current show is a favorite, return
+            return !showFavoritesOnly || userFavorites.contains(Int(currentID ?? "-1") ?? -1)
         }
     }
 
@@ -50,14 +56,13 @@ struct AnimeList: View {
             ScrollView {
                 LazyVGrid(columns: columns) {
                     ForEach(animeKeys, id: \.self) { animeKey in
-                        //showing the AnimeSelect view. Clicking on it leads to the AnimeDetail view
                         NavigationLink(destination: AnimeDetail(animeID: animeKey)) {
                             AnimeSelect(animeID: animeKey)
                         }
                     }
-                    
                 }
             }
+            .scrollTargetBehavior(.paging) // Forces more preloading
         }
         //animation when switching between favorites only and all animes view
         .animation(.default, value: showFavoritesOnly)
@@ -66,8 +71,10 @@ struct AnimeList: View {
 
 #Preview {
     //environment objects
-    let animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
     
     AnimeList()
-        .environmentObject(animeDataFB)
+        .environmentObject(db)
+        .environmentObject(authManager)
 }

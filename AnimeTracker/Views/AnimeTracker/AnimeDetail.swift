@@ -8,94 +8,86 @@
 import SwiftUI
 
 struct AnimeDetail: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase data
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+    
     var animeID: String //holds the document ID to a specific anime
     
     var body: some View {
-        //getting anime object
-        let animeFB = animeDataFB.animes[animeID]
-        //getting anime data objects
-        var animeGeneral = animeFB?["general"] as? general
-        let animeFiles = animeFB?["files"] as? files
+        // getting user data
+        let userID = authManager.userID ?? ""
+        let userData = db.userData[userID]
         
-        // Computed Binding, courtesy of ChatGPT
-        //TODO: code it yourslef to fully understand it, and create relevant comments
-        let favoriteBinding = Binding<Bool>(
-            get: { animeGeneral?.isFavorite ?? false },
-            set: { newValue in
-                // Update the model's isFavorite
-                animeGeneral?.isFavorite = newValue
+        // getting the current anime's data
+        let anime = db.animeNew[animeID]
+        let animeGeneral = anime?.data?.general
+        let animeFiles = anime?.data?.files
+        
+        // favorite button initial value
+        @State var favorite: Bool = userData?.favorites?.contains(Int(animeID) ?? -1) ?? false
+        
+        // watchlist initial values
+        let dropped = userData?.dropped?.contains(Int(animeID) ?? -1) ?? false
+        let completed = userData?.completed?.contains(Int(animeID) ?? -1) ?? false
+        let watching = userData?.watching?.contains(Int(animeID) ?? -1) ?? false
+        let planToWatch = userData?.plan_to_watch?.contains(Int(animeID) ?? -1) ?? false
+        let watchlists = ["Dropped": dropped, "Completed": completed, "Watching": watching, "Plan to Watch": planToWatch]
+        
+        GeometryReader { geometry in
+            ScrollView {
+                //getting the box image
+                let boxImage = URL(string: animeFiles?.box_image ?? "N/A")!
+                BoxImage(imageURL: boxImage)
+                    .frame(height: geometry.size.height * 0.7)
                 
-                // Update animeDataFB or notify about the change
-                // Persist changes back to animeFB
-                   if let generalUpdated = animeGeneral {
-                       animeDataFB.animes[animeID]?["general"] = generalUpdated
-                   }
+                VStack(alignment: .leading) {
+                    HStack {
+                        //Title and favourite button
+                        Text(animeGeneral?.title_english ?? "N/A")
+                            .font(.title)
+                            .fontWeight(.heavy)
+                        Spacer()
+                        FavoriteButtonFB(animeID: animeID, userID: userID, favorite: $favorite)
+                    }
+                    
+                    HStack {
+                        // show premiere date
+                        Text(animeGeneral?.premiere ?? "N/A")
+                            .font(.callout)
+                            .fontWeight(.semibold)
+                        Spacer()
+                        
+                        WatchlistMenu(animeID: animeID, userID: userID, watchlists: watchlists)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    
+                    Divider()
+                    
+                    //adding "Description" title
+                    Text("Description")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 10)
+                }
+                
+                // displaying the actual description
+                Text(animeGeneral?.description?.toPlainText() ?? "N/A")
+                    .font(.body)
+                    .fontWeight(.medium)
             }
-        )
-        
-        ScrollView {
-            //getting the box image
-            var boxImage: Image {
-                Image(animeFiles?.box_image ?? "N/A")
-            }
-            BoxImage(image: boxImage)
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    //Title and favourite button
-                    Text(animeGeneral?.title_eng ?? "N/A")
-                        .font(.title)
-                        .fontWeight(.heavy)
-                    Spacer()
-                    FavoriteButtonFB(animeID: animeID, favorite: favoriteBinding)
-                }
-                
-                HStack {
-                    //display release and schedule info
-                    Text(animeGeneral?.broadcast ?? "N/A")
-                        .font(.callout)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    //TODO: Implement displaying the show's season (s1, s2, etc.) with Firebase
-                    Text(animeGeneral?.premiere ?? "N/A")
-                        .font(.callout)
-                        .fontWeight(.semibold)
-                }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                
-                Divider()
-                
-                //adding "Description" title
-                Text("Description")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 10)
-        
-                }
-            
-            //displaying the actual description
-            Text(animeGeneral?.description ?? "N/A")
-                .font(.body)
-                .fontWeight(.medium)
-            
-//Trying to make a cool shadow effect for around the text, not working properly right now! :(
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(.white)
-//                                .shadow(radius: 10)
-//                        )
-                            
-        }
             .padding()
+        }
     }
 }
 
 #Preview {
     //environment
-    let animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
     
-    AnimeDetail(animeID: "6KaHVRxICvkkrRYsDiMY")
-        .environmentObject(animeDataFB)
+    //"163134" is ReZero
+    AnimeDetail(animeID: "163134")
+        .environmentObject(db)
+        .environmentObject(authManager)
 }

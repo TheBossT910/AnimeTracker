@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ScheduleHome: View {
-    @EnvironmentObject var animeDataFB: AnimeDataFirebase   //holds an AnimeDataFirebase object, with Firebase information
+    @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
+
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
-    var currentlyAiringIDs: [String] = ["6KaHVRxICvkkrRYsDiMY", "eqIKQyLZ7eMe8GmMOB6O", "323Prp20ZeyevdQQcyl9"]
-    // TODO: Bocchi the Rock! (the last item) was accidently deleted off of Firebase, which is why it displays nothing for the last item!!
+    var currentlyAiringIDs: [String] = ["163134", "164299", "169755"]
+    @State private var showFavoritesOnly: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -27,6 +29,16 @@ struct ScheduleHome: View {
                         .font(.title2)
                         .fontWeight(.heavy)
                         .padding(.top)
+                    
+                    HStack {
+                        //favorites toggle
+                        Toggle(isOn: $showFavoritesOnly) {
+                            Text("Show Favorites Only")
+                                .font(.subheadline)
+                                .fontWeight(.heavy)
+                        }
+                    }
+                    .frame(width: geometry.size.width * 0.80)
                         
                     
                     //allows us to display different pages we can swipbe between
@@ -34,14 +46,14 @@ struct ScheduleHome: View {
                         ForEach(week, id: \.self) { day in
                             //wrap ScheduleRow in a container so it is displayed properly by TabView
                             VStack {
-                                ScheduleRow(day: day)
+                                ScheduleRow(day: day, showFavorites: $showFavoritesOnly)
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                     }
                     .tabViewStyle(.page)
                     //height is relative to device height. Explicitly coded so that TabView HAS a height as it was automatically resizing to be really small
-                    .frame(height: geometry.size.height / 1.3)
+                    .frame(width: geometry.size.width * 0.90, height: geometry.size.height / 1.3)
                     
                     .background(Color.gray.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 50))
@@ -49,12 +61,16 @@ struct ScheduleHome: View {
                 }
             }
         }
+//        .frame(width: 300)
     }
 }
 
 #Preview {
     //environment object
-    var animeDataFB = AnimeDataFirebase(collection: "s1")
+    let db = Database()
+    let authManager = AuthManager.shared
+    
     ScheduleHome()
-        .environmentObject(animeDataFB)
+        .environmentObject(db)
+        .environmentObject(authManager)
 }
