@@ -93,7 +93,7 @@ struct AuthView: View {
             else {
                 Text("Authenticated!")
                 // TODO: does not show userName on ContentView screen when you initially load it
-                Text ("Welcome back, \(authManager.userName ?? "User")")
+                Text ("Welcome back, \(username)")
                     .padding()
                 
                 //sign out button
@@ -110,6 +110,7 @@ struct AuthView: View {
             print("Auth state changed: \(newValue)") // Debugging print
         }
         .onReceive(authManager.$userName) { newValue in
+            username = newValue ?? "User"
             print("Username changed: \(newValue ?? "None")") // Debugging print
         }
     }
