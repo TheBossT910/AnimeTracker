@@ -106,6 +106,12 @@ struct AuthView: View {
                 .tint(Color.red)
             }
         }
+        .onReceive(authManager.$isAuthenticated) { newValue in
+            print("Auth state changed: \(newValue)") // Debugging print
+        }
+        .onReceive(authManager.$userName) { newValue in
+            print("Username changed: \(newValue ?? "None")") // Debugging print
+        }
     }
 }
 
