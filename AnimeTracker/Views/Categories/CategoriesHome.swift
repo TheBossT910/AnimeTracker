@@ -31,6 +31,8 @@ struct CategoriesHome: View {
                     .listRowInsets(EdgeInsets())
                 
                 if (authManager.isAuthenticated) {
+                    Text("Add shows to your watchlists, and they will appear here!")
+                        .font(.caption)
                     //display each category with its respective animes
                     ForEach(categories, id: \.self) { category in
                         CategoryRow(categoryName: category)
