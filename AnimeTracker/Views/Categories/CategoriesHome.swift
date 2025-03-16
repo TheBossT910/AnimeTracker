@@ -30,7 +30,7 @@ struct CategoriesHome: View {
                     //allows the image to be displayed to the edge of the screen
                     .listRowInsets(EdgeInsets())
                 
-                if (!authManager.isAuthenticated) {
+                if (authManager.isAuthenticated) {
                     //display each category with its respective animes
                     ForEach(categories, id: \.self) { category in
                         CategoryRow(categoryName: category)
