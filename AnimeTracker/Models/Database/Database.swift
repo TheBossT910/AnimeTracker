@@ -67,8 +67,8 @@ import FirebaseFirestore
                         let currentMain = try await self.db.collection("/anime_data/").document(animeID).getDocument(as: main.self)
                         
                         // for data
-                        let currentFile = try await self.db.collection("/anime_data/\(animeID)/data").document("files").getDocument(as: files2.self)
-                        let currentGeneral = try await self.db.collection("/anime_data/\(animeID)/data").document("general").getDocument(as: general2.self)
+                        let currentFile = try await self.db.collection("/anime_data/\(animeID)/data").document("files").getDocument(as: files.self)
+                        let currentGeneral = try await self.db.collection("/anime_data/\(animeID)/data").document("general").getDocument(as: general.self)
                         
                         // for episodes
                         var currentEpisodes: [episodes] = []

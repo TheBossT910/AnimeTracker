@@ -33,19 +33,19 @@ struct main: Codable {
 
 struct data: Codable {
     @DocumentID var id: String?
-    var files: files2?
-    var general: general2?
+    var files: files?
+    var general: general?
 }
 
 // TODO: deprecate files and geenral structs, rename these structs to files and general
-struct files2: Codable {
+struct files: Codable {
     @DocumentID var id: String?
     var box_image: String?
     var icon_image: String?
     var splash_image: String?
 }
 
-struct general2: Codable {
+struct general: Codable {
     @DocumentID var id: String?
     var description: String?
     var episodes: Int?
