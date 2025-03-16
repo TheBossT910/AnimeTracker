@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoriteButtonFB: View {
     @EnvironmentObject var db: Database
+    @EnvironmentObject var authManager: AuthManager
 
     var animeID: String // the document ID of an anime
     var userID: String  // the user's id
@@ -16,8 +17,7 @@ struct FavoriteButtonFB: View {
     
     var body: some View {
         // check if we have user data to show/assign a favorites value for
-        let userData = db.userData[userID]
-        if (userData != nil) {
+        if (authManager.isAuthenticated) {
             Button(action: {
                 // toggle the favorite, and update in databse
                 favorite.toggle()

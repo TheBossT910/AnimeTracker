@@ -22,7 +22,7 @@ struct WatchlistMenu: View {
     
     var body: some View {
         let userData = db.userData[userID]
-        if (userData != nil) {
+        if (authManager.isAuthenticated) {
             Menu {
                 Button(action: {
                     isDropped.toggle()

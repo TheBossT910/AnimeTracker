@@ -37,6 +37,7 @@ struct ScheduleHome: View {
                                 .font(.subheadline)
                                 .fontWeight(.heavy)
                         }
+                        .disabled(!authManager.isAuthenticated)
                     }
                     .frame(width: geometry.size.width * 0.80)
                         

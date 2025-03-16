@@ -50,6 +50,7 @@ struct AnimeList: View {
                     .font(.title2)
                     .fontWeight(.heavy)
             }
+            .disabled(!authManager.isAuthenticated)
             .padding()
 
             //display all shows
