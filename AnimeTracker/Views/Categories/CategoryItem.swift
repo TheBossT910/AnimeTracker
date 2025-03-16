@@ -26,7 +26,7 @@ struct CategoryItem: View {
         //adding the image, and changing its apperance
         VStack(alignment: .center) {
             AsyncImage(url: boxImage) { image in
-                image.image?
+                image
                 .resizable()
                 .renderingMode(.original)
                 //.resizable()
@@ -41,6 +41,9 @@ struct CategoryItem: View {
                 .clipped()
                 //and rounding the corners
                 .cornerRadius(10)
+            } placeholder: {
+                Color.gray
+                    .frame(width: 220, height: 300)
             }
         
             

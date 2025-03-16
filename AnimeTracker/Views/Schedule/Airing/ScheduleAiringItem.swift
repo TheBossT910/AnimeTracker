@@ -32,7 +32,7 @@ struct ScheduleAiringItem: View {
         ZStack {
             //splash image. The main image
             AsyncImage(url: splash) { image in
-                image.image?
+                image
                 .resizable()
                 .scaledToFill()
                 .frame(height: 100)
@@ -64,7 +64,10 @@ struct ScheduleAiringItem: View {
                             .padding()
                         }
                     }
-                }
+            } placeholder: {
+                Color.gray
+                    .frame(height: 100)
+            }
             
             //TODO: Implement proper checkmark system
             // completion checkmark

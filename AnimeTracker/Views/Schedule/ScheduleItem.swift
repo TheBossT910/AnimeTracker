@@ -32,7 +32,7 @@ struct ScheduleItem: View {
                 HStack(alignment: .top) {
                     //main image
                     AsyncImage(url: animeSplash) { image in
-                        image.image?
+                        image
                         .resizable()
                         .scaledToFill()
                         //trying to make the image dynamically size
@@ -41,6 +41,12 @@ struct ScheduleItem: View {
                             minHeight: 100, maxHeight: 130
                         )
                         .clipped()
+                    } placeholder: {
+                        Color.gray
+                            .frame(
+                                minWidth: 211.2, maxWidth: .infinity,
+                                minHeight: 100, maxHeight: 130
+                            )
                     }
 
                     VStack(alignment: .leading) {
@@ -102,7 +108,7 @@ struct ScheduleItem: View {
 //                        //explicitly set text to leading so it displays correctly in ScheduleRow
 //                        .multilineTextAlignment(.leading)
                     
-                    Text(animeEp1?.description ?? "N/A")
+                    Text(animeEp1?.description?.toPlainText() ?? "N/A")
                         .font(.caption)
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
