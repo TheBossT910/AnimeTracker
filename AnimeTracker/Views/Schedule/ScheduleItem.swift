@@ -16,7 +16,7 @@ struct ScheduleItem: View {
 
     var body: some View {
         //getting anime data
-        let anime = db.animeNew[animeID]
+        let anime = db.animeData[animeID]
         let animeGeneral = anime?.data?.general
         let animeMedia = anime?.episodes
 

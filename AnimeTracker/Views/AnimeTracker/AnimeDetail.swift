@@ -19,7 +19,7 @@ struct AnimeDetail: View {
         let userData = db.userData[userID]
         
         // getting the current anime's data
-        let anime = db.animeNew[animeID]
+        let anime = db.animeData[animeID]
         let animeGeneral = anime?.data?.general
         let animeFiles = anime?.data?.files
         

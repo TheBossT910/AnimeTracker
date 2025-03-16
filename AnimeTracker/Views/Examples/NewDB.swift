@@ -17,7 +17,7 @@ struct NewDB: View {
 //        let animeID = "186621"  //last show in DB
         let animeID = "163134"  // ReZero S3
         
-        let currentAnime = dbTest.animeNew[animeID]
+        let currentAnime = dbTest.animeData[animeID]
 //        let mainDebug = currentAnime?.main.debugDescription ?? "main not found"
 //        let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
 //        let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"

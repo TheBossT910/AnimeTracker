@@ -24,7 +24,7 @@ struct ScheduleRow: View {
         let userFavorites = db.userData[userID]?.favorites ?? []
         
         // going through all animes
-        return db.animeNew.filter { anime in
+        return db.animeData.filter { anime in
             // TODO: We are only basing the air date off of the 1st show... Fix this!
             let latestEpisode = anime.value.episodes?.first
             let broadcastUnix: TimeInterval = Double(latestEpisode?.broadcast ?? 0)

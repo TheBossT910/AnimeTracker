@@ -32,7 +32,7 @@ struct AnimeList: View {
         let userFavorites = db.userData[userID]?.favorites ?? []
         
         // going through all animes
-        return db.animeNew.filter { anime in
+        return db.animeData.filter { anime in
             let currentID = anime.value.id
             // if we want to only see favorites, and the current show is a favorite, return
             return !showFavoritesOnly || userFavorites.contains(Int(currentID ?? "-1") ?? -1)

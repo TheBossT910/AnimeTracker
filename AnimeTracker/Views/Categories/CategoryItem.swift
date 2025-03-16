@@ -15,7 +15,7 @@ struct CategoryItem: View {
     
     var body: some View {
         //getting an anime object
-        let anime = db.animeNew[animeID]
+        let anime = db.animeData[animeID]
         //gettting anime data objects
         let animeGeneral = anime?.data?.general
         let animeFiles = anime?.data?.files

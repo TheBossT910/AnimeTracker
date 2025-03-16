@@ -17,14 +17,14 @@ import Foundation
 import FirebaseFirestore
 
 @MainActor class Database : DatabaseProtocol, ObservableObject {
-    @Published var animeNew: [String: anime]
+    @Published var animeData: [String: anime]
     @Published var userData: [String : user_data]
     private var db: Firestore
     
     // constructor
     init() {
         // initial values
-        self.animeNew = [:]
+        self.animeData = [:]
         self.userData = [:]
         
         // creating a Firestore instance
@@ -99,7 +99,7 @@ import FirebaseFirestore
             }
             
             // set anime to response data
-            animeNew = response
+            animeData = response
             
         } catch {
             print("Error getting documents: \(error)")

@@ -16,7 +16,7 @@ struct AnimeSelect: View {
     
     var body: some View {
         // getting current anime's data
-        let anime = db.animeNew[animeID]
+        let anime = db.animeData[animeID]
         let animeGeneral = anime?.data?.general
         let animeFiles = anime?.data?.files
         

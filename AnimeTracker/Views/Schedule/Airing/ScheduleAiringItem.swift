@@ -19,7 +19,7 @@ struct ScheduleAiringItem: View {
     
     var body: some View {
         //getting current anime data
-        let anime = db.animeNew[animeID]
+        let anime = db.animeData[animeID]
         let animeFiles = anime?.data?.files
         
         //getting specific variables we want to use
