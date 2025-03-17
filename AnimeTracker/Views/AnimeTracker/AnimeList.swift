@@ -42,6 +42,7 @@ struct AnimeList: View {
     var body: some View {
         //grabbing the keys of all animes we want to see
         let animeKeys = Array(filteredAnimes.keys).sorted()
+        let lastKey = animeKeys.last
         
         NavigationStack {
             //favorites toggle
@@ -60,10 +61,24 @@ struct AnimeList: View {
                         NavigationLink(destination: AnimeDetail(animeID: animeKey)) {
                             AnimeSelect(animeID: animeKey)
                         }
+                        .onAppear {
+                            // if the last anime is loaded, then load more animes
+                            if (animeKey == lastKey) {
+                                Task {
+                                    await db.getNextDocuments()
+                                }
+                            }
+                        }
                     }
                 }
             }
             .scrollTargetBehavior(.paging) // Forces more preloading
+            
+            Button("Load More Anime") {
+                Task {
+                    await db.getNextDocuments()
+                }
+            }
         }
         //animation when switching between favorites only and all animes view
         .animation(.default, value: showFavoritesOnly)

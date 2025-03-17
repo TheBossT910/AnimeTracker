@@ -20,12 +20,14 @@ import FirebaseFirestore
     @Published var animeData: [String: anime]
     @Published var userData: [String : user_data]
     private var db: Firestore
+    private var lastDocumentSnapshot: DocumentSnapshot?
     
     // constructor
     init() {
         // initial values
         self.animeData = [:]
         self.userData = [:]
+        self.lastDocumentSnapshot = nil
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
@@ -43,7 +45,7 @@ import FirebaseFirestore
         var animeIDs : [String] = []
         do {
             // fetch all anime documents
-            let queryAnime = try await self.db.collection("/anime_data").getDocuments()
+            let queryAnime = try await self.db.collection("/anime_data").limit(to: 20).getDocuments()
             var counter = 0
             queryAnime.documents.forEach { document in
                 // add to array
@@ -51,6 +53,8 @@ import FirebaseFirestore
                 counter += 1
             }
             print("# of anime documents: \(counter)")
+            lastDocumentSnapshot = queryAnime.documents.last
+            print(lastDocumentSnapshot.debugDescription)
         }
         catch {
             print("Error fetching documents: \(error)")
@@ -103,6 +107,81 @@ import FirebaseFirestore
             
             // set anime to response data
             animeData = response
+            
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+    }
+    
+    func getNextDocuments() async {
+        // getting all anime ids
+        var animeIDs : [String] = []
+        do {
+            // fetch all anime documents
+            let queryAnime = try await self.db.collection("/anime_data")
+                .start(afterDocument: self.lastDocumentSnapshot!)
+                .limit(to: 20)
+                .getDocuments()
+            var counter = 0
+            queryAnime.documents.forEach { document in
+                // add to array
+                animeIDs.append(document.documentID)
+                counter += 1
+            }
+            print("# of added anime documents: \(counter)")
+            lastDocumentSnapshot = queryAnime.documents.last
+        }
+        catch {
+            print("Error fetching documents: \(error)")
+        }
+        
+        do {
+            // storing async response in 'response' variable
+            var response: [String: anime] = [:]
+            response = try await withThrowingTaskGroup(of: (String, anime).self) { group in
+                // going through each animeID
+                for animeID in animeIDs {
+                    // creating a task for each anime
+                    group.addTask {
+                        // for main
+                        let currentMain = try await self.db.collection("/anime_data/").document(animeID).getDocument(as: main.self)
+                        
+                        // for data
+                        let currentFile = try await self.db.collection("/anime_data/\(animeID)/data").document("files").getDocument(as: files.self)
+                        let currentGeneral = try await self.db.collection("/anime_data/\(animeID)/data").document("general").getDocument(as: general.self)
+                        
+                        // for episodes
+                        var currentEpisodes: [episodes] = []
+                        let queryEpisodes = try await self.db.collection("/anime_data/\(animeID)/episodes").getDocuments()
+                        queryEpisodes.documents.forEach { document in
+                            currentEpisodes.append(try! document.data(as: episodes.self))
+                        }
+                        
+                        // creating anime object
+                        let currentAnime: anime = anime(
+                            id: animeID,
+                            main: currentMain,
+                            data: data(files: currentFile, general: currentGeneral),
+                            episodes: currentEpisodes
+                        )
+                        
+                        return (animeID, currentAnime)
+                        }
+                    }
+                
+                // parsing data
+                var animes = [String: anime]()
+                for try await (animeID, currentAnime) in group {
+                    // adding data to proper spots in array
+                    animes[animeID] = currentAnime
+                }
+                
+                // return parsed data (to response)
+                return animes
+            }
+            
+            // set anime to response data
+            animeData.merge(response) { (_, new) in new }
             
         } catch {
             print("Error getting documents: \(error)")
