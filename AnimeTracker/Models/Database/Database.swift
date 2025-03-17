@@ -44,10 +44,13 @@ import FirebaseFirestore
         do {
             // fetch all anime documents
             let queryAnime = try await self.db.collection("/anime_data").getDocuments()
+            var counter = 0
             queryAnime.documents.forEach { document in
                 // add to array
                 animeIDs.append(document.documentID)
+                counter += 1
             }
+            print("# of anime documents: \(counter)")
         }
         catch {
             print("Error fetching documents: \(error)")
