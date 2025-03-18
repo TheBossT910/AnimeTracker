@@ -40,9 +40,6 @@ struct AnimeList: View {
     }
 
     var body: some View {
-        // getting the userID
-        let userID = authManager.userID ?? ""
-        
         //grabbing the keys of all animes we want to see
         let animeKeys = Array(filteredAnimes.keys).sorted()
         // grabbing the key of the last anime, for checking if we have rendered the last item in the Array
