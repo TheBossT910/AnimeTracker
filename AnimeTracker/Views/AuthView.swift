@@ -110,7 +110,7 @@ struct AuthView: View {
             print("Auth state changed: \(newValue)") // Debugging print
             
             // load the current user and all of their favorite/watchlisted animes
-            if (authManager.isAuthenticated) {
+            if (newValue) {
                 Task {
                     let userID = authManager.userID ?? ""
                     await db.getUserDocument(userID: userID)
