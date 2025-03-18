@@ -55,13 +55,6 @@ struct AnimeList: View {
                     .font(.title2)
                     .fontWeight(.heavy)
             }
-            .onChange(of: showFavoritesOnly) {
-                if (showFavoritesOnly) {
-                    Task {
-                        await db.getMarkedDocuments(userID: userID)
-                    }
-                }
-            }
             .disabled(!authManager.isAuthenticated)
             .padding()
 
