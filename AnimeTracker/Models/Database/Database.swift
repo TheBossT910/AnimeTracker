@@ -172,11 +172,6 @@ import FirebaseFirestore
         
         // merge previous anime data with new response data
         animeData.merge(response) { (_, new) in new }
-        
-        // this variable ensures we only run this function once!
-//            gotMarkedDocuments = true
-        print("Ran getMarkedDocuments!")
-//        }
     }
     
     // retrieves user data from database
