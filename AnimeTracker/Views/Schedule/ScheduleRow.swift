@@ -18,32 +18,44 @@ struct ScheduleRow: View {
     @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
     
     //a filtered list of animes based on the day of the week, if the show aired within a span of 2 months, and if we want to show all shows or only favorite shows
-    var filteredAnimes: [String: anime] {
+    // TODO: Change logic
+    var filteredAnimes: [String] {
         // getting all favorites
         let userID = authManager.userID ?? ""
         let userFavorites = db.userData[userID]?.favorites ?? []
         
         // going through all animes
-        return db.animeData.filter { anime in
+        return db.orderedKeys.filter { key in
+            let anime = db.animeData[key]
+            
             // TODO: We are only basing the air date off of the 1st show... Fix this!
-            let latestEpisode = anime.value.episodes?.first
+            let latestEpisode = anime?.episodes?.first
             let broadcastUnix: TimeInterval = Double(latestEpisode?.broadcast ?? 0)
             
             // cheking weekday
             let weekday = getWeekday(from: broadcastUnix)
+
             // checking if aired within 6 month interval (2 cours)
             let isActivelyAiring = isWithinTwoCours(unixTimestamp: broadcastUnix)
+
             
             // for checking favorite
-            let currentID = anime.value.id
+            let currentID = anime?.id
             // if we want to only see favorites, and the current show is a favorite, return
-            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1)) && ((weekday + "s") == day) && isActivelyAiring
+//            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1)) && ((weekday + "s") == day)
+//            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1))
+            return((weekday + "s") == day)
         }
     }
 
     var body: some View {
         //grabbing keys of all animes
-        let animeKeys = Array(filteredAnimes.keys).sorted()
+//        let animeKeys = Array(filteredAnimes.keys)
+        let animeKeys = filteredAnimes
+        let lastKey = animeKeys.last ?? ""
+        var run = false
+        
+        let columns = [GridItem(.flexible())]
         
         ScrollView(.vertical) {
             Text(day)
@@ -55,17 +67,47 @@ struct ScheduleRow: View {
             Text(animeKeys.isEmpty ? "No Animes Found" : "")
                 .font(.headline)
             
-            // display each airing show
-            ForEach(animeKeys, id: \.self) { animeKey in
-                
-                //NavigationLink allows us to navigate to AnimeDetail when clicked (when importing this view into another view)
-                NavigationLink {
-                    AnimeDetail(animeID: animeKey)
-                } label: {
-                    ScheduleItem(animeID: animeKey)
+            LazyVGrid(columns: columns) {
+                // display each airing show
+                ForEach(animeKeys, id: \.self) { animeKey in
+                    
+                    //NavigationLink allows us to navigate to AnimeDetail when clicked (when importing this view into another view)
+                    NavigationLink {
+                        AnimeDetail(animeID: animeKey)
+                    } label: {
+                        ScheduleItem(animeID: animeKey)
+                    }
+                    //fixes the bug where all text is highlighted blue in views that use this view
+                    .buttonStyle(.plain)
+//                    .onAppear {
+//                        if ((animeKey == lastKey) && db.lastAiringSnapshots["Tuesday"]! != nil) {
+//                            print("Adding more shows")
+//                            run = true
+//                            Task {
+//                                await db.getNextAiring(weekday: "Tuesday")
+//                                print(db.animeData.count)
+//                            }
+//                        }
+//                    }
+                    .onReceive(db.$lastAiringSnapshots) { newValue in
+                        if (animeKey == lastKey) {
+                            print("update pls!")
+                            Task {
+                                await db.getNextAiring(weekday: "Tuesday")
+                                print(db.animeData.count)
+                            }
+                        }
+                    }
                 }
-                //fixes the bug where all text is highlighted blue in views that use this view
-                .buttonStyle(.plain)
+            }
+        }
+        .scrollTargetBehavior(.viewAligned) // Forces more preloading
+        
+        // TODO: do initial load when view loads. Perhaps in ScheduleHome view?
+        Button("Load More Anime") {
+            Task {
+                await db.getNextAiring(weekday: "Tuesday")
+                print(db.animeData.count)
             }
         }
     }
@@ -104,7 +146,7 @@ struct ScheduleRow: View {
     let db = Database()
     let authManager = AuthManager.shared
     
-    ScheduleRow(day: "Tuesdays", showFavorites: .constant(true))
+    ScheduleRow(day: "Tuesdays", showFavorites: .constant(false))
         .environmentObject(db)
         .environmentObject(authManager)
 }

@@ -19,16 +19,23 @@ import FirebaseFirestore
 @MainActor class Database : DatabaseProtocol, ObservableObject {
     @Published var animeData: [String: anime]
     @Published var userData: [String : user_data]
+    
     private var db: Firestore
+    // for auto-loading ALL animes
     private var lastDocumentSnapshot: DocumentSnapshot?
-    private var gotMarkedDocuments: Bool = false
+    // for auto-loading AIRING animes
+    @Published var lastAiringSnapshots: [String: DocumentSnapshot?] = [:]
+    // array to make sure all shows are showed in loaded order
+    var orderedKeys: [String] = []
     
     // constructor
     init() {
         // initial values
         self.animeData = [:]
         self.userData = [:]
+        
         self.lastDocumentSnapshot = nil
+        self.lastAiringSnapshots = ["Sunday": nil, "Monday": nil, "Tuesday": nil, "Wednesday": nil, "Thursday": nil, "Friday": nil, "Saturday": nil]
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
@@ -36,6 +43,8 @@ import FirebaseFirestore
         // running async tasks
         Task {
             await getInitialDocuments(documentAmount: 20)
+            // TODO: temporary? remove!
+            await getInitialAiring(weekday: "Tuesday")
         }
     }
     
@@ -118,8 +127,10 @@ import FirebaseFirestore
         }
         
         let response = await getDocuments(animeIDs: animeIDs)
-        // set animeData to response
-        animeData = response
+        // merge previous anime data with new response data
+        animeData.merge(response) { (_, new) in new }
+        // add to keys array
+        orderedKeys = orderedKeys + animeIDs
     }
 
     // retrieve the next animes from database
@@ -148,6 +159,8 @@ import FirebaseFirestore
         let response = await getDocuments(animeIDs: animeIDs)
         // merge previous anime data with new response data
         animeData.merge(response) { (_, new) in new }
+        // add to keys array
+        orderedKeys = orderedKeys + animeIDs
     }
     
     // immediately retrieves all favorited/watchlisted shows
@@ -172,23 +185,11 @@ import FirebaseFirestore
         
         // merge previous anime data with new response data
         animeData.merge(response) { (_, new) in new }
+        // add to keys array
+        orderedKeys = orderedKeys + animeIDs
     }
     
     // retrieves user data from database
-    // TODO: only retrieve signed-in user. This is a privacy issue!
-//    private func getUserDocuments() async {
-//        do {
-//            let queryUsers = try await db.collection("/user_data/").getDocuments()
-//            try queryUsers.documents.forEach { document in
-//                // add each user to array
-//                userData[document.documentID] = try document.data(as: user_data.self)
-//            }
-//        }
-//        catch {
-//            print("Error getting documents: \(error)")
-//        }
-//    }
-    
     // TODO: stop using an array to store 1 variable... We are just doing this because our current implementation worked like this!
     public func getUserDocument(userID: String) async {
         do {
@@ -198,6 +199,91 @@ import FirebaseFirestore
         catch {
             print("Error getting documents: \(error)")
         }
+    }
+    
+    // retrieves airing shows based on weekday and tine-period (i.e. cour)
+    public func getInitialAiring(weekday: String) async {
+        // TODO: add limit variable in call
+        // TODO: fetch current Unix date and check with that
+        // TODO: check for currentDay <= broadcast <= currentDayEnd
+        
+        // adding ids to set to ensure no duplicates
+        var animeIDSet = Set<String>()
+        
+        do {
+            let episodesCollection = try await db.collectionGroup("episodes")
+            // TODO: more specific filter
+                .whereField("broadcast", isGreaterThanOrEqualTo: 1679156287)
+                .limit(to: 10)
+                .getDocuments()
+            
+            // going up 2 levels to get the anime collection id
+            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
+            print(animeIDSet.count) // debug
+            
+            // get shows
+            // TODO: don't use this as-is? We could simply add them to the main anime array, and filter by day/time as we are already doing...
+            // convert to array
+            var animeIDs: [String] = []
+            animeIDs = Array(animeIDSet)
+            
+            let response = await getDocuments(animeIDs: animeIDs)
+            
+            // merge previous anime data with new response data
+            animeData.merge(response) { (_, new) in new }
+            // add to keys array
+            orderedKeys = orderedKeys + animeIDs
+            
+            // set last snapshot
+            lastAiringSnapshots[weekday] = episodesCollection.documents.last
+            
+            
+        } catch {
+            print("error getting initialAiring \(error)")
+        }
+        
+    }
+    
+    public func getNextAiring(weekday: String) async {
+        // TODO: pass in an array, where 0 = sunday, 6 = saturday,
+        // TODO: fetch current Unix date and check with that
+        // TODO: check for currentDay <= broadcast <= currentDayEnd
+        
+        // adding ids to set to ensure no duplicates
+        var animeIDSet = Set<String>()
+        
+        do {
+            let episodesCollection = try await db.collectionGroup("episodes")
+                .whereField("broadcast", isGreaterThanOrEqualTo: 1679156287)
+                .start(afterDocument: self.lastAiringSnapshots[weekday]!!)
+                .limit(to: 10)
+                .getDocuments()
+            
+            // going up 2 levels to get the anime collection id
+            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
+            print(animeIDSet.count) // debug
+            
+            // get shows
+            // TODO: don't use this as-is? We could simply add them to the main anime array, and filter by day/time as we are already doing...
+            // convert to array
+            var animeIDs: [String] = []
+            animeIDs = Array(animeIDSet)
+            
+            let response = await getDocuments(animeIDs: animeIDs)
+            
+            // merge previous anime data with new response data
+            animeData.merge(response) { (_, new) in new }
+            // add to keys array
+            orderedKeys = orderedKeys + animeIDs
+            
+            // set last snapshot
+            lastAiringSnapshots[weekday] = episodesCollection.documents.last
+            
+            
+        } catch {
+            print("error getting initialAiring \(error)")
+        }
+        
     }
     
     // this function updates user-defined variables
