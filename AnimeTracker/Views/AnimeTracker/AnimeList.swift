@@ -40,8 +40,12 @@ struct AnimeList: View {
     }
 
     var body: some View {
+        // getting the userID
+        let userID = authManager.userID ?? ""
+        
         //grabbing the keys of all animes we want to see
         let animeKeys = Array(filteredAnimes.keys).sorted()
+        // grabbing the key of the last anime, for checking if we have rendered the last item in the Array
         let lastKey = animeKeys.last
         
         NavigationStack {
@@ -50,6 +54,13 @@ struct AnimeList: View {
                 Text("Show Favorites Only")
                     .font(.title2)
                     .fontWeight(.heavy)
+            }
+            .onChange(of: showFavoritesOnly) {
+                if (showFavoritesOnly) {
+                    Task {
+                        await db.getMarkedDocuments(userID: userID)
+                    }
+                }
             }
             .disabled(!authManager.isAuthenticated)
             .padding()
@@ -62,8 +73,8 @@ struct AnimeList: View {
                             AnimeSelect(animeID: animeKey)
                         }
                         .onAppear {
-                            // if the last anime is loaded, then load more animes
-                            if (animeKey == lastKey) {
+                            // if the last anime is loaded and we are NOT showing favorites (i.e. all animes are visible), then load more animes
+                            if ((animeKey == lastKey) && (!showFavoritesOnly)) {
                                 Task {
                                     await db.getNextDocuments()
                                 }
@@ -79,6 +90,8 @@ struct AnimeList: View {
                     await db.getNextDocuments()
                 }
             }
+            // only load more animes if we can see ALL animes
+            .disabled(showFavoritesOnly)
         }
         //animation when switching between favorites only and all animes view
         .animation(.default, value: showFavoritesOnly)
