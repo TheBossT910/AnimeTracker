@@ -10,12 +10,12 @@ import Firebase
 
 @main
 struct AnimeTrackerApp: App {
+    @StateObject private var db = Database()
+    @StateObject private var authManager = AuthManager.shared
+    
     init() {
         FirebaseApp.configure()
     }
-    
-    @StateObject private var db = Database()
-    @StateObject private var authManager = AuthManager.shared
     
     var body: some Scene {
         WindowGroup {
