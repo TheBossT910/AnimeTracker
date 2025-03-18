@@ -53,6 +53,12 @@ struct AnimeList: View {
                     .fontWeight(.heavy)
             }
             .disabled(!authManager.isAuthenticated)
+            // updates toggle so it is "off" when disabled
+            .onChange(of: authManager.isAuthenticated) {
+                if !authManager.isAuthenticated {
+                    showFavoritesOnly = false
+                }
+            }
             .padding()
 
             //display all shows
