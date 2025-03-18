@@ -36,7 +36,6 @@ import FirebaseFirestore
         // running async tasks
         Task {
             await getInitialDocuments(documentAmount: 20)
-            await getUserDocuments()
         }
     }
     
@@ -153,41 +152,53 @@ import FirebaseFirestore
     
     // immediately retrieves all favorited/watchlisted shows
     public func getMarkedDocuments(userID: String) async {
-        if (!gotMarkedDocuments) {
-            // getting all different data arrays
-            let favorites = userData[userID]!.favorites!
-            let completed = userData[userID]!.completed!
-            let dropped = userData[userID]!.dropped!
-            let watching = userData[userID]!.watching!
-            let planToWatch = userData[userID]!.plan_to_watch!
-            
-            // merging into 1 array
-            // this creates 1 array which has all data, then makes it into a Set (to get rid of duplicates) and converts it back into an array
-            let mergedInt = Array(Set(favorites + completed + dropped + watching + planToWatch))
-            // converts all items (Int) into Strings
-            let mergedString = mergedInt.map { String($0) }
-            
-            // getting animes
-            let animeIDs: [String] = mergedString
-            let response = await getDocuments(animeIDs: animeIDs)
-            
-            // merge previous anime data with new response data
-            animeData.merge(response) { (_, new) in new }
-            
-            // this variable ensures we only run this function once!
-            gotMarkedDocuments = true
-            print("Ran getMarkedDocuments!")
-        }
+        // getting all different data arrays
+        let favorites = userData[userID]?.favorites ?? []
+        let completed = userData[userID]?.completed ?? []
+        let dropped = userData[userID]?.dropped ?? []
+        let watching = userData[userID]?.watching ?? []
+        let planToWatch = userData[userID]?.plan_to_watch ?? []
+        
+        // merging into 1 array
+        // this creates 1 array which has all data, then makes it into a Set (to get rid of duplicates) and converts it back into an array
+        let mergedInt = Array(Set(favorites + completed + dropped + watching + planToWatch))
+        // converts all items (Int) into Strings
+        let mergedString = mergedInt.map { String($0) }
+        print("Number of marked docs: \(mergedInt.count)")
+        
+        // getting animes
+        let animeIDs: [String] = mergedString
+        let response = await getDocuments(animeIDs: animeIDs)
+        
+        // merge previous anime data with new response data
+        animeData.merge(response) { (_, new) in new }
+        
+        // this variable ensures we only run this function once!
+//            gotMarkedDocuments = true
+        print("Ran getMarkedDocuments!")
+//        }
     }
     
     // retrieves user data from database
-    private func getUserDocuments() async {
+    // TODO: only retrieve signed-in user. This is a privacy issue!
+//    private func getUserDocuments() async {
+//        do {
+//            let queryUsers = try await db.collection("/user_data/").getDocuments()
+//            try queryUsers.documents.forEach { document in
+//                // add each user to array
+//                userData[document.documentID] = try document.data(as: user_data.self)
+//            }
+//        }
+//        catch {
+//            print("Error getting documents: \(error)")
+//        }
+//    }
+    
+    // TODO: stop using an array to store 1 variable... We are just doing this because our current implementation worked like this!
+    public func getUserDocument(userID: String) async {
         do {
-            let queryUsers = try await db.collection("/user_data/").getDocuments()
-            try queryUsers.documents.forEach { document in
-                // add each user to array
-                userData[document.documentID] = try document.data(as: user_data.self)
-            }
+            let queryUser = try await db.collection("/user_data/").document(userID).getDocument()
+            userData[queryUser.documentID] = try queryUser.data(as: user_data.self)
         }
         catch {
             print("Error getting documents: \(error)")
