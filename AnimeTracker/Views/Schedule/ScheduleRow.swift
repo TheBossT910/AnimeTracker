@@ -16,44 +16,12 @@ struct ScheduleRow: View {
     
     var day: String
     @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
-    
-    //a filtered list of animes based on the day of the week, if the show aired within a span of 2 months, and if we want to show all shows or only favorite shows
-    // TODO: Change logic
-    var filteredAnimes: [String] {
-        // getting all favorites
-        let userID = authManager.userID ?? ""
-        let userFavorites = db.userData[userID]?.favorites ?? []
-        
-        // going through all animes
-        return db.orderedKeys.filter { key in
-            let anime = db.animeData[key]
-            
-            // TODO: We are only basing the air date off of the 1st show... Fix this!
-            let latestEpisode = anime?.episodes?.first
-            let broadcastUnix: TimeInterval = Double(latestEpisode?.broadcast ?? 0)
-            
-            // cheking weekday
-            let weekday = getWeekday(from: broadcastUnix)
-
-            // checking if aired within 6 month interval (2 cours)
-            let isActivelyAiring = isWithinTwoCours(unixTimestamp: broadcastUnix)
-
-            
-            // for checking favorite
-            let currentID = anime?.id
-            // if we want to only see favorites, and the current show is a favorite, return
-//            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1)) && ((weekday + "s") == day)
-//            return (!showFavorites || userFavorites.contains(Int(currentID ?? "-1") ?? -1))
-            return((weekday + "s") == day)
-        }
-    }
+    @State var initiallyLoaded: Bool = false
 
     var body: some View {
-        //grabbing keys of all animes
-//        let animeKeys = Array(filteredAnimes.keys)
-        let animeKeys = filteredAnimes
-        let lastKey = animeKeys.last ?? ""
-        var run = false
+        //grabbing keys of all animes airing on date
+        let animeKeys = db.airingKeys["Tuesday"] ?? []
+        let lastKey = animeKeys.last
         
         let columns = [GridItem(.flexible())]
         
@@ -79,25 +47,29 @@ struct ScheduleRow: View {
                     }
                     //fixes the bug where all text is highlighted blue in views that use this view
                     .buttonStyle(.plain)
-//                    .onAppear {
-//                        if ((animeKey == lastKey) && db.lastAiringSnapshots["Tuesday"]! != nil) {
-//                            print("Adding more shows")
-//                            run = true
-//                            Task {
-//                                await db.getNextAiring(weekday: "Tuesday")
-//                                print(db.animeData.count)
-//                            }
-//                        }
-//                    }
                     .onReceive(db.$lastAiringSnapshots) { newValue in
-                        if (animeKey == lastKey) {
-                            print("update pls!")
-                            Task {
-                                await db.getNextAiring(weekday: "Tuesday")
-                                print(db.animeData.count)
+                        // if the nextDoc exists
+                        if let nextDoc = newValue["Tuesday"] {
+                            // if value is NOT nil (we have data)
+                            if nextDoc != nil {
+                                print("Adding more weekday data...")
+                                Task {
+                                    await db.getNextAiring(date: 0)
+                                    print(db.animeData.count)
+                                }
                             }
                         }
                     }
+                }
+            }
+            // initially load the data
+            .onAppear {
+                if (!initiallyLoaded) {
+                    Task {
+                        print("Initial weekday load...")
+                        await db.getInitialAiring(date: 0)
+                    }
+                    initiallyLoaded.toggle()
                 }
             }
         }
@@ -106,38 +78,10 @@ struct ScheduleRow: View {
         // TODO: do initial load when view loads. Perhaps in ScheduleHome view?
         Button("Load More Anime") {
             Task {
-                await db.getNextAiring(weekday: "Tuesday")
+                await db.getInitialAiring(date: 0)
                 print(db.animeData.count)
             }
         }
-    }
-
-    // function courtesy of ChatGPT.
-    // TODO: create your own implementation
-    // gets the weekday
-    func getWeekday(from unixTimestamp: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: unixTimestamp)
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE"  // Full weekday name (e.g., "Monday")
-        formatter.timeZone = TimeZone.current  // Uses the device's timezone
-        
-        return formatter.string(from: date)
-    }
-    
-    // function courtesy of ChatGPT
-    // TODO: create your own implementation
-    // returns true if the airdate is within 6 months (2 cours) of the current date (false otherwise)
-    func isWithinTwoCours(unixTimestamp: TimeInterval) -> Bool {
-        let givenDate = Date(timeIntervalSince1970: unixTimestamp)
-        let currentDate = Date()
-        
-        guard let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: currentDate),
-              let sixMonthsLater = Calendar.current.date(byAdding: .month, value: 6, to: currentDate) else {
-            return false
-        }
-        
-        return givenDate >= sixMonthsAgo && givenDate <= sixMonthsLater
     }
 }
 

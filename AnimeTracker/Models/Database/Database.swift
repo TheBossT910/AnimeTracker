@@ -25,6 +25,7 @@ import FirebaseFirestore
     private var lastDocumentSnapshot: DocumentSnapshot?
     // for auto-loading AIRING animes
     @Published var lastAiringSnapshots: [String: DocumentSnapshot?] = [:]
+    @Published var airingKeys: [String: [String]] = [:]
     // array to make sure all shows are showed in loaded order
     var orderedKeys: [String] = []
     
@@ -36,6 +37,7 @@ import FirebaseFirestore
         
         self.lastDocumentSnapshot = nil
         self.lastAiringSnapshots = ["Sunday": nil, "Monday": nil, "Tuesday": nil, "Wednesday": nil, "Thursday": nil, "Friday": nil, "Saturday": nil]
+        self.airingKeys = ["Sunday": [], "Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": [], "Saturday": []]
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
@@ -44,7 +46,7 @@ import FirebaseFirestore
         Task {
             await getInitialDocuments(documentAmount: 20)
             // TODO: temporary? remove!
-            await getInitialAiring(weekday: "Tuesday")
+//            await getInitialAiring(weekday: "Tuesday")
         }
     }
     
@@ -201,19 +203,20 @@ import FirebaseFirestore
         }
     }
     
-    // retrieves airing shows based on weekday and tine-period (i.e. cour)
-    public func getInitialAiring(weekday: String) async {
-        // TODO: add limit variable in call
-        // TODO: fetch current Unix date and check with that
-        // TODO: check for currentDay <= broadcast <= currentDayEnd
+    // initially gets airing data
+    public func getInitialAiring(date: Int) async {
+        let weekday = "Tuesday"
+        
+        // Example usage to get the Unix range for Tuesday (weekday 3)
+        let unixRange = getUnixRangeForWeekday(weekday: date)
         
         // adding ids to set to ensure no duplicates
         var animeIDSet = Set<String>()
         
         do {
             let episodesCollection = try await db.collectionGroup("episodes")
-            // TODO: more specific filter
-                .whereField("broadcast", isGreaterThanOrEqualTo: 1679156287)
+                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
+                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
                 .limit(to: 10)
                 .getDocuments()
             
@@ -228,11 +231,26 @@ import FirebaseFirestore
             animeIDs = Array(animeIDSet)
             
             let response = await getDocuments(animeIDs: animeIDs)
+            print("Num of animes on tuesday today: \(response.count)")
             
             // merge previous anime data with new response data
             animeData.merge(response) { (_, new) in new }
             // add to keys array
             orderedKeys = orderedKeys + animeIDs
+            
+            // add to airing data
+            var currentKeys =  airingKeys["Tuesday"] ?? []
+            
+            // only add new keys to newKeys array
+            var newKeys: [String] = []
+            for key in animeIDs {
+                if !currentKeys.contains(key) {
+                    newKeys.append(key)
+                }
+            }
+            
+            // save old + new keys
+            airingKeys["Tuesday"] = currentKeys + newKeys
             
             // set last snapshot
             lastAiringSnapshots[weekday] = episodesCollection.documents.last
@@ -244,17 +262,20 @@ import FirebaseFirestore
         
     }
     
-    public func getNextAiring(weekday: String) async {
-        // TODO: pass in an array, where 0 = sunday, 6 = saturday,
-        // TODO: fetch current Unix date and check with that
-        // TODO: check for currentDay <= broadcast <= currentDayEnd
+    // gets next airing data
+    public func getNextAiring(date: Int) async {
+        let weekday = "Tuesday"
+        
+        // Example usage to get the Unix range for Tuesday (weekday 3)
+        let unixRange = getUnixRangeForWeekday(weekday: date)
         
         // adding ids to set to ensure no duplicates
         var animeIDSet = Set<String>()
         
         do {
             let episodesCollection = try await db.collectionGroup("episodes")
-                .whereField("broadcast", isGreaterThanOrEqualTo: 1679156287)
+                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
+                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
                 .start(afterDocument: self.lastAiringSnapshots[weekday]!!)
                 .limit(to: 10)
                 .getDocuments()
@@ -270,11 +291,26 @@ import FirebaseFirestore
             animeIDs = Array(animeIDSet)
             
             let response = await getDocuments(animeIDs: animeIDs)
+            print("Num of animes on tuesday today: \(response.count)")
             
             // merge previous anime data with new response data
             animeData.merge(response) { (_, new) in new }
             // add to keys array
             orderedKeys = orderedKeys + animeIDs
+            
+            // add to airing data
+            var currentKeys =  airingKeys["Tuesday"] ?? []
+            
+            // only add new keys to newKeys array
+            var newKeys: [String] = []
+            for key in animeIDs {
+                if !currentKeys.contains(key) {
+                    newKeys.append(key)
+                }
+            }
+            
+            // save old + new keys
+            airingKeys["Tuesday"] = currentKeys + newKeys
             
             // set last snapshot
             lastAiringSnapshots[weekday] = episodesCollection.documents.last
@@ -285,6 +321,8 @@ import FirebaseFirestore
         }
         
     }
+    
+    
     
     // this function updates user-defined variables
     // currently, it only updates the favorite button
@@ -341,4 +379,37 @@ extension String {
     func toPlainText() -> String {
         self.replacingOccurrences(of: #"<[^>]+>"#, with: "", options: .regularExpression)
     }
+}
+
+// function courtesy of ChatGPT.
+// TODO: create your own implementation
+// gets the weekday range
+// 0 is Sunday, 6 is Saturday
+func getUnixRangeForWeekday(weekday: Int) -> (start: TimeInterval, end: TimeInterval)? {
+    let calendar = Calendar.current
+    let currentDate = Date()
+    
+    // Get the current weekday
+    let currentWeekday = calendar.component(.weekday, from: currentDate) // Sunday = 1, Monday = 2, ..., Saturday = 7
+    
+    // Calculate the difference in days between current weekday and target weekday
+    let dayDifference = (weekday - currentWeekday + 7) % 7 // Ensures that dayDifference is always positive
+    
+    // Get the current week's weekday at 00:00 (start of the day)
+    guard let startOfDay = calendar.date(byAdding: .day, value: dayDifference, to: currentDate) else {
+        return nil
+    }
+    
+    let startOfDayAtMidnight = calendar.startOfDay(for: startOfDay) // Midnight (00:00)
+    
+    // Calculate the end of the day (23:59:59) for the given weekday
+    guard let endOfDay = calendar.date(byAdding: .second, value: 86399, to: startOfDayAtMidnight) else {
+        return nil
+    }
+    
+    // Convert start and end dates to Unix timestamps
+    let startUnix = startOfDayAtMidnight.timeIntervalSince1970
+    let endUnix = endOfDay.timeIntervalSince1970
+    
+    return (start: startUnix, end: endUnix)
 }
