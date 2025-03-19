@@ -56,7 +56,7 @@ struct ScheduleRow: View {
                     NavigationLink {
                         AnimeDetail(animeID: animeKey)
                     } label: {
-                        ScheduleItem(animeID: animeKey)
+                        ScheduleItem(animeID: animeKey, weekday: day)
                     }
                     //fixes the bug where all text is highlighted blue in views that use this view
                     .buttonStyle(.plain)
@@ -102,7 +102,7 @@ struct ScheduleRow: View {
     let db = Database()
     let authManager = AuthManager.shared
     
-    ScheduleRow(day: "Tuesdays", showFavorites: .constant(false))
+    ScheduleRow(day: "Wednesdays", showFavorites: .constant(false))
         .environmentObject(db)
         .environmentObject(authManager)
 }

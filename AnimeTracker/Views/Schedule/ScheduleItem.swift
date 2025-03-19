@@ -13,17 +13,70 @@ struct ScheduleItem: View {
     @EnvironmentObject var authManager: AuthManager
 
     let animeID: String  //currently selected anime's iD
+    let weekday: String
+    
+    var animeEpisode: episodes {
+        // grab all episodes of show (which are already loaded in)
+        let allEpisodes = db.animeData[animeID]?.episodes ?? []
+        
+        // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
+        let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
+        
+        // save the start/end times of the day
+        let startTime = Int(unixRange!.start)
+        let endTime = Int(unixRange!.end)
+        
+        // episode banner image
+        // initially set it as the first episode's image (so that there IS an image)
+        var episodeBanner = allEpisodes.first?.box_image
+        // episode count
+        var episodeCount: Int = 0
+        
+        var airingEpisode = episodes()
+        
+        allEpisodes.forEach { episode in
+            let broadcast = episode.broadcast ?? 0
+            // increment episode count. This assumes we get the episode documents in-order/they are inputted in-order
+            // TODO: add a episodeCount field in database documents! This is just a temporary solution
+            episodeCount += 1
+            
+            // if an episode airs on the given day
+            if (startTime <= broadcast && broadcast <= endTime) {
+                // assign to return variable
+                airingEpisode = episode
+                
+                // set broadcast to episode number
+                // TODO: this is a temporary solution! Fix this!
+                airingEpisode.broadcast = episodeCount
+                
+                // assign the previous banner image if there is none for the current episode
+                if airingEpisode.box_image == "" {
+                    airingEpisode.box_image = episodeBanner
+                }
+                
+                // set default title if there is none
+                if airingEpisode.title_episode == "" {
+                    airingEpisode.title_episode = "Latest Episode"
+                }
+            }
+            
+            // update latest banner
+            episodeBanner = episode.box_image
+        }
+        
+        // return found airing episode (if any)
+        return airingEpisode
+    }
 
     var body: some View {
         //getting anime data
         let anime = db.animeData[animeID]
         let animeGeneral = anime?.data?.general
-        let animeMedia = anime?.episodes
 
         //getting specific data
-        //TODO: Figure out a way to know what episode data to show automaticaly. This is hard-coded to only show episode 1 for all shows!
-        let animeEp1 = animeMedia?[0]
-        let animeSplash = URL(string: animeEp1?.box_image ?? "N/A")
+        let airingEpisode = animeEpisode
+        let animeSplash = URL(string: airingEpisode.box_image ?? "N/A")
 
 
         HStack(alignment: .bottom) {
@@ -53,7 +106,7 @@ struct ScheduleItem: View {
                         //I am embedding the text items in HStacks to horizontally center the text
                         HStack(alignment: .top) {
                             Spacer()
-                            Text("Ep 1: \(animeEp1?.title_episode ?? "N/A")")
+                            Text("Ep \(airingEpisode.broadcast ?? 0): \(airingEpisode.title_episode ?? "N/A")")
                                 .font(.title3)
                                 //allows for text wrapping
                                 .fontWeight(.medium)
@@ -85,7 +138,7 @@ struct ScheduleItem: View {
                             
                             // TODO: Deal with cases where we don't have a broadcast time (and it defaults to 0 in the database itself I think... This is a large-scale problem for later)
                             // NOTE: We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
-                            let unixTime: TimeInterval = Double(animeEp1?.broadcast?.description ?? "0") ?? 0
+                            let unixTime: TimeInterval = Double(airingEpisode.broadcast?.description ?? "0") ?? 0
                             let convertedTime = getFormattedTime(from: unixTime)
                             Text(convertedTime)
                                 .font(.subheadline)
@@ -103,12 +156,12 @@ struct ScheduleItem: View {
 
                 DisclosureGroup(content: {
                     // TODO: Implement recap. For now, we will replace showing the recap with showing the 1st episode's description
-//                    Text(animeEp1?.recap ?? "N/A")
+//                    Text(airingEpisode?.recap ?? "N/A")
 //                        .font(.caption)
 //                        //explicitly set text to leading so it displays correctly in ScheduleRow
 //                        .multilineTextAlignment(.leading)
                     
-                    Text(animeEp1?.description?.toPlainText() ?? "N/A")
+                    Text(airingEpisode.description?.toPlainText() ?? "N/A")
                         .font(.caption)
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
@@ -147,7 +200,7 @@ struct ScheduleItem: View {
     let authManager = AuthManager.shared
 
     //"163134" is ReZero
-    ScheduleItem(animeID: "163134")
+    ScheduleItem(animeID: "163134", weekday: "Sundays")
     .environmentObject(db)
     .environmentObject(authManager)
 }
