@@ -17,13 +17,12 @@ struct ScheduleRow: View {
     var day: String
     @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
     @State var initiallyLoaded: Bool = false
+    let columns = [GridItem(.flexible())]
 
     var body: some View {
         //grabbing keys of all animes airing on date
-        let animeKeys = db.airingKeys["Tuesday"] ?? []
+        let animeKeys = db.airingKeys[day] ?? []
         let lastKey = animeKeys.last
-        
-        let columns = [GridItem(.flexible())]
         
         ScrollView(.vertical) {
             Text(day)
@@ -49,25 +48,25 @@ struct ScheduleRow: View {
                     .buttonStyle(.plain)
                     .onReceive(db.$lastAiringSnapshots) { newValue in
                         // if the nextDoc exists
-                        if let nextDoc = newValue["Tuesday"] {
-                            // if value is NOT nil (we have data)
-                            if nextDoc != nil {
+                        if let nextDoc = newValue[day] {
+                            // if value is NOT nil (we have data) and we load the last show
+                            if (nextDoc != nil) && (animeKey == lastKey) {
                                 print("Adding more weekday data...")
                                 Task {
-                                    await db.getNextAiring(date: 0)
-                                    print(db.animeData.count)
+                                    // add more airing shows
+                                    await db.getNextAiring(weekday: day)
                                 }
                             }
                         }
                     }
                 }
             }
-            // initially load the data
+            // initially load airing shows
             .onAppear {
                 if (!initiallyLoaded) {
                     Task {
                         print("Initial weekday load...")
-                        await db.getInitialAiring(date: 0)
+                        await db.getInitialAiring(weekday: day)
                     }
                     initiallyLoaded.toggle()
                 }
@@ -75,10 +74,9 @@ struct ScheduleRow: View {
         }
         .scrollTargetBehavior(.viewAligned) // Forces more preloading
         
-        // TODO: do initial load when view loads. Perhaps in ScheduleHome view?
         Button("Load More Anime") {
             Task {
-                await db.getInitialAiring(date: 0)
+                await db.getInitialAiring(weekday: day)
                 print(db.animeData.count)
             }
         }
