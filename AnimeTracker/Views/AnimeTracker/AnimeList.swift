@@ -25,23 +25,22 @@ struct AnimeList: View {
         return [GridItem(.adaptive(minimum: minSize), alignment: .top)]
     }
 
-    //a filtered list of animes based on if we want to show all shows or only favorite shows
-    var filteredAnimes: [String: anime] {
+    //a filtered list of keys based on if we want to show all shows or only favorite shows
+    var filteredKeys: [String] {
         // getting all favorites
         let userID = authManager.userID ?? ""
         let userFavorites = db.userData[userID]?.favorites ?? []
         
         // going through all animes
-        return db.animeData.filter { anime in
-            let currentID = anime.value.id
+        return db.orderedKeys.filter { key in
             // if we want to only see favorites, and the current show is a favorite, return
-            return !showFavoritesOnly || userFavorites.contains(Int(currentID ?? "-1") ?? -1)
+            return !showFavoritesOnly || userFavorites.contains(Int(key) ?? -1)
         }
     }
 
     var body: some View {
         //grabbing the keys of all animes we want to see
-        let animeKeys = Array(filteredAnimes.keys).sorted()
+        let animeKeys = filteredKeys
         // grabbing the key of the last anime, for checking if we have rendered the last item in the Array
         let lastKey = animeKeys.last
         
