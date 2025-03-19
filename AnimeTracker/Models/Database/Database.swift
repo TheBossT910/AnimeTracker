@@ -20,13 +20,18 @@ import FirebaseFirestore
     @Published var animeData: [String: anime]
     @Published var userData: [String : user_data]
     
+    // database var
     private var db: Firestore
+    
     // for auto-loading ALL animes
     private var lastDocumentSnapshot: DocumentSnapshot?
+    
     // for auto-loading AIRING animes
     @Published var lastAiringSnapshots: [String: DocumentSnapshot?] = [:]
     @Published var airingKeys: [String: [String]] = [:]
+    
     // array to make sure all shows are showed in loaded order
+    // TODO: implement this with other getDoc functions()... Only implemented for currently airing!
     var orderedKeys: [String] = []
     
     // constructor
