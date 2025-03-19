@@ -58,6 +58,8 @@ struct ScheduleHome: View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                     }
+                    //animation when switching between favorites only and all animes view
+                    .animation(.default, value: showFavoritesOnly)
                     .tabViewStyle(.page)
                     //height is relative to device height. Explicitly coded so that TabView HAS a height as it was automatically resizing to be really small
                     .frame(width: geometry.size.width * 0.90, height: geometry.size.height / 1.3)
