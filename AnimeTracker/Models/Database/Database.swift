@@ -368,7 +368,20 @@ import FirebaseFirestore
         Task {
             userData[userID] = try await db.collection("/user_data/").document(userID).getDocument(as: user_data.self)
         }
+    }
+    
+    // returns the unique keys from retrievedKeys  not found in sourceKeys
+    func getUniqueKeys(sourceKeys: [String], retrievedKeys: [String]) -> [String] {
+        var uniqueKeys: [String] = []
+        retrievedKeys.forEach {
+            // add to uniqueKeys if not in sourceKeys
+            if !sourceKeys.contains($0) {
+                uniqueKeys.append($0)
+            }
+        }
         
+        // return unique keys
+        return uniqueKeys
     }
 }
 
