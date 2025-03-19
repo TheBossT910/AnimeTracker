@@ -41,8 +41,8 @@ import FirebaseFirestore
         self.userData = [:]
         
         self.lastDocumentSnapshot = nil
-        self.lastAiringSnapshots = ["Sunday": nil, "Monday": nil, "Tuesday": nil, "Wednesday": nil, "Thursday": nil, "Friday": nil, "Saturday": nil]
-        self.airingKeys = ["Sunday": [], "Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": [], "Saturday": []]
+        self.lastAiringSnapshots = ["Sundays": nil, "Mondays": nil, "Tuesdays": nil, "Wednesdays": nil, "Thursdays": nil, "Fridays": nil, "Saturdays": nil]
+        self.airingKeys = ["Sundays": [], "Mondays": [], "Tuesdays": [], "Wednesdays": [], "Thursdays": [], "Fridays": [], "Saturdays": []]
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
