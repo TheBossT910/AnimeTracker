@@ -133,11 +133,13 @@ import FirebaseFirestore
             print("Error fetching documents: \(error)")
         }
         
+        // get data
         let response = await getDocuments(animeIDs: animeIDs)
         // merge previous anime data with new response data
         animeData.merge(response) { (_, new) in new }
-        // add to keys array
-        orderedKeys = orderedKeys + animeIDs
+        
+        // add keys
+        orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
     }
 
     // retrieve the next animes from database
@@ -163,11 +165,13 @@ import FirebaseFirestore
             print("Error fetching documents: \(error)")
         }
         
+        // get data
         let response = await getDocuments(animeIDs: animeIDs)
         // merge previous anime data with new response data
         animeData.merge(response) { (_, new) in new }
-        // add to keys array
-        orderedKeys = orderedKeys + animeIDs
+        
+        // add keys
+        orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
     }
     
     // immediately retrieves all favorited/watchlisted shows
@@ -192,8 +196,106 @@ import FirebaseFirestore
         
         // merge previous anime data with new response data
         animeData.merge(response) { (_, new) in new }
-        // add to keys array
-        orderedKeys = orderedKeys + animeIDs
+                
+        // add keys
+        orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
+        
+    }
+    
+    // initially gets airing data
+    public func getInitialAiring(weekday: String, documentAmount: Int = 10) async {
+        // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
+        let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
+        print(weekdayAsNumber)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
+        
+        // adding ids to set to ensure no duplicates
+        var animeIDSet = Set<String>()
+        
+        do {
+            // getting filtered shows
+            let episodesCollection = try await db.collectionGroup("episodes")
+                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
+                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
+                .limit(to: documentAmount)
+                .getDocuments()
+            
+            // going up 2 levels to get the anime collection id
+            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
+//            print(animeIDSet.count) // debug
+            
+            // convert set to array
+            var animeIDs: [String] = []
+            animeIDs = Array(animeIDSet)
+            
+            // get shows
+            let response = await getDocuments(animeIDs: animeIDs)
+            print("Animes retrieved for \(weekday): \(response.count)")
+            
+            // merge previous anime data with new response data
+            animeData.merge(response) { (_, new) in new }
+            
+            // add keys
+            orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
+            
+            // adding airing data keys
+            airingKeys[weekday] = (airingKeys[weekday] ?? []) + getUniqueKeys(sourceKeys: airingKeys[weekday] ?? [], retrievedKeys: animeIDs)
+            
+            // set last snapshot
+            lastAiringSnapshots[weekday] = episodesCollection.documents.last
+            
+        } catch {
+            print("error getting initialAiring \(error)")
+        }
+        
+    }
+    
+    // gets next airing data
+    public func getNextAiring(weekday: String, documentAmount: Int = 10) async {
+        // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
+        let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
+        print(weekdayAsNumber)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
+        
+        // adding ids to set to ensure no duplicates
+        var animeIDSet = Set<String>()
+        
+        do {
+            // getting filtered shows after the last retrieved show
+            let episodesCollection = try await db.collectionGroup("episodes")
+                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
+                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
+                .start(afterDocument: self.lastAiringSnapshots[weekday]!!)
+                .limit(to: documentAmount)
+                .getDocuments()
+            
+            // going up 2 levels to get the anime collection id
+            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
+//            print(animeIDSet.count) // debug
+            
+            // convert set to array
+            var animeIDs: [String] = []
+            animeIDs = Array(animeIDSet)
+            
+            // get shows
+            let response = await getDocuments(animeIDs: animeIDs)
+            print("Additional animes retrieved for \(weekday): \(response.count)")
+            
+            // merge previous anime data with new response data
+            animeData.merge(response) { (_, new) in new }
+
+            // add keys
+            orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
+            
+            // adding airing data keys
+            airingKeys[weekday] = (airingKeys[weekday] ?? []) + getUniqueKeys(sourceKeys: airingKeys[weekday] ?? [], retrievedKeys: animeIDs)
+            
+            // set last snapshot
+            lastAiringSnapshots[weekday] = episodesCollection.documents.last
+            
+        } catch {
+            print("error getting nextAiring \(error)")
+        }
     }
     
     // retrieves user data from database
@@ -208,130 +310,7 @@ import FirebaseFirestore
         }
     }
     
-    // initially gets airing data
-    public func getInitialAiring(date: Int) async {
-        let weekday = "Tuesday"
-        
-        // Example usage to get the Unix range for Tuesday (weekday 3)
-        let unixRange = getUnixRangeForWeekday(weekday: date)
-        
-        // adding ids to set to ensure no duplicates
-        var animeIDSet = Set<String>()
-        
-        do {
-            let episodesCollection = try await db.collectionGroup("episodes")
-                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
-                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
-                .limit(to: 10)
-                .getDocuments()
-            
-            // going up 2 levels to get the anime collection id
-            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
-            print(animeIDSet.count) // debug
-            
-            // get shows
-            // TODO: don't use this as-is? We could simply add them to the main anime array, and filter by day/time as we are already doing...
-            // convert to array
-            var animeIDs: [String] = []
-            animeIDs = Array(animeIDSet)
-            
-            let response = await getDocuments(animeIDs: animeIDs)
-            print("Num of animes on tuesday today: \(response.count)")
-            
-            // merge previous anime data with new response data
-            animeData.merge(response) { (_, new) in new }
-            // add to keys array
-            orderedKeys = orderedKeys + animeIDs
-            
-            // add to airing data
-            var currentKeys =  airingKeys["Tuesday"] ?? []
-            
-            // only add new keys to newKeys array
-            var newKeys: [String] = []
-            for key in animeIDs {
-                if !currentKeys.contains(key) {
-                    newKeys.append(key)
-                }
-            }
-            
-            // save old + new keys
-            airingKeys["Tuesday"] = currentKeys + newKeys
-            
-            // set last snapshot
-            lastAiringSnapshots[weekday] = episodesCollection.documents.last
-            
-            
-        } catch {
-            print("error getting initialAiring \(error)")
-        }
-        
-    }
-    
-    // gets next airing data
-    public func getNextAiring(date: Int) async {
-        let weekday = "Tuesday"
-        
-        // Example usage to get the Unix range for Tuesday (weekday 3)
-        let unixRange = getUnixRangeForWeekday(weekday: date)
-        
-        // adding ids to set to ensure no duplicates
-        var animeIDSet = Set<String>()
-        
-        do {
-            let episodesCollection = try await db.collectionGroup("episodes")
-                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
-                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
-                .start(afterDocument: self.lastAiringSnapshots[weekday]!!)
-                .limit(to: 10)
-                .getDocuments()
-            
-            // going up 2 levels to get the anime collection id
-            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
-            print(animeIDSet.count) // debug
-            
-            // get shows
-            // TODO: don't use this as-is? We could simply add them to the main anime array, and filter by day/time as we are already doing...
-            // convert to array
-            var animeIDs: [String] = []
-            animeIDs = Array(animeIDSet)
-            
-            let response = await getDocuments(animeIDs: animeIDs)
-            print("Num of animes on tuesday today: \(response.count)")
-            
-            // merge previous anime data with new response data
-            animeData.merge(response) { (_, new) in new }
-            // add to keys array
-            orderedKeys = orderedKeys + animeIDs
-            
-            // add to airing data
-            var currentKeys =  airingKeys["Tuesday"] ?? []
-            
-            // only add new keys to newKeys array
-            var newKeys: [String] = []
-            for key in animeIDs {
-                if !currentKeys.contains(key) {
-                    newKeys.append(key)
-                }
-            }
-            
-            // save old + new keys
-            airingKeys["Tuesday"] = currentKeys + newKeys
-            
-            // set last snapshot
-            lastAiringSnapshots[weekday] = episodesCollection.documents.last
-            
-            
-        } catch {
-            print("error getting initialAiring \(error)")
-        }
-        
-    }
-    
-    
-    
-    // this function updates user-defined variables
-    // currently, it only updates the favorite button
-    // toggles the given anime as a favorite
+    // toggles a given anime as a favorite
     public func updateFavorite(userID: String, isFavorite: Bool, animeID: Int) {
         var myUser: user_data = userData[userID]!
         
