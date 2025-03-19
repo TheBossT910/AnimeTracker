@@ -381,6 +381,28 @@ extension String {
     }
 }
 
+func getWeekdayAsNumber(weekday: String) -> Int {
+    switch weekday {
+        case "Sundays"
+            : return 0
+        case "Mondays"
+            : return 1
+        case "Tuesdays"
+            : return 2
+        case "Wednesdays"
+            : return 3
+        case "Thursdays"
+            : return 4
+        case "Fridays"
+            : return 5
+        case "Saturdays"
+            : return 6
+        default:
+            print("Error! Invalid weekday!")
+            return -1
+    }
+}
+
 // function courtesy of ChatGPT.
 // TODO: create your own implementation
 // gets the weekday range
