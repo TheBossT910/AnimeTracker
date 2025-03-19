@@ -18,10 +18,24 @@ struct ScheduleRow: View {
     @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
     @State var initiallyLoaded: Bool = false
     let columns = [GridItem(.flexible())]
+    
+    //a filtered list of keys based on if we want to show all shows or only favorite shows
+    var filteredKeys: [String] {
+        let allKeys = db.airingKeys[day] ?? []
+        // getting all favorites
+        let userID = authManager.userID ?? ""
+        let userFavorites = db.userData[userID]?.favorites ?? []
+        
+        // going through all animes
+        return allKeys.filter { key in
+            // if we want to only see favorites, and the current show is a favorite, return
+            return !showFavorites || userFavorites.contains(Int(key) ?? -1)
+        }
+    }
 
     var body: some View {
         //grabbing keys of all animes airing on date
-        let animeKeys = db.airingKeys[day] ?? []
+        let animeKeys = filteredKeys
         let lastKey = animeKeys.last
         
         ScrollView(.vertical) {
