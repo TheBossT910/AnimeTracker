@@ -206,7 +206,6 @@ import FirebaseFirestore
     public func getInitialAiring(weekday: String, documentAmount: Int = 10) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
-        print(weekdayAsNumber)
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
         
         // adding ids to set to ensure no duplicates
@@ -254,7 +253,6 @@ import FirebaseFirestore
     public func getNextAiring(weekday: String, documentAmount: Int = 10) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
-        print(weekdayAsNumber)
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
         
         // adding ids to set to ensure no duplicates
