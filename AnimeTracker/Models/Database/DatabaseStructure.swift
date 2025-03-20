@@ -16,12 +16,12 @@ import FirebaseFirestore
 struct anime: Codable {
     @DocumentID var id: String?
     var main: main?
-    var data: data?
     var episodes: [episodes]?
 }
 
 struct main: Codable {
     @DocumentID var id: String?
+    // doc info
     var anilist_id: Int?
     var db_version: String?
     var doc_id: Int?
@@ -29,31 +29,26 @@ struct main: Codable {
     var relation_id: String?
     var title: String?
     var tvdb_id: Int?
-}
-
-struct data: Codable {
-    @DocumentID var id: String?
-    var files: files?
-    var general: general?
-}
-
-// TODO: deprecate files and geenral structs, rename these structs to files and general
-struct files: Codable {
-    @DocumentID var id: String?
-    var box_image: String?
-    var icon_image: String?
-    var splash_image: String?
-}
-
-struct general: Codable {
-    @DocumentID var id: String?
+    
+    // show info
     var description: String?
     var episodes: Int?
     var premiere: String?
     var rating: String?
     var title_english: String?
     var title_native: String?
+    
+    // show files
+    var box_image: String?
+    var icon_image: String?
+    var splash_image: String?
 }
+
+//struct data: Codable {
+//    @DocumentID var id: String?
+//    var files: files?
+//    var general: general?
+//}
 
 struct episodes: Codable {
     @DocumentID var id: String?
