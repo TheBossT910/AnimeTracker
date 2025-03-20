@@ -60,6 +60,7 @@ struct episodes: Codable {
     var runtime: Int?
     var title_episode: String?
     var tvdb_id: Int?
+    var number_episode: Int?
 }
 
 struct user_data: Codable {
