@@ -101,7 +101,7 @@ import FirebaseFirestore
                 return animes
             }
         } catch {
-            print("Error getting documents: \(error)")
+            print("Error getting documents main fn: \(error)")
         }
         
         // return response data
@@ -127,7 +127,7 @@ import FirebaseFirestore
             lastDocumentSnapshot = queryAnime.documents.last
         }
         catch {
-            print("Error fetching documents: \(error)")
+            print("Error fetching initial documents: \(error)")
         }
         
         // get data
@@ -159,7 +159,7 @@ import FirebaseFirestore
             lastDocumentSnapshot = queryAnime.documents.last
         }
         catch {
-            print("Error fetching documents: \(error)")
+            print("Error fetching next documents: \(error)")
         }
         
         // get data
@@ -301,7 +301,7 @@ import FirebaseFirestore
             userData[queryUser.documentID] = try queryUser.data(as: user_data.self)
         }
         catch {
-            print("Error getting documents: \(error)")
+            print("Error getting user documents: \(error)")
         }
     }
     
