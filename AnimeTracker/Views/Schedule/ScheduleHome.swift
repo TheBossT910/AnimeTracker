@@ -27,9 +27,12 @@ struct ScheduleHome: View {
         }
         
         // getting the first 3 favorites, and converting result to String array
-        let selectFavorites = favWithSplash?[..<3] ?? []
-        let favIntArr = Array(selectFavorites)
-        let favStringArr = favIntArr.map { String($0) }
+        var favStringArr: [String] = []
+        if ((favWithSplash?.count ?? 0) >= 3) {
+            let selectFavorites = favWithSplash?[..<3] ?? []
+            let favIntArr = Array(selectFavorites)
+            favStringArr = favIntArr.map { String($0) }
+        }
         
         // return results
         return favStringArr
