@@ -112,7 +112,7 @@ import FirebaseFirestore
     }
     
     // retrives the initial batch of animes from database
-    private func getInitialDocuments(documentAmount: Int = 20) async {
+    private func getInitialDocuments(documentAmount: Int = 10) async {
         // getting all anime ids
         var animeIDs : [String] = []
         do {
@@ -143,7 +143,7 @@ import FirebaseFirestore
     }
 
     // retrieve the next animes from database
-    public func getNextDocuments(documentAmount: Int = 20) async {
+    public func getNextDocuments(documentAmount: Int = 10) async {
         // getting all anime ids
         var animeIDs : [String] = []
         do {
@@ -203,7 +203,7 @@ import FirebaseFirestore
     }
     
     // initially gets airing data
-    public func getInitialAiring(weekday: String, documentAmount: Int = 10) async {
+    public func getInitialAiring(weekday: String, documentAmount: Int = 5) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
@@ -250,7 +250,7 @@ import FirebaseFirestore
     }
     
     // gets next airing data
-    public func getNextAiring(weekday: String, documentAmount: Int = 10) async {
+    public func getNextAiring(weekday: String, documentAmount: Int = 5) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
