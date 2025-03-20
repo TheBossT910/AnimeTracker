@@ -49,9 +49,7 @@ import FirebaseFirestore
         
         // running async tasks
         Task {
-            await getInitialDocuments(documentAmount: 20)
-            // TODO: temporary? remove!
-//            await getInitialAiring(weekday: "Tuesday")
+            await getInitialDocuments()
         }
     }
     
