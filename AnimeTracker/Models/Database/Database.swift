@@ -67,10 +67,6 @@ import FirebaseFirestore
                         // for main
                         let currentMain = try await self.db.collection("/anime_data/").document(animeID).getDocument(as: main.self)
                         
-                        // for data
-                        let currentFile = try await self.db.collection("/anime_data/\(animeID)/data").document("files").getDocument(as: files.self)
-                        let currentGeneral = try await self.db.collection("/anime_data/\(animeID)/data").document("general").getDocument(as: general.self)
-                        
                         // for episodes
                         var currentEpisodes: [episodes] = []
                         let queryEpisodes = try await self.db.collection("/anime_data/\(animeID)/episodes").getDocuments()
@@ -82,7 +78,6 @@ import FirebaseFirestore
                         let currentAnime: anime = anime(
                             id: animeID,
                             main: currentMain,
-                            data: data(files: currentFile, general: currentGeneral),
                             episodes: currentEpisodes
                         )
                         
@@ -101,7 +96,7 @@ import FirebaseFirestore
                 return animes
             }
         } catch {
-            print("Error getting documents: \(error)")
+            print("Error getting documents main fn: \(error)")
         }
         
         // return response data
@@ -127,7 +122,7 @@ import FirebaseFirestore
             lastDocumentSnapshot = queryAnime.documents.last
         }
         catch {
-            print("Error fetching documents: \(error)")
+            print("Error fetching initial documents: \(error)")
         }
         
         // get data
@@ -159,7 +154,7 @@ import FirebaseFirestore
             lastDocumentSnapshot = queryAnime.documents.last
         }
         catch {
-            print("Error fetching documents: \(error)")
+            print("Error fetching next documents: \(error)")
         }
         
         // get data
@@ -301,7 +296,7 @@ import FirebaseFirestore
             userData[queryUser.documentID] = try queryUser.data(as: user_data.self)
         }
         catch {
-            print("Error getting documents: \(error)")
+            print("Error getting user documents: \(error)")
         }
     }
     

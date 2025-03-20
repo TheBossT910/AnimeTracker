@@ -31,25 +31,16 @@ struct ScheduleItem: View {
         // episode banner image
         // initially set it as the first episode's image (so that there IS an image)
         var episodeBanner = allEpisodes.first?.box_image
-        // episode count
-        var episodeCount: Int = 0
         
+        // get airing episode number
         var airingEpisode = episodes()
         
         allEpisodes.forEach { episode in
             let broadcast = episode.broadcast ?? 0
-            // increment episode count. This assumes we get the episode documents in-order/they are inputted in-order
-            // TODO: add a episodeCount field in database documents! This is just a temporary solution
-            episodeCount += 1
-            
             // if an episode airs on the given day
             if (startTime <= broadcast && broadcast <= endTime) {
                 // assign to return variable
                 airingEpisode = episode
-                
-                // set broadcast to episode number
-                // TODO: this is a temporary solution! Fix this!
-                airingEpisode.broadcast = episodeCount
                 
                 // assign the previous banner image if there is none for the current episode
                 if airingEpisode.box_image == "" {
@@ -58,7 +49,7 @@ struct ScheduleItem: View {
                 
                 // set default title if there is none
                 if airingEpisode.title_episode == "" {
-                    airingEpisode.title_episode = "Latest Episode"
+                    airingEpisode.title_episode = "..."
                 }
             }
             
@@ -69,16 +60,25 @@ struct ScheduleItem: View {
         // return found airing episode (if any)
         return airingEpisode
     }
+    
+
 
     var body: some View {
         //getting anime data
         let anime = db.animeData[animeID]
-        let animeGeneral = anime?.data?.general
+        let animeMain = anime?.main
 
         //getting specific data
         let airingEpisode = animeEpisode
         let animeSplash = URL(string: airingEpisode.box_image ?? "N/A")
-
+        
+        // get the episode number as a String
+        var episodeNumber: String {
+            if  let episodeNum = airingEpisode.number_episode {
+                return String(episodeNum) + ":"
+            }
+            return ""
+        }
 
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
@@ -107,7 +107,7 @@ struct ScheduleItem: View {
                         //I am embedding the text items in HStacks to horizontally center the text
                         HStack(alignment: .top) {
                             Spacer()
-                            Text("Ep \(airingEpisode.broadcast ?? 0): \(airingEpisode.title_episode ?? "N/A")")
+                            Text("\(episodeNumber) \(airingEpisode.title_episode ?? "...")")
                                 .font(.title3)
                                 //allows for text wrapping
                                 .fontWeight(.medium)
@@ -167,7 +167,7 @@ struct ScheduleItem: View {
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
                 }) {
-                    Text("\(animeGeneral?.title_english ?? "N/A")")
+                    Text("\(animeMain?.title_english ?? "N/A")")
                         .font(.title2)
                         .fontWeight(.heavy)
                 }

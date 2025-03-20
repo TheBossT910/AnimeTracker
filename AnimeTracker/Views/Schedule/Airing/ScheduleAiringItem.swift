@@ -20,10 +20,10 @@ struct ScheduleAiringItem: View {
     var body: some View {
         //getting current anime data
         let anime = db.animeData[animeID]
-        let animeFiles = anime?.data?.files
+        let animeMain = anime?.main
         
         //getting specific variables we want to use
-        let splash = URL(string: animeFiles?.splash_image ?? "N/A")
+        let splash = URL(string: animeMain?.splash_image ?? "N/A")
 
         //TODO: split time into a seperate var in Firebase. This is temporary!
         //Not implemented yet

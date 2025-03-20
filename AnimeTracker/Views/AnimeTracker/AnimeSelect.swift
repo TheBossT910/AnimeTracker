@@ -17,8 +17,7 @@ struct AnimeSelect: View {
     var body: some View {
         // getting current anime's data
         let anime = db.animeData[animeID]
-        let animeGeneral = anime?.data?.general
-        let animeFiles = anime?.data?.files
+        let animeMain = anime?.main
         
         // getting current user's data
         let userID = authManager.userID ?? ""
@@ -30,12 +29,12 @@ struct AnimeSelect: View {
         VStack {
             //displaying top text, premiere and rating
             HStack {
-                Text(animeGeneral?.premiere ?? "N/A")
+                Text(animeMain?.premiere ?? "N/A")
                     .font(.caption)
                     .fontWeight(.heavy)
                     //changes color depending on light/dark mode
                     .foregroundColor(colorScheme == .light ? Color.black : Color.white)
-                Text(animeGeneral?.rating ?? "N/A")
+                Text(animeMain?.rating ?? "N/A")
                     .font(.caption)
                     .fontWeight(.semibold)
             }
@@ -43,7 +42,7 @@ struct AnimeSelect: View {
             //displaying the image
             VStack {
                 //getting the image
-                let boxImage = URL(string: animeFiles?.box_image ?? "N/A")
+                let boxImage = URL(string: animeMain?.box_image ?? "N/A")
                 
                 //formatting the image
                 AsyncImage(url: boxImage) { image in
@@ -85,10 +84,10 @@ struct AnimeSelect: View {
 
             }
             // display the english and native title at the bottom
-            Text(animeGeneral?.title_english ?? "N/A")
+            Text(animeMain?.title_english ?? "N/A")
                 .font(.title3)
                 .fontWeight(.bold)
-            Text(animeGeneral?.title_native ?? "N/A")
+            Text(animeMain?.title_native ?? "N/A")
                 .font(.callout)
         }
         .padding(10)
