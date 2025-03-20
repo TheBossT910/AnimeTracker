@@ -73,7 +73,7 @@ struct ScheduleItem: View {
     var body: some View {
         //getting anime data
         let anime = db.animeData[animeID]
-        let animeGeneral = anime?.data?.general
+        let animeMain = anime?.main
 
         //getting specific data
         let airingEpisode = animeEpisode
@@ -167,7 +167,7 @@ struct ScheduleItem: View {
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
                 }) {
-                    Text("\(animeGeneral?.title_english ?? "N/A")")
+                    Text("\(animeMain?.title_english ?? "N/A")")
                         .font(.title2)
                         .fontWeight(.heavy)
                 }

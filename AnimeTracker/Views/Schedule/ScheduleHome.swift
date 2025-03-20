@@ -21,7 +21,7 @@ struct ScheduleHome: View {
         // get all favorites with splash images
         let favWithSplash = db.userData[userID]?.favorites?.filter { fav in
             let currentAnime = db.animeData[String(fav)]
-            if (currentAnime?.data?.files?.splash_image != nil) {
+            if (currentAnime?.main?.splash_image != nil) {
                 return true
             }
             return false

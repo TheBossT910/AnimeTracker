@@ -17,11 +17,10 @@ struct CategoryItem: View {
         //getting an anime object
         let anime = db.animeData[animeID]
         //gettting anime data objects
-        let animeGeneral = anime?.data?.general
-        let animeFiles = anime?.data?.files
+        let animeMain = anime?.main
         
         //getting the box image
-        let boxImage = URL(string: animeFiles?.box_image ?? "N/A")
+        let boxImage = URL(string: animeMain?.box_image ?? "N/A")
         
         //adding the image, and changing its apperance
         VStack(alignment: .center) {
@@ -48,7 +47,7 @@ struct CategoryItem: View {
         
             
             //adding the show name
-            Text(animeGeneral?.title_english ?? "N/A")
+            Text(animeMain?.title_english ?? "N/A")
                 .fontWeight(.semibold)
                 //changing the look
                 .foregroundStyle(.primary)
