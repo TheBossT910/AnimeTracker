@@ -52,6 +52,7 @@ struct ScheduleRow: View {
             
             Button("Reload") {
                 Task {
+                    // NOTE: This "solves" the problem where we need to load in a new season of shows
                     // TODO: this is not an ideal solution, but it works for now!
                     db.resetAiringKeys()
                     await db.getInitialAiring(weekday: day, week: date)
