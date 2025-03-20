@@ -200,10 +200,10 @@ import FirebaseFirestore
     }
     
     // initially gets airing data
-    public func getInitialAiring(weekday: String, documentAmount: Int = 5) async {
+    public func getInitialAiring(weekday: String, week: Date, documentAmount: Int = 5) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
-        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: week)
         
         // adding ids to set to ensure no duplicates
         var animeIDSet = Set<String>()
@@ -247,10 +247,10 @@ import FirebaseFirestore
     }
     
     // gets next airing data
-    public func getNextAiring(weekday: String, documentAmount: Int = 5) async {
+    public func getNextAiring(weekday: String, week: Date, documentAmount: Int = 5) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
-        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: week)
         
         // adding ids to set to ensure no duplicates
         var animeIDSet = Set<String>()
@@ -349,6 +349,10 @@ import FirebaseFirestore
         }
     }
     
+    public func resetAiringKeys() {
+        self.airingKeys = ["Sundays": [], "Mondays": [], "Tuesdays": [], "Wednesdays": [], "Thursdays": [], "Fridays": [], "Saturdays": []]
+    }
+    
     // returns the unique keys from retrievedKeys  not found in sourceKeys
     func getUniqueKeys(sourceKeys: [String], retrievedKeys: [String]) -> [String] {
         var uniqueKeys: [String] = []
@@ -399,9 +403,11 @@ func getWeekdayAsNumber(weekday: String) -> Int {
 // TODO: create your own implementation
 // gets the weekday range
 // 0 is Sunday, 6 is Saturday
-func getUnixRangeForWeekday(weekday: Int) -> (start: TimeInterval, end: TimeInterval)? {
+func getUnixRangeForWeekday(weekday: Int, week: Date) -> (start: TimeInterval, end: TimeInterval)? {
+    // TODO: we want to be able to pass in a date object directly and replace currentDate with it
     let calendar = Calendar.current
-    let currentDate = Date()
+//    let currentDate = Date()
+    let currentDate = week
     
     // Get the current weekday
     let currentWeekday = calendar.component(.weekday, from: currentDate) // Sunday = 1, Monday = 2, ..., Saturday = 7

@@ -17,6 +17,8 @@ struct ScheduleRow: View {
     var day: String
     @Binding var showFavorites: Bool // a toggle to show favorite shows only (true) or not (false)
     @State var initiallyLoaded: Bool = false
+    // TODO: show week by selected date
+    let date: Date
     let columns = [GridItem(.flexible())]
     
     //a filtered list of keys based on if we want to show all shows or only favorite shows
@@ -48,6 +50,17 @@ struct ScheduleRow: View {
             Text(animeKeys.isEmpty ? "No Animes Found" : "")
                 .font(.headline)
             
+            Button("Reload") {
+                Task {
+                    // TODO: this is not an ideal solution, but it works for now!
+                    db.resetAiringKeys()
+                    await db.getInitialAiring(weekday: day, week: date)
+                    print(db.animeData.count)
+                }
+            }
+            // no padding
+            .padding(0)
+            
             LazyVGrid(columns: columns) {
                 // display each airing show
                 ForEach(animeKeys, id: \.self) { animeKey in
@@ -56,7 +69,7 @@ struct ScheduleRow: View {
                     NavigationLink {
                         AnimeDetail(animeID: animeKey)
                     } label: {
-                        ScheduleItem(animeID: animeKey, weekday: day)
+                        ScheduleItem(animeID: animeKey, weekday: day, date: date)
                     }
                     //fixes the bug where all text is highlighted blue in views that use this view
                     .buttonStyle(.plain)
@@ -68,7 +81,7 @@ struct ScheduleRow: View {
                                 print("Adding more weekday data...")
                                 Task {
                                     // add more airing shows
-                                    await db.getNextAiring(weekday: day)
+                                    await db.getNextAiring(weekday: day, week: date)
                                 }
                             }
                         }
@@ -80,20 +93,13 @@ struct ScheduleRow: View {
                 if (!initiallyLoaded) {
                     Task {
                         print("Initial weekday load...")
-                        await db.getInitialAiring(weekday: day)
+                        await db.getInitialAiring(weekday: day, week: date)
                     }
                     initiallyLoaded.toggle()
                 }
             }
         }
         .scrollTargetBehavior(.viewAligned) // Forces more preloading
-        
-        Button("Load More Anime") {
-            Task {
-                await db.getInitialAiring(weekday: day)
-                print(db.animeData.count)
-            }
-        }
     }
 }
 
@@ -102,7 +108,7 @@ struct ScheduleRow: View {
     let db = Database()
     let authManager = AuthManager.shared
     
-    ScheduleRow(day: "Wednesdays", showFavorites: .constant(false))
+    ScheduleRow(day: "Sundays", showFavorites: .constant(false), date: Date())
         .environmentObject(db)
         .environmentObject(authManager)
 }

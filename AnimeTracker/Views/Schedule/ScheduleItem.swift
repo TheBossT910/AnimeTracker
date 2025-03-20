@@ -14,6 +14,7 @@ struct ScheduleItem: View {
 
     let animeID: String  //currently selected anime's iD
     let weekday: String
+    let date: Date
     
     var animeEpisode: episodes {
         // grab all episodes of show (which are already loaded in)
@@ -21,7 +22,7 @@ struct ScheduleItem: View {
         
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
-        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: date)
         
         // save the start/end times of the day
         let startTime = Int(unixRange!.start)
@@ -200,7 +201,7 @@ struct ScheduleItem: View {
     let authManager = AuthManager.shared
 
     //"163134" is ReZero
-    ScheduleItem(animeID: "163134", weekday: "Sundays")
+    ScheduleItem(animeID: "163134", weekday: "Sundays", date: Date())
     .environmentObject(db)
     .environmentObject(authManager)
 }

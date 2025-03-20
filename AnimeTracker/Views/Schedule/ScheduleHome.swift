@@ -12,6 +12,7 @@ struct ScheduleHome: View {
     @EnvironmentObject var db: Database
     @EnvironmentObject var authManager: AuthManager
 
+    @State private var date = Date()
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
     // TODO: look for popular/currently airing shows insted of favorites. This is temporary
     var airing: [String] {
@@ -74,6 +75,21 @@ struct ScheduleHome: View {
                         }
                     }
                     .frame(width: geometry.size.width * 0.80)
+                    
+                    // select the week we want to see
+                    
+                    HStack() {
+                        DatePicker(
+                            "Week",
+                            selection: $date,
+                            displayedComponents: [.date]
+                        )
+                        .datePickerStyle(.compact)
+                        .padding(.leading)
+                        .padding(.trailing)
+                        .padding(.top, 2)
+                    }
+                    .frame(width: geometry.size.width * 0.88)
                         
                     
                     //allows us to display different pages we can swipbe between
@@ -81,7 +97,7 @@ struct ScheduleHome: View {
                         ForEach(week, id: \.self) { day in
                             //wrap ScheduleRow in a container so it is displayed properly by TabView
                             VStack {
-                                ScheduleRow(day: day, showFavorites: $showFavoritesOnly)
+                                ScheduleRow(day: day, showFavorites: $showFavoritesOnly, date: date)
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
