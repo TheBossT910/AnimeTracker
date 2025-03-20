@@ -131,8 +131,8 @@ struct ScheduleItem: View {
                         Spacer()
 
                         HStack {
-                            //TODO: temporary fake checkmark. Plan to implement real "marking" system later
-                            Text("☑")
+//                            //TODO: temporary fake checkmark. Plan to implement real "marking" system later
+//                            Text("☑")
                             
                             Spacer()
                             
