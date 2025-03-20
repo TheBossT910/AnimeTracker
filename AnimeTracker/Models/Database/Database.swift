@@ -31,7 +31,6 @@ import FirebaseFirestore
     @Published var airingKeys: [String: [String]] = [:]
     
     // array to make sure all shows are showed in loaded order
-    // TODO: implement this with other getDoc functions()... Only implemented for currently airing!
     var orderedKeys: [String] = []
     
     // constructor
