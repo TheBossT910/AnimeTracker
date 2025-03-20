@@ -31,9 +31,8 @@ struct ScheduleItem: View {
         // episode banner image
         // initially set it as the first episode's image (so that there IS an image)
         var episodeBanner = allEpisodes.first?.box_image
-        // episode count
-        var episodeCount: Int = 0
         
+        // get airing episode number
         var airingEpisode = episodes()
         
         allEpisodes.forEach { episode in
