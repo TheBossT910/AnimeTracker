@@ -22,7 +22,7 @@ struct DatabaseExample: View {
 //        let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
 //        let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"
         
-        let currentUser = dbTest.userData[user]
+        let currentUser = dbTest.userData
 //        dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: true, animeID: Int(animeID) ?? -1)
         let favorite: Bool = currentUser?.favorites?.contains(Int(animeID) ?? -1) ?? false
         

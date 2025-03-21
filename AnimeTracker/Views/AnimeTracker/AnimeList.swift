@@ -29,8 +29,7 @@ struct AnimeList: View {
     //a filtered list of keys based on if we want to show all shows or only favorite shows
     var filteredKeys: [String] {
         // getting all favorites
-        let userID = authManager.userID ?? ""
-        let userFavorites = db.userData[userID]?.favorites ?? []
+        let userFavorites = db.userData?.favorites ?? []
         
         // going through all animes
         return db.orderedKeys.filter { key in

@@ -18,7 +18,7 @@ import FirebaseFirestore
 
 @MainActor class Database : DatabaseProtocol, ObservableObject {
     @Published var animeData: [String: anime]
-    @Published var userData: [String : user_data]
+    @Published var userData: user_data?
     
     // database var
     private var db: Firestore
@@ -164,11 +164,11 @@ import FirebaseFirestore
     // immediately retrieves all favorited/watchlisted shows
     public func getMarkedDocuments(userID: String) async {
         // getting all different data arrays
-        let favorites = userData[userID]?.favorites ?? []
-        let completed = userData[userID]?.completed ?? []
-        let dropped = userData[userID]?.dropped ?? []
-        let watching = userData[userID]?.watching ?? []
-        let planToWatch = userData[userID]?.plan_to_watch ?? []
+        let favorites = userData?.favorites ?? []
+        let completed = userData?.completed ?? []
+        let dropped = userData?.dropped ?? []
+        let watching = userData?.watching ?? []
+        let planToWatch = userData?.plan_to_watch ?? []
         
         // merging into 1 array
         // this creates 1 array which has all data, then makes it into a Set (to get rid of duplicates) and converts it back into an array
@@ -288,7 +288,7 @@ import FirebaseFirestore
     public func getUserDocument(userID: String) async {
         do {
             let queryUser = try await db.collection("/user_data/").document(userID).getDocument()
-            userData[queryUser.documentID] = try queryUser.data(as: user_data.self)
+            userData = try queryUser.data(as: user_data.self)
         }
         catch {
             print("Error getting user documents: \(error)")
@@ -297,7 +297,7 @@ import FirebaseFirestore
     
     // toggles a given anime as a favorite
     public func updateFavorite(userID: String, isFavorite: Bool, animeID: Int) {
-        var myUser: user_data = userData[userID]!
+        var myUser: user_data = userData!
         
         // not in favorites and we want to add to favorites
         if ((myUser.favorites?.contains(animeID)) == false) && isFavorite {
@@ -307,7 +307,7 @@ import FirebaseFirestore
             // update database
             db.collection("/user_data/").document(userID).updateData(["favorites": myUser.favorites as Any])
             // update local copy
-            userData[userID] = myUser
+            userData = myUser
         } else if ((myUser.favorites?.contains(animeID)) == true) && !isFavorite {   // in favorites, and we want to remove from favorites
             // remove from array
             myUser.favorites?.removeAll { $0 == animeID }
@@ -315,7 +315,7 @@ import FirebaseFirestore
             // update database
             db.collection("/user_data/").document(userID).updateData(["favorites": myUser.favorites as Any])
             // update local copy
-            userData[userID] = myUser
+            userData = myUser
         }
     }
     
@@ -335,7 +335,7 @@ import FirebaseFirestore
         db.collection("/user_data/").document(userID).updateData([watchlistName: updatedWatchlist])
         // update local copy
         Task {
-            userData[userID] = try await db.collection("/user_data/").document(userID).getDocument(as: user_data.self)
+            userData = try await db.collection("/user_data/").document(userID).getDocument(as: user_data.self)
         }
     }
     

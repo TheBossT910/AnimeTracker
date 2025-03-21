@@ -20,8 +20,7 @@ struct AnimeSelect: View {
         let animeMain = anime?.main
         
         // getting current user's data
-        let userID = authManager.userID ?? ""
-        let userData = db.userData[userID]
+        let userData = db.userData
         
         //getting anime's favorite value
         let isFavorite = userData?.favorites?.contains(Int(animeID) ?? -1) ?? false

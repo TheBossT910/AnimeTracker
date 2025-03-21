@@ -16,7 +16,7 @@ struct AnimeDetail: View {
     var body: some View {
         // getting user data
         let userID = authManager.userID ?? ""
-        let userData = db.userData[userID]
+        let userData = db.userData
         
         // getting the current anime's data
         let anime = db.animeData[animeID]

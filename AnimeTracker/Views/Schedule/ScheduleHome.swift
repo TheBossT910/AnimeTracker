@@ -16,10 +16,8 @@ struct ScheduleHome: View {
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
     // TODO: look for popular/currently airing shows insted of favorites. This is temporary
     var airing: [String] {
-        // getting all favorites
-        let userID = authManager.userID ?? ""
         // get all favorites with splash images
-        let favWithSplash = db.userData[userID]?.favorites?.filter { fav in
+        let favWithSplash = db.userData?.favorites?.filter { fav in
             let currentAnime = db.animeData[String(fav)]
             if (currentAnime?.main?.splash_image != nil) {
                 return true

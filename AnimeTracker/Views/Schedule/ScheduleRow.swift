@@ -25,8 +25,7 @@ struct ScheduleRow: View {
     var filteredKeys: [String] {
         let allKeys = db.airingKeys[day] ?? []
         // getting all favorites
-        let userID = authManager.userID ?? ""
-        let userFavorites = db.userData[userID]?.favorites ?? []
+        let userFavorites = db.userData?.favorites ?? []
         
         // going through all animes
         return allKeys.filter { key in

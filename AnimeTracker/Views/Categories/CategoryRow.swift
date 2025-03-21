@@ -52,18 +52,17 @@ struct CategoryRow: View {
     
     // returns an Int array of anime IDs that are in the chosen category
     func getKeys(category: String) -> [Int] {
-        let userID = authManager.userID ?? ""
         var keys: [Int] = []
         
         switch category {
             case "Dropped":
-                keys = db.userData[userID]?.dropped ?? []
+                keys = db.userData?.dropped ?? []
             case "Completed":
-                keys = db.userData[userID]?.completed ?? []
+                keys = db.userData?.completed ?? []
             case "Watching":
-                keys = db.userData[userID]?.watching ?? []
+                keys = db.userData?.watching ?? []
             case "Plan to Watch":
-                keys = db.userData[userID]?.plan_to_watch ?? []
+                keys = db.userData?.plan_to_watch ?? []
             default:
                 keys = []
         }

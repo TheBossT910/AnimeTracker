@@ -21,7 +21,7 @@ struct WatchlistMenu: View {
     @State var isPlanToWatch = false
     
     var body: some View {
-        let userData = db.userData[userID]
+        let userData = db.userData
         if (authManager.isAuthenticated) {
             Menu {
                 Button(action: {
