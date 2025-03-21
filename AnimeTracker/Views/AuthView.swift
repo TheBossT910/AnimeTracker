@@ -48,6 +48,13 @@ struct AuthView: View {
                 Button("Sign up") {
                     signUpMode = true
                 }
+                
+                // info about app
+                Text("Made with ❤️ in Ottawa, Canada 🇨🇦")
+                    .font(.caption)
+                    .padding(.top)
+                Text("Taha Rashid 2025")
+                    .font(.caption2)
             }
             
             else if (signUpMode) {
