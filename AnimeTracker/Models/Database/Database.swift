@@ -45,11 +45,6 @@ import FirebaseFirestore
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
-        
-        // running async tasks
-        Task {
-            await getInitialDocuments()
-        }
     }
     
     // retrieves documents from Firebase (async)
@@ -104,7 +99,7 @@ import FirebaseFirestore
     }
     
     // retrives the initial batch of animes from database
-    private func getInitialDocuments(documentAmount: Int = 10) async {
+    public func getInitialDocuments(documentAmount: Int = 10) async {
         // getting all anime ids
         var animeIDs : [String] = []
         do {

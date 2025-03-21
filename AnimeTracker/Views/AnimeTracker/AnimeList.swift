@@ -12,6 +12,7 @@ struct AnimeList: View {
     @EnvironmentObject var authManager: AuthManager
     
     @State private var showFavoritesOnly: Bool = false  // a toggle to show favorite shows only (true) or not (false)
+    @State var initiallyLoaded: Bool = false
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
 
@@ -75,6 +76,16 @@ struct AnimeList: View {
                                 }
                             }
                         }
+                    }
+                }
+                // initially load documents
+                .onAppear {
+                    if (!initiallyLoaded) {
+                        Task {
+                            print("Initial list load...")
+                            await db.getInitialDocuments()
+                        }
+                        initiallyLoaded.toggle()
                     }
                 }
             }
