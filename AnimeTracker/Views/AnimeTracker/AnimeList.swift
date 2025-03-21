@@ -77,16 +77,6 @@ struct AnimeList: View {
                         }
                     }
                 }
-                // initially load documents
-                .onAppear {
-                    if (!initiallyLoaded) {
-                        Task {
-                            print("Initial list load...")
-                            await db.getInitialDocuments()
-                        }
-                        initiallyLoaded.toggle()
-                    }
-                }
             }
             .scrollTargetBehavior(.paging) // Forces more preloading
             

@@ -37,7 +37,6 @@ import FirebaseFirestore
     init() {
         // initial values
         self.animeData = [:]
-        self.userData = [:]
         
         self.lastDocumentSnapshot = nil
         self.lastAiringSnapshots = ["Sundays": nil, "Mondays": nil, "Tuesdays": nil, "Wednesdays": nil, "Thursdays": nil, "Fridays": nil, "Saturdays": nil]
@@ -45,6 +44,11 @@ import FirebaseFirestore
         
         // creating a Firestore instance
         self.db = Firestore.firestore()
+        
+        Task {
+            // initially load 1 document
+            await getInitialDocuments(documentAmount: 1)
+        }
     }
     
     // retrieves documents from Firebase (async)
