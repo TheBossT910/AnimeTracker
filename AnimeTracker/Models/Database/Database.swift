@@ -339,12 +339,13 @@ import FirebaseFirestore
         }
     }
     
+    // resets the airing keys
     public func resetAiringKeys() {
         self.airingKeys = ["Sundays": [], "Mondays": [], "Tuesdays": [], "Wednesdays": [], "Thursdays": [], "Fridays": [], "Saturdays": []]
     }
     
     // returns the unique keys from retrievedKeys  not found in sourceKeys
-    func getUniqueKeys(sourceKeys: [String], retrievedKeys: [String]) -> [String] {
+    private func getUniqueKeys(sourceKeys: [String], retrievedKeys: [String]) -> [String] {
         var uniqueKeys: [String] = []
         retrievedKeys.forEach {
             // add to uniqueKeys if not in sourceKeys
