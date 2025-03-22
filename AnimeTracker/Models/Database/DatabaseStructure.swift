@@ -23,12 +23,14 @@ struct main: Codable {
     @DocumentID var id: String?
     // doc info
     var anilist_id: Int?
-    var db_version: String?
     var doc_id: Int?
     var mal_id: Int?
     var relation_id: String?
     var title: String?
     var tvdb_id: Int?
+    
+    var db_version: String?
+    var last_updated: String?
     
     // show info
     var description: String?
