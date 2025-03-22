@@ -97,6 +97,13 @@ struct ScheduleHome: View {
                             VStack {
                                 ScheduleRow(day: day, showFavorites: $showFavoritesOnly, date: date)
                             }
+                            .onChange(of: date, {
+                                // reset the current data when the date changes
+                                Task {
+                                    print("Initial weekday load...")
+                                    await db.getInitialAiring(weekday: day, week: date)
+                                }
+                            })
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                     }
