@@ -16,7 +16,8 @@ struct ScheduleItem: View {
     let weekday: String
     let date: Date
     
-    // TODO: Fix this! It doesn't actually SAVE the previous episode's box image (?)
+    // TODO: Fix this! It doesn't actually SAVE the previous episode's box image
+    // This is because we changed the logic! Database only retrieves the episode matching the given date
     var animeEpisode: episodes {
         // grab all episodes of show (which are already loaded in)
         let allEpisodes = db.animeData[animeID]?.episodes ?? []
@@ -29,11 +30,7 @@ struct ScheduleItem: View {
         let startTime = Int(unixRange!.start)
         let endTime = Int(unixRange!.end)
         
-        // episode banner image
-        // initially set it as the first episode's image (so that there IS an image)
-        var episodeBanner = allEpisodes.first?.box_image
-        
-        // get airing episode number
+        // get airing episode
         var airingEpisode = episodes()
         
         allEpisodes.forEach { episode in
@@ -43,9 +40,15 @@ struct ScheduleItem: View {
                 // assign to return variable
                 airingEpisode = episode
                 
-                // assign the previous banner image if there is none for the current episode
+                // assign the show's images if there is no box image
                 if airingEpisode.box_image == "" {
-                    airingEpisode.box_image = episodeBanner
+                    // fetch show images
+                    let currentAnime = db.animeData[animeID]
+                    let showSplash = currentAnime?.main?.splash_image ?? ""
+                    let showBanner = currentAnime?.main?.box_image ?? ""
+                    
+                    // assign splash 1st, then default to showBanner if we dont have splash
+                    airingEpisode.box_image = showSplash != "" ? showSplash : showBanner
                 }
                 
                 // set default title if there is none
@@ -53,9 +56,6 @@ struct ScheduleItem: View {
                     airingEpisode.title_episode = "..."
                 }
             }
-            
-            // update latest banner
-            episodeBanner = episode.box_image
         }
         
         // return found airing episode (if any)
