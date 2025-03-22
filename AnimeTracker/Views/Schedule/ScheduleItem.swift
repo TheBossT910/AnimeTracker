@@ -13,18 +13,71 @@ struct ScheduleItem: View {
     @EnvironmentObject var authManager: AuthManager
 
     let animeID: String  //currently selected anime's iD
-
+    let weekday: String
+    let date: Date
+    
+    // TODO: Fix this! It doesn't actually SAVE the previous episode's box image
+    // This is because we changed the logic! Database only retrieves the episode matching the given date
+    var animeEpisode: episodes {
+        // grab all episodes of show (which are already loaded in)
+        let allEpisodes = db.animeData[animeID]?.episodes ?? []
+        
+        // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
+        let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
+        let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: date)
+        
+        // save the start/end times of the day
+        let startTime = Int(unixRange!.start)
+        let endTime = Int(unixRange!.end)
+        
+        // get airing episode
+        var airingEpisode = episodes()
+        
+        allEpisodes.forEach { episode in
+            let broadcast = episode.broadcast ?? 0
+            // if an episode airs on the given day
+            if (startTime <= broadcast && broadcast <= endTime) {
+                // assign to return variable
+                airingEpisode = episode
+                
+                // assign the show's images if there is no box image
+                if airingEpisode.box_image == "" {
+                    // fetch show images
+                    let currentAnime = db.animeData[animeID]
+                    let showSplash = currentAnime?.main?.splash_image ?? ""
+                    let showBanner = currentAnime?.main?.box_image ?? ""
+                    
+                    // assign splash 1st, then default to showBanner if we dont have splash
+                    airingEpisode.box_image = showSplash != "" ? showSplash : showBanner
+                }
+                
+                // set default title if there is none
+                if airingEpisode.title_episode == "" {
+                    airingEpisode.title_episode = "..."
+                }
+            }
+        }
+        
+        // return found airing episode (if any)
+        return airingEpisode
+    }
+    
     var body: some View {
         //getting anime data
         let anime = db.animeData[animeID]
-        let animeGeneral = anime?.data?.general
-        let animeMedia = anime?.episodes
+        let animeMain = anime?.main
 
         //getting specific data
-        //TODO: Figure out a way to know what episode data to show automaticaly. This is hard-coded to only show episode 1 for all shows!
-        let animeEp1 = animeMedia?[0]
-        let animeSplash = URL(string: animeEp1?.box_image ?? "N/A")
-
+        let airingEpisode = animeEpisode
+        let animeSplash = URL(string: airingEpisode.box_image ?? "N/A")
+        
+        // get the episode number as a String
+        var episodeNumber: String {
+            if  let episodeNum = airingEpisode.number_episode {
+                return String(episodeNum) + ":"
+            }
+            return ""
+        }
 
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
@@ -53,7 +106,7 @@ struct ScheduleItem: View {
                         //I am embedding the text items in HStacks to horizontally center the text
                         HStack(alignment: .top) {
                             Spacer()
-                            Text("Ep 1: \(animeEp1?.title_episode ?? "N/A")")
+                            Text("\(episodeNumber) \(airingEpisode.title_episode ?? "")")
                                 .font(.title3)
                                 //allows for text wrapping
                                 .fontWeight(.medium)
@@ -78,16 +131,17 @@ struct ScheduleItem: View {
                         Spacer()
 
                         HStack {
-                            //TODO: temporary fake checkmark. Plan to implement real "marking" system later
-                            Text("☑")
+//                            //TODO: temporary fake checkmark. Plan to implement real "marking" system later
+//                            Text("☑")
                             
                             Spacer()
                             
                             // TODO: Deal with cases where we don't have a broadcast time (and it defaults to 0 in the database itself I think... This is a large-scale problem for later)
                             // NOTE: We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
-                            let unixTime: TimeInterval = Double(animeEp1?.broadcast?.description ?? "0") ?? 0
+                            let unixTime: TimeInterval = Double(airingEpisode.broadcast?.description ?? "0") ?? 0
                             let convertedTime = getFormattedTime(from: unixTime)
-                            Text(convertedTime)
+                            // only display time if we have a valid time
+                            Text(unixTime == 0 ? "" : convertedTime)
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                         }
@@ -103,17 +157,17 @@ struct ScheduleItem: View {
 
                 DisclosureGroup(content: {
                     // TODO: Implement recap. For now, we will replace showing the recap with showing the 1st episode's description
-//                    Text(animeEp1?.recap ?? "N/A")
+//                    Text(airingEpisode?.recap ?? "N/A")
 //                        .font(.caption)
 //                        //explicitly set text to leading so it displays correctly in ScheduleRow
 //                        .multilineTextAlignment(.leading)
                     
-                    Text(animeEp1?.description?.toPlainText() ?? "N/A")
+                    Text(airingEpisode.description?.toPlainText() ?? "N/A")
                         .font(.caption)
                         //explicitly set text to leading so it displays correctly in ScheduleRow
                         .multilineTextAlignment(.leading)
                 }) {
-                    Text("\(animeGeneral?.title_english ?? "N/A")")
+                    Text("\(animeMain?.title_english ?? "N/A")")
                         .font(.title2)
                         .fontWeight(.heavy)
                 }
@@ -147,7 +201,7 @@ struct ScheduleItem: View {
     let authManager = AuthManager.shared
 
     //"163134" is ReZero
-    ScheduleItem(animeID: "163134")
+    ScheduleItem(animeID: "163134", weekday: "Sundays", date: Date())
     .environmentObject(db)
     .environmentObject(authManager)
 }

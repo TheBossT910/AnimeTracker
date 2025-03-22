@@ -12,6 +12,7 @@ struct AnimeList: View {
     @EnvironmentObject var authManager: AuthManager
     
     @State private var showFavoritesOnly: Bool = false  // a toggle to show favorite shows only (true) or not (false)
+    @State var initiallyLoaded: Bool = false
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
 
@@ -25,23 +26,23 @@ struct AnimeList: View {
         return [GridItem(.adaptive(minimum: minSize), alignment: .top)]
     }
 
-    //a filtered list of animes based on if we want to show all shows or only favorite shows
-    var filteredAnimes: [String: anime] {
+    //a filtered list of keys based on if we want to show all shows or only favorite shows
+    var filteredKeys: [String] {
         // getting all favorites
-        let userID = authManager.userID ?? ""
-        let userFavorites = db.userData[userID]?.favorites ?? []
+        let userFavorites = db.userData?.favorites ?? []
         
         // going through all animes
-        return db.animeData.filter { anime in
-            let currentID = anime.value.id
+        return db.orderedKeys.filter { key in
             // if we want to only see favorites, and the current show is a favorite, return
-            return !showFavoritesOnly || userFavorites.contains(Int(currentID ?? "-1") ?? -1)
+            return !showFavoritesOnly || userFavorites.contains(Int(key) ?? -1)
         }
     }
 
     var body: some View {
         //grabbing the keys of all animes we want to see
-        let animeKeys = Array(filteredAnimes.keys).sorted()
+        let animeKeys = filteredKeys
+        // grabbing the key of the last anime, for checking if we have rendered the last item in the Array
+        let lastKey = animeKeys.last
         
         NavigationStack {
             //favorites toggle
@@ -51,6 +52,12 @@ struct AnimeList: View {
                     .fontWeight(.heavy)
             }
             .disabled(!authManager.isAuthenticated)
+            // updates toggle so it is "off" when disabled
+            .onChange(of: authManager.isAuthenticated) {
+                if !authManager.isAuthenticated {
+                    showFavoritesOnly = false
+                }
+            }
             .padding()
 
             //display all shows
@@ -60,10 +67,26 @@ struct AnimeList: View {
                         NavigationLink(destination: AnimeDetail(animeID: animeKey)) {
                             AnimeSelect(animeID: animeKey)
                         }
+                        .onAppear {
+                            // if the last anime is loaded and we are NOT showing favorites (i.e. all animes are visible), then load more animes
+                            if ((animeKey == lastKey) && (!showFavoritesOnly)) {
+                                Task {
+                                    await db.getNextDocuments()
+                                }
+                            }
+                        }
                     }
                 }
             }
             .scrollTargetBehavior(.paging) // Forces more preloading
+            
+            Button("Load More Anime") {
+                Task {
+                    await db.getNextDocuments()
+                }
+            }
+            // only load more animes if we can see ALL animes
+            .disabled(showFavoritesOnly)
         }
         //animation when switching between favorites only and all animes view
         .animation(.default, value: showFavoritesOnly)

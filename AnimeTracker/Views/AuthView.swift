@@ -48,6 +48,13 @@ struct AuthView: View {
                 Button("Sign up") {
                     signUpMode = true
                 }
+                
+                // info about app
+                Text("Made with ❤️ in Ottawa, Canada 🇨🇦")
+                    .font(.caption)
+                    .padding(.top)
+                Text("Taha Rashid 2025")
+                    .font(.caption2)
             }
             
             else if (signUpMode) {
@@ -108,7 +115,17 @@ struct AuthView: View {
         }
         .onReceive(authManager.$isAuthenticated) { newValue in
             print("Auth state changed: \(newValue)") // Debugging print
+            
+            // load the current user and all of their favorite/watchlisted animes
+            if (newValue) {
+                Task {
+                    let userID = authManager.userID ?? ""
+                    await db.getUserDocument(userID: userID)
+                    await db.getMarkedDocuments(userID: userID)
+                }
+            }
         }
+        
         .onReceive(authManager.$userName) { newValue in
             username = newValue ?? "User"
             print("Username changed: \(newValue ?? "None")") // Debugging print

@@ -22,7 +22,7 @@ struct DatabaseExample: View {
 //        let dataDebug = currentAnime?.data.debugDescription ?? "data not found"
 //        let episodesDebug = currentAnime?.episodes.debugDescription ?? "episodes not found"
         
-        let currentUser = dbTest.userData[user]
+        let currentUser = dbTest.userData
 //        dbTest.updateFavorite(userID: "hlvTw2YGh1ySqS4eKeEh", isFavorite: true, animeID: Int(animeID) ?? -1)
         let favorite: Bool = currentUser?.favorites?.contains(Int(animeID) ?? -1) ?? false
         
@@ -71,7 +71,7 @@ struct DatabaseExample: View {
         
         
         // displaying images
-        let boxImage = URL(string: currentAnime?.data?.files?.box_image ?? "N/A")
+        let boxImage = URL(string: currentAnime?.main?.box_image ?? "N/A")
         
         // displaying the box image
         AsyncImage(url: boxImage) { image in
@@ -99,7 +99,7 @@ struct DatabaseExample: View {
         }
         
         // displaying the splash image
-        let splashImage = URL(string: currentAnime?.data?.files?.splash_image ?? "N/A")
+        let splashImage = URL(string: currentAnime?.main?.splash_image ?? "N/A")
         
         AsyncImage(url: splashImage) { image in
             image

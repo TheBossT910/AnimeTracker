@@ -16,12 +16,11 @@ struct AnimeDetail: View {
     var body: some View {
         // getting user data
         let userID = authManager.userID ?? ""
-        let userData = db.userData[userID]
+        let userData = db.userData
         
         // getting the current anime's data
         let anime = db.animeData[animeID]
-        let animeGeneral = anime?.data?.general
-        let animeFiles = anime?.data?.files
+        let animeMain = anime?.main
         
         // favorite button initial value
         @State var favorite: Bool = userData?.favorites?.contains(Int(animeID) ?? -1) ?? false
@@ -36,14 +35,14 @@ struct AnimeDetail: View {
         GeometryReader { geometry in
             ScrollView {
                 //getting the box image
-                let boxImage = URL(string: animeFiles?.box_image ?? "N/A")!
+                let boxImage = URL(string: animeMain?.box_image ?? "N/A")!
                 BoxImage(imageURL: boxImage)
                     .frame(height: geometry.size.height * 0.7)
                 
                 VStack(alignment: .leading) {
                     HStack {
                         //Title and favourite button
-                        Text(animeGeneral?.title_english ?? "N/A")
+                        Text(animeMain?.title_english ?? "N/A")
                             .font(.title)
                             .fontWeight(.heavy)
                         Spacer()
@@ -52,7 +51,7 @@ struct AnimeDetail: View {
                     
                     HStack {
                         // show premiere date
-                        Text(animeGeneral?.premiere ?? "N/A")
+                        Text(animeMain?.premiere ?? "N/A")
                             .font(.callout)
                             .fontWeight(.semibold)
                         Spacer()
@@ -72,7 +71,7 @@ struct AnimeDetail: View {
                 }
                 
                 // displaying the actual description
-                Text(animeGeneral?.description?.toPlainText() ?? "N/A")
+                Text(animeMain?.description?.toPlainText() ?? "N/A")
                     .font(.body)
                     .fontWeight(.medium)
             }

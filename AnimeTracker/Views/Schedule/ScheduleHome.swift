@@ -6,24 +6,51 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct ScheduleHome: View {
     @EnvironmentObject var db: Database
     @EnvironmentObject var authManager: AuthManager
 
+    @State private var date = Date()
     var week = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"]
-    var currentlyAiringIDs: [String] = ["163134", "164299", "169755"]
+    // TODO: look for popular/currently airing shows insted of favorites. This is temporary
+    var airing: [String] {
+        // get all favorites with splash images
+        let favWithSplash = db.userData?.favorites?.filter { fav in
+            let currentAnime = db.animeData[String(fav)]
+            if (currentAnime?.main?.splash_image != nil) {
+                return true
+            }
+            return false
+        }
+        
+        // getting the first 3 favorites, and converting result to String array
+        var favStringArr: [String] = []
+        if ((favWithSplash?.count ?? 0) >= 3) {
+            let selectFavorites = favWithSplash?[..<3] ?? []
+            let favIntArr = Array(selectFavorites)
+            favStringArr = favIntArr.map { String($0) }
+        }
+        
+        // return results
+        return favStringArr
+    }
     @State private var showFavoritesOnly: Bool = false
     
     var body: some View {
+        
         GeometryReader { geometry in
             NavigationStack {
                 ScrollView {
-                    Text("Airing Right Now")
-                        .font(.title2)
-                        .fontWeight(.heavy)
-                        .padding(.top)
-                    ScheduleAiringRow(animeAiringIDs: currentlyAiringIDs)
+                    // only displays airing row if we have content to show
+                    if (!airing.isEmpty) {
+                        Text("Airing Right Now")
+                            .font(.title2)
+                            .fontWeight(.heavy)
+                            .padding(.top)
+                        ScheduleAiringRow(animeAiringIDs: airing)
+                    }
                     
                     Text("My Anime Schedule")
                         .font(.title2)
@@ -38,8 +65,29 @@ struct ScheduleHome: View {
                                 .fontWeight(.heavy)
                         }
                         .disabled(!authManager.isAuthenticated)
+                        // updates toggle so it is "off" when disabled
+                        .onChange(of: authManager.isAuthenticated) {
+                            if !authManager.isAuthenticated {
+                                showFavoritesOnly = false
+                            }
+                        }
                     }
                     .frame(width: geometry.size.width * 0.80)
+                    
+                    // select the week we want to see
+                    
+                    HStack() {
+                        DatePicker(
+                            "Week",
+                            selection: $date,
+                            displayedComponents: [.date]
+                        )
+                        .datePickerStyle(.compact)
+                        .padding(.leading)
+                        .padding(.trailing)
+                        .padding(.top, 2)
+                    }
+                    .frame(width: geometry.size.width * 0.88)
                         
                     
                     //allows us to display different pages we can swipbe between
@@ -47,14 +95,23 @@ struct ScheduleHome: View {
                         ForEach(week, id: \.self) { day in
                             //wrap ScheduleRow in a container so it is displayed properly by TabView
                             VStack {
-                                ScheduleRow(day: day, showFavorites: $showFavoritesOnly)
+                                ScheduleRow(day: day, showFavorites: $showFavoritesOnly, date: date)
                             }
+                            .onChange(of: date, {
+                                // reset the current data when the date changes
+                                Task {
+                                    print("Initial weekday load...")
+                                    await db.getInitialAiring(weekday: day, week: date)
+                                }
+                            })
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                     }
+                    //animation when switching between favorites only and all animes view
+                    .animation(.default, value: showFavoritesOnly)
                     .tabViewStyle(.page)
                     //height is relative to device height. Explicitly coded so that TabView HAS a height as it was automatically resizing to be really small
-                    .frame(width: geometry.size.width * 0.90, height: geometry.size.height / 1.3)
+                    .frame(width: geometry.size.width * 0.90, height: geometry.size.height * 0.90)
                     
                     .background(Color.gray.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 50))
