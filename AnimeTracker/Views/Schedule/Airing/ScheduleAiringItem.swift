@@ -35,7 +35,7 @@ struct ScheduleAiringItem: View {
                 image
                 .resizable()
                 .scaledToFill()
-                .frame(height: 100)
+                .frame(height: 120)
                 .clipped()
                 .padding()
                 // TODO: implement airing bar
@@ -67,7 +67,7 @@ struct ScheduleAiringItem: View {
 //                    }
             } placeholder: {
                 Color.gray
-                    .frame(height: 150)
+                    .frame(height: 120)
             }
             
             //TODO: Implement proper checkmark system
