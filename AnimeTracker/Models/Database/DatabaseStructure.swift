@@ -57,6 +57,18 @@ struct episodes: Codable {
     var number_episode: Int?
 }
 
+extension episodes: Hashable {
+    // checks if the left-hand side and right-hand side are the same
+    static func == (lhs: episodes, rhs: episodes) -> Bool {
+        // check if they have the same tvdb_id. This is unique to each episode, and all episode MUST have a tvdb_id
+        return lhs.tvdb_id == rhs.tvdb_id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tvdb_id)
+    }
+}
+
 struct user_data: Codable {
     @DocumentID var id: String?
     var user_name: String?
