@@ -44,6 +44,8 @@ import FirebaseFirestore
             // initially load 1 document
             await getInitialDocuments(documentAmount: 1)
         }
+        
+        self.refreshAnimeAPI()
     }
     
     // retrieves documents from Firebase (async)
@@ -354,6 +356,44 @@ import FirebaseFirestore
         Task {
             userData = try await db.collection("/user_data/").document(userID).getDocument(as: user_data.self)
         }
+    }
+    
+    // courtesy of ChatGPT
+    // calls the Python API, checking for new airing episodes to update and new shows to add
+    private func refreshAnimeAPI() {
+        // Define the API URL
+        let url = URL(string: "https://animetracker-data-parser.onrender.com/refresh-data")!
+
+        // Create the URLSession data task
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            // Handle the response data (e.g., parse JSON)
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                
+                // Print out the response (You can also handle it here)
+                print("Response: \(json)")
+                
+                // If you need to update the UI, make sure it's on the main thread
+                DispatchQueue.main.async {
+                    // Update UI here if needed
+                }
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+            }
+        }
+
+        // Start the task
+        task.resume()
     }
     
     // resets the airing keys
