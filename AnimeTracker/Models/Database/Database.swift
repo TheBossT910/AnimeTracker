@@ -134,9 +134,11 @@ import FirebaseFirestore
                 .getDocuments()
             var counter = 0
             queryAnime.documents.forEach { document in
-                // add to array
-                animeIDs.append(document.documentID)
-                counter += 1
+                // add to array if it doesn't already exist
+                if (!animeIDs.contains(document.documentID)) {
+                    animeIDs.append(document.documentID)
+                    counter += 1
+                }
             }
             print("Added anime documents: \(counter)")
             lastDocumentSnapshot = queryAnime.documents.last
