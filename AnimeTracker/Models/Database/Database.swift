@@ -4,14 +4,9 @@
 //
 //  Created by Taha Rashid on 2025-02-18.
 //
-// Updated file to communicate with the database.
-// This replaces AnimeFirebaseDatabase, which will be deprecated at a later date
+// Class that communicates with the database.
 
-// TODO: Implement new database code. We are using the new database structure for Firebase. See Notion for more details
 // TODO: Create an interface (called Protocols) for all of the methods in this file. This is to make it easier in the future if we change databases
-
-
-// TODO: fetch documents async
 
 import Foundation
 import FirebaseFirestore
@@ -127,6 +122,7 @@ import FirebaseFirestore
     }
 
     // retrieve the next animes from database
+    // TODO: could be optimized furthur? Somehow ignore all fetch docs? (i.e. airing fetched more docs)
     public func getNextDocuments(documentAmount: Int = 10) async {
         // getting all anime ids
         var animeIDs : [String] = []
@@ -159,6 +155,7 @@ import FirebaseFirestore
     }
     
     // immediately retrieves all favorited/watchlisted shows
+    // TODO: in the future, dynamically load these in as well. This implementation is okay for now
     public func getMarkedDocuments(userID: String) async {
         // getting all different data arrays
         let favorites = userData?.favorites ?? []
@@ -356,6 +353,7 @@ import FirebaseFirestore
     }
     
     // returns the unique keys from retrievedKeys  not found in sourceKeys
+    // TODO: this could be moved to Utils, but is a highly-linked method...
     private func getUniqueKeys(sourceKeys: [String], retrievedKeys: [String]) -> [String] {
         var uniqueKeys: [String] = []
         retrievedKeys.forEach {
