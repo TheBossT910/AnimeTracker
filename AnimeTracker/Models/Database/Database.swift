@@ -127,21 +127,24 @@ import FirebaseFirestore
         // getting all anime ids
         var animeIDs : [String] = []
         do {
-            // fetch all anime documents
-            let queryAnime = try await self.db.collection("/anime_data")
-                .start(afterDocument: self.lastDocumentSnapshot!)
-                .limit(to: documentAmount)
-                .getDocuments()
-            var counter = 0
-            queryAnime.documents.forEach { document in
-                // add to array if it doesn't already exist
-                if (!animeIDs.contains(document.documentID)) {
-                    animeIDs.append(document.documentID)
-                    counter += 1
+            // only look at shows if we have the last document snapshot
+            if let lastDocumentSnapshot = self.lastDocumentSnapshot {
+                // fetch all anime documents
+                let queryAnime = try await self.db.collection("/anime_data")
+                    .start(afterDocument: lastDocumentSnapshot)
+                    .limit(to: documentAmount)
+                    .getDocuments()
+                var counter = 0
+                queryAnime.documents.forEach { document in
+                    // add to array if it doesn't already exist
+                    if (!animeIDs.contains(document.documentID)) {
+                        animeIDs.append(document.documentID)
+                        counter += 1
+                    }
                 }
+                print("Added anime documents: \(counter)")
+                self.lastDocumentSnapshot = queryAnime.documents.last
             }
-            print("Added anime documents: \(counter)")
-            lastDocumentSnapshot = queryAnime.documents.last
         }
         catch {
             print("Error fetching next documents: \(error)")
@@ -278,16 +281,20 @@ import FirebaseFirestore
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: week)
         
         do {
-            // getting filtered shows
-            let episodesCollection = try await db.collectionGroup("episodes")
-                .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
-                .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
-                .start(afterDocument: self.lastAiringSnapshots[weekday]!!)
-                .limit(to: documentAmount)
-                .getDocuments()
-            
-            await getAiring(episodesCollection: episodesCollection, weekday: weekday, documentAmount: documentAmount)
-            
+            // only look at shows if we have the last document's snapshot
+            if let snapshots = self.lastAiringSnapshots[weekday] {
+                if let lastSnapshot = snapshots {
+                    // getting filtered shows
+                    let episodesCollection = try await db.collectionGroup("episodes")
+                        .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
+                        .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
+                        .start(afterDocument: lastSnapshot)
+                        .limit(to: documentAmount)
+                        .getDocuments()
+                    
+                    await getAiring(episodesCollection: episodesCollection, weekday: weekday, documentAmount: documentAmount)
+                }
+            }
         } catch {
             print("error getting nextAiring \(error)")
         }
