@@ -66,18 +66,11 @@ import FirebaseFirestore
                         // for main
                         let currentMain = try await self.db.collection("/anime_data/").document(animeID).getDocument(as: main.self)
                         
-                        // for episodes
-                        var currentEpisodes: [episodes] = []
-                        let queryEpisodes = try await self.db.collection("/anime_data/\(animeID)/episodes").getDocuments()
-                        queryEpisodes.documents.forEach { document in
-                            currentEpisodes.append(try! document.data(as: episodes.self))
-                        }
-                        
                         // creating anime object
                         let currentAnime: anime = anime(
                             id: animeID,
                             main: currentMain,
-                            episodes: currentEpisodes
+                            episodes: []
                         )
                         
                         return (animeID, currentAnime)
@@ -190,17 +183,79 @@ import FirebaseFirestore
                 
         // add keys
         orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
-        
     }
+    
+    // retrieves the airing shows' documents and their specific airing episode document
+    private func getAiring(episodesCollection: QuerySnapshot, weekday: String, documentAmount: Int = 5) async {
+        // adding ids to set to ensure no duplicates
+        var animeIDSet = Set<String>()
+    
+        // dictionary to save episode documents
+        var episodeDocs: [String: [episodes]] = [:]
+        
+        // going up 2 levels to get the anime collection id
+        episodesCollection.documents.forEach { document in
+            let animeID = document.reference.parent.parent?.documentID ?? ""
+            var currentEpisodes: [episodes] = []
+            
+            animeIDSet.insert(animeID)
+            do {
+                // get the currentEpisode and add to array
+                let currentEpisode: episodes = try document.data(as: episodes.self)
+                currentEpisodes.append(currentEpisode)
+//                    print("EpID \(currentEpisode.id ?? "NONE") in animeID \(animeID)")
+            } catch {
+                print("Error converting to episode in getInitialAiring!")
+            }
+            
+            // save episodes
+            episodeDocs[animeID] = currentEpisodes
+        }
+//            print(animeIDSet.count) // debug
+//            print(episodeDocs)    // debug
+        
+        // convert set to array
+        var animeIDs: [String] = []
+        animeIDs = Array(animeIDSet)
+        
+        // get shows that we have not fetched before
+        var newAnimeIDSet = Set<String>()
+        // returns a new set with elements not seen in orderedKeys
+        newAnimeIDSet = animeIDSet.subtracting(Set(orderedKeys))
+        let newAnimeIDs: [String] = Array(newAnimeIDSet)
+        print("Num of unique: \(newAnimeIDs.count)")
+        
+        
+        // get new shows we don't already have yet
+        let response = await getDocuments(animeIDs: newAnimeIDs)
+        // merge previous anime data with new response data
+        animeData.merge(response) { (_, new) in new }
+        
+        // add keys
+        orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
+        // adding airing data keys
+        airingKeys[weekday] = (airingKeys[weekday] ?? []) + getUniqueKeys(sourceKeys: airingKeys[weekday] ?? [], retrievedKeys: animeIDs)
+        // set last snapshot
+        lastAiringSnapshots[weekday] = episodesCollection.documents.last
+        
+        // now, add episode data to each anime
+        animeIDs.forEach { animeID in
+            let currentAnime = animeData[animeID]
+            let currentEpisodes = currentAnime?.episodes ?? []
+            let newEpisodes = episodeDocs[animeID] ?? []
+            
+            // combine old + new episodes, and update local data
+            let updatedEpisodes: [episodes] = Array(Set<episodes>(currentEpisodes + newEpisodes))
+            animeData[animeID]?.episodes = updatedEpisodes
+        }
+    }
+    
     
     // initially gets airing data
     public func getInitialAiring(weekday: String, week: Date, documentAmount: Int = 5) async {
         // get the weekday as a number, and return the Unix time range for the day (start of day -> end of day)
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: week)
-        
-        // adding ids to set to ensure no duplicates
-        var animeIDSet = Set<String>()
         
         do {
             // getting filtered shows
@@ -210,34 +265,11 @@ import FirebaseFirestore
                 .limit(to: documentAmount)
                 .getDocuments()
             
-            // going up 2 levels to get the anime collection id
-            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
-//            print(animeIDSet.count) // debug
-            
-            // convert set to array
-            var animeIDs: [String] = []
-            animeIDs = Array(animeIDSet)
-            
-            // get shows
-            let response = await getDocuments(animeIDs: animeIDs)
-            print("Animes retrieved for \(weekday): \(response.count)")
-            
-            // merge previous anime data with new response data
-            animeData.merge(response) { (_, new) in new }
-            
-            // add keys
-            orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
-            
-            // adding airing data keys
-            airingKeys[weekday] = (airingKeys[weekday] ?? []) + getUniqueKeys(sourceKeys: airingKeys[weekday] ?? [], retrievedKeys: animeIDs)
-            
-            // set last snapshot
-            lastAiringSnapshots[weekday] = episodesCollection.documents.last
+            await getAiring(episodesCollection: episodesCollection, weekday: weekday, documentAmount: documentAmount)
             
         } catch {
             print("error getting initialAiring \(error)")
         }
-        
     }
     
     // gets next airing data
@@ -246,11 +278,8 @@ import FirebaseFirestore
         let weekdayAsNumber = getWeekdayAsNumber(weekday: weekday)
         let unixRange = getUnixRangeForWeekday(weekday: weekdayAsNumber, week: week)
         
-        // adding ids to set to ensure no duplicates
-        var animeIDSet = Set<String>()
-        
         do {
-            // getting filtered shows after the last retrieved show
+            // getting filtered shows
             let episodesCollection = try await db.collectionGroup("episodes")
                 .whereField("broadcast", isGreaterThanOrEqualTo: Int(unixRange!.start))
                 .whereField("broadcast", isLessThanOrEqualTo: Int(unixRange!.end))
@@ -258,29 +287,7 @@ import FirebaseFirestore
                 .limit(to: documentAmount)
                 .getDocuments()
             
-            // going up 2 levels to get the anime collection id
-            episodesCollection.documents.forEach { animeIDSet.insert($0.reference.parent.parent?.documentID ?? "") }
-//            print(animeIDSet.count) // debug
-            
-            // convert set to array
-            var animeIDs: [String] = []
-            animeIDs = Array(animeIDSet)
-            
-            // get shows
-            let response = await getDocuments(animeIDs: animeIDs)
-            print("Additional animes retrieved for \(weekday): \(response.count)")
-            
-            // merge previous anime data with new response data
-            animeData.merge(response) { (_, new) in new }
-
-            // add keys
-            orderedKeys = orderedKeys + getUniqueKeys(sourceKeys: orderedKeys, retrievedKeys: animeIDs)
-            
-            // adding airing data keys
-            airingKeys[weekday] = (airingKeys[weekday] ?? []) + getUniqueKeys(sourceKeys: airingKeys[weekday] ?? [], retrievedKeys: animeIDs)
-            
-            // set last snapshot
-            lastAiringSnapshots[weekday] = episodesCollection.documents.last
+            await getAiring(episodesCollection: episodesCollection, weekday: weekday, documentAmount: documentAmount)
             
         } catch {
             print("error getting nextAiring \(error)")
