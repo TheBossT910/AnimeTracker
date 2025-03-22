@@ -30,7 +30,7 @@ struct main: Codable {
     var tvdb_id: Int?
     
     var db_version: String?
-    var last_updated: String?
+    var last_updated: Int?
     
     // show info
     var description: String?
