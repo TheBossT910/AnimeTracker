@@ -61,8 +61,6 @@ struct ScheduleItem: View {
         return airingEpisode
     }
     
-
-
     var body: some View {
         //getting anime data
         let anime = db.animeData[animeID]
@@ -107,7 +105,7 @@ struct ScheduleItem: View {
                         //I am embedding the text items in HStacks to horizontally center the text
                         HStack(alignment: .top) {
                             Spacer()
-                            Text("\(episodeNumber) \(airingEpisode.title_episode ?? "...")")
+                            Text("\(episodeNumber) \(airingEpisode.title_episode ?? "")")
                                 .font(.title3)
                                 //allows for text wrapping
                                 .fontWeight(.medium)
@@ -141,7 +139,8 @@ struct ScheduleItem: View {
                             // NOTE: We have to do .description because otherwise Swift freaks out and thinks we are referencing a Swift method/var!
                             let unixTime: TimeInterval = Double(airingEpisode.broadcast?.description ?? "0") ?? 0
                             let convertedTime = getFormattedTime(from: unixTime)
-                            Text(convertedTime)
+                            // only display time if we have a valid time
+                            Text(unixTime == 0 ? "" : convertedTime)
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                         }
