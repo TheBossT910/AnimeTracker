@@ -225,7 +225,7 @@ import FirebaseFirestore
         // returns a new set with elements not seen in orderedKeys
         newAnimeIDSet = animeIDSet.subtracting(Set(orderedKeys))
         let newAnimeIDs: [String] = Array(newAnimeIDSet)
-        print("Num of unique: \(newAnimeIDs.count)")
+//        print("Num of unique: \(newAnimeIDs.count)")
         
         
         // get new shows we don't already have yet
