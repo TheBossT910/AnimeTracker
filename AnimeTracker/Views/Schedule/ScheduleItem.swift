@@ -16,6 +16,7 @@ struct ScheduleItem: View {
     let weekday: String
     let date: Date
     
+    // TODO: Fix this! It doesn't actually SAVE the previous episode's box image (?)
     var animeEpisode: episodes {
         // grab all episodes of show (which are already loaded in)
         let allEpisodes = db.animeData[animeID]?.episodes ?? []
