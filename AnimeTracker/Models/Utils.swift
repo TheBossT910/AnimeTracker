@@ -19,19 +19,19 @@ extension String {
 public func getWeekdayAsNumber(weekday: String) -> Int {
     switch weekday {
         case "Sundays"
-            : return 0
-        case "Mondays"
             : return 1
-        case "Tuesdays"
+        case "Mondays"
             : return 2
-        case "Wednesdays"
+        case "Tuesdays"
             : return 3
-        case "Thursdays"
+        case "Wednesdays"
             : return 4
-        case "Fridays"
+        case "Thursdays"
             : return 5
-        case "Saturdays"
+        case "Fridays"
             : return 6
+        case "Saturdays"
+            : return 7
         default:
             print("Error! Invalid weekday!")
             return -1
