@@ -1,4 +1,4 @@
-# Anime Tracker App 📺  
+# Koyomi - AnimeTracker 📺  
 
 A simple iOS app to help you track anime you're watching or planning to watch.  
 Name: Koyomi - AnimeTracker
